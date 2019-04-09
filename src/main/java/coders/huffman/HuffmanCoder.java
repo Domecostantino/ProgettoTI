@@ -12,7 +12,7 @@ import coders.Message;
  * 	https://www.geeksforgeeks.org/greedy-algorithms-set-3-huffman-coding/
  * 	https://it.wikipedia.org/wiki/Codifica_di_Huffman
  * 
- * 
+ * Funziona con testi di almeno 2 caratteri
  */
 
 public class HuffmanCoder implements Coder {
@@ -25,22 +25,34 @@ public class HuffmanCoder implements Coder {
 
 	@Override
 	public Message encode(String input) {
+		//TODO eliminare
+		System.out.println("Input: "+input+"\n\n");
 
-		//calcola le frequenze
+		// calcola le frequenze
 		computeOccurencies(input);
-		//crea l'albero date le frequenza, ottenendo la codeTable
+		// crea l'albero date le frequenza, ottenendo la codeTable
 		createHuffmanTree();
+		// calcola la codifica canonica partendo da quella normale usata per codificare
+		// il payload
+		HashMap<Character, String> canonicalCodeTable = CanonicalCode.getCanonicalCodeTable(codeTable);
+		// ricavare la tabella contenente la lunghezza delle codifiche dei vari simboli
+		// da inviare come header e usata nella decodifica
+		HashMap<Character, Integer> lengthTable = getLengthTable(canonicalCodeTable);
 
-		// 4. inviare header contente la codeTable
-		// e poi inviare il payload codificato
+		//TODO eliminare
+		System.out.println();
+		System.out.println("lengthtable: "+lengthTable);
 
-		return null;
+		// TODO creare header (lengthTable) e payload del messaggio
+		Message mex = new Message();
+		mex.setHeader(lengthTable);
+		return mex;
 	}
 
 	@Override
 	public String decode(Message input) {
 
-		// 1. leggere header (codeTable)
+		// 1. leggere header (canonicalCodeTable)
 
 		// 2. <creare l'albero>
 
@@ -52,7 +64,6 @@ public class HuffmanCoder implements Coder {
 	}
 
 	private void computeOccurencies(String input) {
-
 		// lettura del'input e creazione delle coppie <lettera, occorrenze>
 		int i = 0;
 		int inputLength = input.length();
@@ -64,7 +75,6 @@ public class HuffmanCoder implements Coder {
 				frequencies.put(current, new Coppia(current));
 			i++;
 		}
-
 	}
 
 	private void createHuffmanTree() {
@@ -76,7 +86,9 @@ public class HuffmanCoder implements Coder {
 			coppie.add(new HuffmanNode(coppia));
 		}
 		
-		System.out.println(frequencies);
+		//TODO eliminare
+		System.out.println("Frequenze: "+frequencies+"\n");
+		
 		// creazione dell'albero - iterativamente estraiamo i due valori pi� piccoli e
 		// creaimo un
 		// nodo "interno" finche' la cardinalita' della coda e' pari a 1
@@ -101,10 +113,14 @@ public class HuffmanCoder implements Coder {
 		// istanziamo la nostra codeTable
 		codeTable = new PriorityQueue<>();
 		// navigazione dell'albero per ottenere i codici
-		getCode(root, "");
-		while (!codeTable.isEmpty()) {
-			System.out.println(codeTable.poll());
-		}
+		if(root!=null)
+			getCode(root, "");
+
+		//TODO eliminare
+		System.out.println("Codifica di Huffman normale:");
+		PriorityQueue<Entry> codeTableCopy = new PriorityQueue<HuffmanCoder.Entry>(codeTable);
+		while (!codeTableCopy.isEmpty())
+			System.out.println(codeTableCopy.poll());
 
 	}
 
@@ -118,9 +134,27 @@ public class HuffmanCoder implements Coder {
 		getCode(root.right, s + "1");
 	}
 
+	/*
+	 * Data la canonicalCodeTable crea una mappa di (simbolo, lunghezza della
+	 * codifica) utile al decodificatore
+	 */
+	private HashMap<Character, Integer> getLengthTable(HashMap<Character, String> canonicalCodeTable) {
+		if(canonicalCodeTable==null)
+			return null;
+		HashMap<Character, Integer> lengthTable = new HashMap<>(canonicalCodeTable.size());
+		for (java.util.Map.Entry<Character, String> entry : canonicalCodeTable.entrySet()) {
+			lengthTable.put(entry.getKey(), entry.getValue().length());
+		}
+		return lengthTable;
+	}
+
+	/*
+	 * 
+	 * Di test per questa codifica
+	 */
 	public static void main(String[] args) {
 		Coder c = new HuffmanCoder();
-		c.encode("proviamo questo schifoooooooooooooaaaa e vediamo come va ");
+		c.encode("ewrr");
 	}
 
 	private class Coppia {
@@ -141,15 +175,17 @@ public class HuffmanCoder implements Coder {
 
 	}
 
-	private class Entry implements Comparable<Entry> {
+	protected class Entry implements Comparable<Entry> {
 		String code = "";
-		char symbol;
+		Character symbol;
 
 		public Entry(char symbol, String code) {
 			this.symbol = symbol;
 			this.code = code;
 		}
 
+		// permette di ordinare le entry prima in base alla lunghezza (crescente) della
+		// codifica e in caso di lunghezza uguale lessicograficamente sui simboli
 		@Override
 		public int compareTo(Entry e1) {
 			if (code.length() < e1.code.length())
@@ -157,7 +193,7 @@ public class HuffmanCoder implements Coder {
 			else if (code.length() > e1.code.length())
 				return 1;
 			else
-				return this.code.compareTo(e1.code);
+				return symbol.compareTo(e1.symbol);
 		}
 
 		public String toString() {
