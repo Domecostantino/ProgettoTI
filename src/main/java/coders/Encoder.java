@@ -1,9 +1,6 @@
 package coders;
 /**
        -----Encoder Java File-------
-@author Karthikeyan Thorali Krishnmaurthy Ragunath
-@version 1.0
-@student ID 800936747
 
 **/
 import java.io.BufferedReader;

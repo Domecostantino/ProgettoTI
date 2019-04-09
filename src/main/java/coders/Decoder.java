@@ -1,9 +1,7 @@
 package coders;
 /**
 	-----Decoder Java File-------
-@author Karthikeyan Thorali Krishnmaurthy Ragunath
-@version 1.0
-@student ID 800936747
+
 
 **/
 
