@@ -4,8 +4,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 
-import coders.Coder;
-import coders.Message;
+import coders.LZW.Coder;
+import coders.LZW.Message;
 
 /*
  * per comprendere di cosa si parla

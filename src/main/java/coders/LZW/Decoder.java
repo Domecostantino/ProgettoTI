@@ -1,4 +1,4 @@
-package coders;
+package coders.LZW;
 /**
 	-----Decoder Java File-------
 

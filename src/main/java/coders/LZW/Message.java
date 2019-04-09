@@ -1,4 +1,4 @@
-package coders;
+package coders.LZW;
 
 /*
  * TEMPORANEO - bisogna decidere come formalizzare un header che vada bene per tutte le codifiche di sorgente
