@@ -1,6 +1,5 @@
 package coders.huffman;
 
-import java.io.IOException;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,6 +8,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import coders.Coder;
+import coders.Decoder;
 import coders.Message;
 
 /*
@@ -73,18 +73,22 @@ import coders.Message;
 class CanonicalHuffmanCoder implements Coder {
 
 	// struttura usata per tenere ordinate in maniera crescente le lunghezze delle
-	// codifiche e pe ognuna in ordine crescenti i simboli corrispondenti
-	private TreeMap<Integer, TreeSet<Character>> canonicalCodeTable;
+	// codifiche e per ognuna in ordine crescenti i simboli corrispondenti
+	private TreeMap<Integer, TreeSet<Character>> lengthTable;
 
 	// strutture utili a contare le occorrenze delle varie parole e a
 	// ordinare le coppie (symbolo,occorrenze) in maniera veloce
-	private HashMap<Character, Coppia> frequencies = new HashMap<>();
+	private HashMap<Character, Coppia> frequencies;
 
 	// albero usato nella codifica
 	private HuffmanNode root = null;
+	
+	//struttura usata come codebook per la codifica canonica
+	private HashMap<Character, String> canonicalCodeTable;
 
 	public CanonicalHuffmanCoder() {
-		canonicalCodeTable = new TreeMap<Integer, TreeSet<Character>>();
+		lengthTable = new TreeMap<Integer, TreeSet<Character>>();
+		frequencies = new HashMap<>();
 	}
 
 	@Override
@@ -103,27 +107,25 @@ class CanonicalHuffmanCoder implements Coder {
 		createHuffmanTree();
 		// calcola la codifica canonica (lunghezza codi, insieme di simoli ordinati
 		// lexicograf) partendo dall'albero appena creato
-		getCanonicalCodeTable(root, 0);
+		getLengthTable(root, 0);
+		
+		canonicalCodeTable = getCanonicalCodeTable();
 
 		// TODO eliminare
 		printNormalCodeTable();
 		printCanonicalCodeTable();
-		System.out.println(canonicalCodeTable);
+		System.out.println("\nLengthTable:\n"+lengthTable);
 
 		// ottenuta la canonicalCodeTable possiamo codificare il messaggio e aggiungerlo
-		// come
-		// payload
+		// come payload
+		String encodedPayload = encodePayload(input);
+		System.out.println(encodedPayload); //TODO eliminare
 
-		// TODO creare header (lengthTable) e payload del messaggio
+		// creiamo il messaggio e lo ritorniamo
 		Message mex = new Message();
-		mex.setHeader(canonicalCodeTable);
+		mex.setHeader(lengthTable);
+		mex.setPayload(encodedPayload);
 		return mex;
-	}
-
-	@Override
-	public String decode(Message input) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	private void computeOccurencies(String input) {
@@ -174,20 +176,27 @@ class CanonicalHuffmanCoder implements Coder {
 		}
 	}
 
-	// Funzione ricorsiva che dall'albero ricava la codifica canonica
-	private void getCanonicalCodeTable(HuffmanNode root, int code_length) {
+	// Funzione ricorsiva che dall'albero ricava la codifica canonica (lengthTable, l'informazione da inviare come header)
+	private void getLengthTable(HuffmanNode root, int code_length) {
 		if (root == null)
 			return;
 
 		if (root.left == null && root.right == null) {
 
-			canonicalCodeTable.putIfAbsent(code_length, new TreeSet<Character>());
+			lengthTable.putIfAbsent(code_length, new TreeSet<Character>());
 
-			canonicalCodeTable.get(code_length).add(root.symbol);
+			lengthTable.get(code_length).add(root.symbol);
 			return;
 		}
-		getCanonicalCodeTable(root.left, code_length + 1);
-		getCanonicalCodeTable(root.right, code_length + 1);
+		getLengthTable(root.left, code_length + 1);
+		getLengthTable(root.right, code_length + 1);
+	}
+	
+	private void printCanonicalCodeTable() {
+		System.out.println("\nCodifica di Huffman Canonica: "); 
+		for (java.util.Map.Entry<Character, String> entry : canonicalCodeTable.entrySet()) {
+			System.out.println(entry.getKey()+":"+entry.getValue());
+		}
 	}
 
 	// metodo che permette di stampare la codifica di Huffman non canonica
@@ -195,42 +204,43 @@ class CanonicalHuffmanCoder implements Coder {
 
 		PriorityQueue<Entry> codeTable = new PriorityQueue<>();
 		// navigazione dell'albero per ottenere i codici
-		getCode(root, "",codeTable);
+		getCode(root, "", codeTable);
 
 		System.out.println("Codifica di Huffman normale:");
 		while (!codeTable.isEmpty())
 			System.out.println(codeTable.poll());
 	}
 
-	//metodo usato per stampare la codifica di Huffman normale
+	// metodo usato per stampare la codifica di Huffman normale
 	private void getCode(HuffmanNode root, String s, PriorityQueue<Entry> codeTable) {
 		if (root.left == null && root.right == null) {
 			codeTable.add(new Entry(root.symbol, s));
 			return;
 		}
-		getCode(root.left, s + "0",codeTable);
-		getCode(root.right, s + "1",codeTable);
+		getCode(root.left, s + "0", codeTable);
+		getCode(root.right, s + "1", codeTable);
 	}
 
-	// funzione di servizio utile a stampare la codeTable relativa al corrente input
-	private void printCanonicalCodeTable() {
-		System.out.println("\nCodifica di Huffman Canonica: ");
-		Object[] arr = canonicalCodeTable.keySet().toArray();
+	// funzione di servizio utile a creare la codeTable relativa al corrente input
+	// partendo dall'albero gia' costruito
+	private HashMap<Character, String> getCanonicalCodeTable() {
+		HashMap<Character, String> canonicalCodeTable = new HashMap<>();
+		
+		Object[] arr = lengthTable.keySet().toArray();
 
-		// Set initial canonical code=0
 		int c_code = 0, curr_len = 0, next_len = 0;
 
 		for (int i = 0; i < arr.length; i++) {
-			Iterator<Character> it = canonicalCodeTable.get(arr[i]).iterator();
-			// code length of current character
+			Iterator<Character> it = lengthTable.get(arr[i]).iterator();
+			// lunghezza del simbolo corrente
 			curr_len = (int) arr[i];
 			while (it.hasNext()) {
 				// stampiamo la codifica canonica - l'if serve perche' il metodo toBinaryString
 				// elimina gli zeri iniziali
 				if ((int) arr[i] > Integer.toBinaryString(c_code).length())
-					System.out.println(it.next() + ":" + "0" + Integer.toBinaryString(c_code));
+					canonicalCodeTable.put(it.next(), "0" + Integer.toBinaryString(c_code));
 				else
-					System.out.println(it.next() + ":" + Integer.toBinaryString(c_code));
+					canonicalCodeTable.put(it.next(), Integer.toBinaryString(c_code));
 
 				// per capire la lunghezza del prossimo simbolo
 				if (it.hasNext() || i == arr.length - 1)
@@ -242,11 +252,24 @@ class CanonicalHuffmanCoder implements Coder {
 				c_code = (c_code + 1) << (next_len - curr_len);
 			}
 		}
+		return canonicalCodeTable;
 	}
 
-	public static void main(String args[]) throws IOException {
+	// metodo usato per codificare l'input data l'albero di huffman già creato
+	private String encodePayload(String input) {
+		StringBuilder encodedPayload = new StringBuilder();
+		for (int i = 0; i < input.length(); i++) {
+			encodedPayload.append(canonicalCodeTable.get(input.charAt(i)));
+		}
+		return encodedPayload.toString();
+	}
+
+	public static void main(String args[]) {
 		Coder c = new CanonicalHuffmanCoder();
-		c.encode("sfkjfisub snn jef oapj  ");
+		Message m = c.encode("sakjlebfikfbaskbfadabnkjdawjb a jnba hawoiahoi ahaow aidj");
+		System.out.println("\n");
+		Decoder dec = new CanonicalHuffmanDecoder();
+		dec.decode(m);
 	}
 
 	protected class Coppia {

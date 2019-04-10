@@ -2,6 +2,5 @@ package coders;
 
 public interface Coder {
 	public Message encode(String input);
-	public String decode(Message input);
 
 }
