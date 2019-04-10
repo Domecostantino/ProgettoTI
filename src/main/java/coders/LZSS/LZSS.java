@@ -28,7 +28,7 @@ import java.util.Arrays;
  * license was not included.
  *
  * 
- * /*
+ *
  * LZSS is the fastest at decompression, but does not generated as small a
  * compressed file as the other methods. The other two methods provided,
  * perhaps, a 15% improvement in compression. Or, put another way, on a 100K
@@ -688,4 +688,6 @@ public class LZSS  {
      * The output stream containing the result.
      */
     private ByteArrayOutputStream out;
+
+
 }

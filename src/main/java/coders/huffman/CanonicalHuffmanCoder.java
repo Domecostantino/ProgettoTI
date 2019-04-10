@@ -17,8 +17,7 @@ import coders.Message;
  * 	https://it.wikipedia.org/wiki/Codifica_di_Huffman
  * 
  * Funziona con testi di almeno 2 caratteri non vuoti			ASSERT
- * 
- * 
+ *  
  * La codifica canonica differisce da quella normale per:
  * 
  * The normal Huffman coding algorithm assigns a variable length code to every
