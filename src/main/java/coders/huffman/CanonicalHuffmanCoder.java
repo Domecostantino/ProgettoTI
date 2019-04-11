@@ -2,7 +2,6 @@ package coders.huffman;
 
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -108,11 +107,13 @@ class CanonicalHuffmanCoder implements Coder {
 		// lexicograf) partendo dall'albero appena creato
 		getLengthTable(root, 0);
 		
-		canonicalCodeTable = getCanonicalCodeTable();
+		//otteniamo la codifica canonica esplcita dalla lengthTable
+		canonicalCodeTable = HuffmanUtils.getCanonicalCodeTable(lengthTable);
 
 		// TODO eliminare
 		printNormalCodeTable();
 		printCanonicalCodeTable();
+		System.out.println(canonicalCodeTable);
 		System.out.println("\nLengthTable:\n"+lengthTable);
 
 		// ottenuta la canonicalCodeTable possiamo codificare il messaggio e aggiungerlo
@@ -220,40 +221,6 @@ class CanonicalHuffmanCoder implements Coder {
 		getCode(root.right, s + "1", codeTable);
 	}
 
-	// funzione di servizio utile a creare la codeTable relativa al corrente input
-	// partendo dall'albero gia' costruito
-	private HashMap<Character, String> getCanonicalCodeTable() {
-		HashMap<Character, String> canonicalCodeTable = new HashMap<>();
-		
-		Object[] arr = lengthTable.keySet().toArray();
-
-		int c_code = 0, curr_len = 0, next_len = 0;
-
-		for (int i = 0; i < arr.length; i++) {
-			Iterator<Character> it = lengthTable.get(arr[i]).iterator();
-			// lunghezza del simbolo corrente
-			curr_len = (int) arr[i];
-			while (it.hasNext()) {
-				// stampiamo la codifica canonica - l'if serve perche' il metodo toBinaryString
-				// elimina gli zeri iniziali
-				if ((int) arr[i] > Integer.toBinaryString(c_code).length())
-					canonicalCodeTable.put(it.next(), "0" + Integer.toBinaryString(c_code));
-				else
-					canonicalCodeTable.put(it.next(), Integer.toBinaryString(c_code));
-
-				// per capire la lunghezza del prossimo simbolo
-				if (it.hasNext() || i == arr.length - 1)
-					next_len = curr_len;
-				else
-					next_len = (int) arr[i + 1];
-
-				// generiamo il codice del prossimo simbolo
-				c_code = (c_code + 1) << (next_len - curr_len);
-			}
-		}
-		return canonicalCodeTable;
-	}
-
 	// metodo usato per codificare l'input dato l'albero di huffman già creato
 	private String encodePayload(String input) {
 		StringBuilder encodedPayload = new StringBuilder();
@@ -263,9 +230,10 @@ class CanonicalHuffmanCoder implements Coder {
 		return encodedPayload.toString();
 	}
 
+	//main di prova per codifica/decodifica di Huffman, eliminare TODO
 	public static void main(String args[]) {
 		Coder c = new CanonicalHuffmanCoder();
-		Message m = c.encode("sakjlebfikfbaskbfadabnkjdawjb a jnba hawoiahoi ahaow aidj");
+		Message m = c.encode("domenico non è particolarmente convinto che questa versione possa funzionare");
 		System.out.println("\n");
 		Decoder dec = new CanonicalHuffmanDecoder();
 		dec.decode(m);
