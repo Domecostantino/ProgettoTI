@@ -173,4 +173,11 @@ public class HammingCode {
 
 		return n;
 	}
+	
+	
+	public static void main(String [] args) {
+		
+	}
+	
+	
 }
