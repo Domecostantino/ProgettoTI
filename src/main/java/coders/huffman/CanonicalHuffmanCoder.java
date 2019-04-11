@@ -255,7 +255,7 @@ class CanonicalHuffmanCoder implements Coder {
 		return canonicalCodeTable;
 	}
 
-	// metodo usato per codificare l'input data l'albero di huffman già creato
+	// metodo usato per codificare l'input dato l'albero di huffman già creato
 	private String encodePayload(String input) {
 		StringBuilder encodedPayload = new StringBuilder();
 		for (int i = 0; i < input.length(); i++) {
