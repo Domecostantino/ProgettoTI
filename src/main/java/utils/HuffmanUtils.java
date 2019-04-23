@@ -1,4 +1,4 @@
-package coders.huffman;
+package utils;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -50,7 +50,7 @@ public class HuffmanUtils {
 	 * partendo dalla tabella delle lunghezze. Usato in CanonicalHuffmanCoder.
 	 * 
 	 */
-	static HashMap<Character, String> getCanonicalCodeTable(TreeMap<Integer, TreeSet<Character>> lengthTable) {
+	public static HashMap<Character, String> getCanonicalCodeTable(TreeMap<Integer, TreeSet<Character>> lengthTable) {
 		HashMap<Character, String> canonicalCodeTable = new HashMap<>();
 
 		Set<Entry<Integer, TreeSet<Character>>> entries = lengthTable.entrySet();
@@ -107,7 +107,7 @@ public class HuffmanUtils {
 	 * partendo dalla tabella delle lunghezze. Usato in CanonicalHuffmanDecoder.
 	 * 
 	 */
-	static HashMap<String, Character> createInverseCanonicalCodeTable(TreeMap<Integer, TreeSet<Character>> lengthTable) {
+	public static HashMap<String, Character> createInverseCanonicalCodeTable(TreeMap<Integer, TreeSet<Character>> lengthTable) {
 
 		HashMap<String, Character> inverseCanonicalCodeTable = new HashMap<>();
 
