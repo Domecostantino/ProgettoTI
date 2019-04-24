@@ -1,29 +1,29 @@
 package coders.convolutional;
 
+import java.util.HashMap;
+
 public class TrellisNode {
 	private String state;
-	private int outputValue;
-	private TrellisNode successor;
+	private HashMap<Byte, TrellisNode> successors; //il byte è l'input corrente
+	
+	public TrellisNode(String state) {
+		this.state = state;
+	}
+	
 	public String getState() {
 		return state;
 	}
 	public void setState(String state) {
 		this.state = state;
 	}
-	public int getOutputValue() {
-		return outputValue;
-	}
-	public void setOutputValue(int outputValue) {
-		this.outputValue = outputValue;
-	}
-	public TrellisNode getSuccessor() {
-		return successor;
-	}
-	public void setSuccessor(TrellisNode successor) {
-		this.successor = successor;
-	}
 	
+	public HashMap<Byte, TrellisNode> getSuccessors() {
+		return successors;
+	}
+	public void setSuccessors(HashMap<Byte, TrellisNode> successors) {
+		this.successors = successors;
+	}
 	public boolean hasSuccessor() {
-		return successor!=null;
+		return successors.isEmpty();
 	}
 }

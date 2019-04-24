@@ -28,17 +28,12 @@ import utils.ConvolutionalUtils;
  * 
  * In alternativa vedere http://complextoreal.com/wp-content/uploads/2013/01/convo.pdf
  * 
- * 
- * 
- * 
  */
 
-public class CC implements Coder {
+public class ConvolutionalCoder implements Coder {
 	private int K, r;
 
 	private String[] generatorPolynomial;
-
-	private TrellisNode trellis;
 
 	private byte[] memoryRegister;
 
@@ -51,9 +46,12 @@ public class CC implements Coder {
 	 * 
 	 * effettuo la codifica usando i polinomi generatori
 	 * 
+	 * invio l'header (K,r utile al decodificatore per creare il trellis) 
+	 * e il payload codificato
+	 * 
 	 */
 
-	public CC(int constraintLenght, int r) {
+	public ConvolutionalCoder(int constraintLenght, int r) {
 		this.K = constraintLenght;
 		this.r = r;
 
@@ -81,10 +79,13 @@ public class CC implements Coder {
 	 */
 
 	@Override
-	public Message encode(String input) {
+	public Message encode(String input) { //TODO pulire stampe
 		// conversione dell'input testuale in una stringa di bit
 		String bitInput = new BigInteger(input.getBytes()).toString(2);
+		String a = Integer.toBinaryString(input.charAt(0));
+		System.out.println(a);
 		System.out.println(input);
+		System.out.println(bitInput.length());
 		System.out.println(bitInput);
 
 		// codifica convoluzionale mediante i polinomi generatori
@@ -95,7 +96,8 @@ public class CC implements Coder {
 		Message message = new Message();
 
 		// header
-		message.setHeader(trellis);
+		ConvolutionalHeader header = new ConvolutionalHeader(K,r);
+		message.setHeader(header);
 
 		// payload
 		message.setPayload(encoding);
@@ -110,7 +112,6 @@ public class CC implements Coder {
 	private String computeEncoding(String bitInput) {
 
 		StringBuilder result = new StringBuilder();
-		trellis = new TrellisNode();
 
 		//recuperiamo i polinomi generatori
 		System.out.println(Arrays.toString(generatorPolynomial));
@@ -129,11 +130,13 @@ public class CC implements Coder {
 			for (int l = 0; l < currentBitEncoding.length; l++) {
 				//e per ognuno tutti i registri di memoria (K+1)
 				for (int j = 0; j < memoryRegister.length; j++) {
-					currentBitEncoding[l] =  (byte) (currentBitEncoding[l] ^ memoryRegister[j]*gs[l][j]);
+					currentBitEncoding[l] =  (byte) (currentBitEncoding[l] ^ (memoryRegister[j]*gs[l][j]));
 				}
 				result.append(currentBitEncoding[l]);
-				System.out.println(currentBitEncoding[l]); //TODO eliminare
+//				System.out.println(currentBitEncoding[l]); //TODO eliminare
 			}
+			
+			
 
 		} //TODO controllare a mano se è giusto
 		return result.toString();
@@ -155,13 +158,20 @@ public class CC implements Coder {
 		}
 		memoryRegister[0] = input;
 
-		System.out.println(Arrays.toString(memoryRegister)); //TODO eliminare
+		//System.out.println(Arrays.toString(memoryRegister)); //TODO eliminare
 	}
 
 	public static void main(String[] args) {
-		CC cc = new CC(4, 2);
-
-		cc.encode("asdaadas");
+		ConvolutionalCoder cc = new ConvolutionalCoder(2, 3);
+		String q = "aadec";
+		Message m = cc.encode(q);
+		
+		String p = new BigInteger(q.getBytes()).toString(2);
+		p = p.replace("1011", "1010");
+		System.out.println(p);
+		
+		String text2 = new String(new BigInteger(p, 2).toByteArray());
+		System.out.println(text2);
 	}
 
 }
