@@ -25,6 +25,9 @@ public class ConvolutionalUtils {
 
 		byte z = (byte) '1';
 		System.out.println(z);
+		
+		String aaa = "ciao";
+		System.out.println(aaa.substring(0,aaa.length()-1));
 	}
 
 }//BitUtility

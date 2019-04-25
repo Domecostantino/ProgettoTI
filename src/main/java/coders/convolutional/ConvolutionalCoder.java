@@ -82,8 +82,6 @@ public class ConvolutionalCoder implements Coder {
 	public Message encode(String input) { //TODO pulire stampe
 		// conversione dell'input testuale in una stringa di bit
 		String bitInput = new BigInteger(input.getBytes()).toString(2);
-		String a = Integer.toBinaryString(input.charAt(0));
-		System.out.println(a);
 		System.out.println(input);
 		System.out.println(bitInput.length());
 		System.out.println(bitInput);
@@ -162,16 +160,20 @@ public class ConvolutionalCoder implements Coder {
 	}
 
 	public static void main(String[] args) {
-		ConvolutionalCoder cc = new ConvolutionalCoder(2, 3);
-		String q = "aadec";
+		ConvolutionalCoder cc = new ConvolutionalCoder(5, 3);
+		String q = "ciao";
 		Message m = cc.encode(q);
 		
-		String p = new BigInteger(q.getBytes()).toString(2);
-		p = p.replace("1011", "1010");
-		System.out.println(p);
+//		String p = new BigInteger(q.getBytes()).toString(2);
+//		p = p.replace("1011", "1010");
+//		System.out.println(p);
+//		
+//		String text2 = new String(new BigInteger(p, 2).toByteArray());
+//		System.out.println(text2);
 		
-		String text2 = new String(new BigInteger(p, 2).toByteArray());
-		System.out.println(text2);
+		ViterbiDecoder dec = new ViterbiDecoder();
+		String d = dec.decode(m);
+		System.out.println(d);
 	}
 
 }
