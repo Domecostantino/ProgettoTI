@@ -302,6 +302,9 @@ public class LZWCompression {
 				long time = d2.getTime() - d1.getTime();
 				System.out.println("Time Taken to run the program = " + time);
 			}
+			File f=new File(arg[3]);
+			File f1=new File(arg[4]);
+			System.out.println(f.length()+", "+f1.length());
 		}
 
 		in.close();

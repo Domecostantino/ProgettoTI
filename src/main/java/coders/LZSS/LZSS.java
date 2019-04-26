@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -711,28 +712,38 @@ public class LZSS {
 				InputStream inp = new FileInputStream(new File(arg[3]));
 				LZSS lzss = new LZSS(inp);
 				ByteArrayOutputStream baos = lzss.compress();
-				String out = new String(baos.toByteArray());
+				byte[] out = baos.toByteArray();
 				Date d2 = new Date();
 
 				long time = d2.getTime() - d1.getTime();
 				System.out.println("Time Taken to run the program = " + time);
-				System.out.println(out);
-				File f = new File(arg[4]);
-				PrintWriter pw = new PrintWriter(f);
-				pw.append(out);
-				pw.flush();
-				pw.close();
+				System.out.println(new String(out));
+				try (FileOutputStream fos = new FileOutputStream(arg[4])) {
+					fos.write(out);
+					// fos.close(); There is no more need for this line since you had created the
+					// instance of "fos" inside the try. And this will automatically close the
+					// OutputStream
+				}
 			}
 			if (arg[2].equals("d")) {
 				Date d1 = new Date();
 				InputStream inp = new FileInputStream(new File(arg[3]));
 				LZSS lzss = new LZSS(inp);
-				String out = lzss.uncompress().toString();
+				byte[] out = lzss.uncompress().toByteArray();
 				Date d2 = new Date();
 				long time = d2.getTime() - d1.getTime();
 				System.out.println("Time Taken to run the program = " + time);
-				System.out.println(out);
+				System.out.println(new String(out));
+				try (FileOutputStream fos = new FileOutputStream(arg[4])) {
+					fos.write(out);
+					// fos.close(); There is no more need for this line since you had created the
+					// instance of "fos" inside the try. And this will automatically close the
+					// OutputStream
+				}
 			}
+			File f=new File(arg[3]);
+			File f1=new File(arg[4]);
+			System.out.println(f.length()+", "+f1.length());
 		}
 
 		in.close();
