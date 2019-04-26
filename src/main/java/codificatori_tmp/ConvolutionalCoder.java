@@ -16,6 +16,7 @@ public class ConvolutionalCoder implements Coder {
     boolean[][] g;
     private HashMap<Integer, LinkedList<Nodo>> traliccio;
     private int numeroLivelli;
+    private FileInputStream inputStream;
 
     public ConvolutionalCoder(int N, int n, int numLivelli, int k){
         this.N = N;
