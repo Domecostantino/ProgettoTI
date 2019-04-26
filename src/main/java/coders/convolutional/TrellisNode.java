@@ -5,12 +5,15 @@ import java.util.LinkedList;
 public class TrellisNode implements Comparable<TrellisNode> {
 	private String state;
 	private LinkedList<TrellisNode> successors; // il byte è l'input corrente
-	private TrellisNode predecessor;
+	private TrellisNode pathPredecessor;
+	
+	private int pathMetric;
+	
 
 	public TrellisNode(String state, TrellisNode predecessor) {
 		this.state = state;
-		this.predecessor = predecessor;
-		successors = new LinkedList<>();
+		this.successors = new LinkedList<>();
+		this.pathMetric = 0;
 	}
 
 	public String getState() {
@@ -74,5 +77,21 @@ public class TrellisNode implements Comparable<TrellisNode> {
 	@Override
 	public int compareTo(TrellisNode o) {
 		return state.compareTo(o.state);
+	}
+
+	public int getPathMetric() {
+		return pathMetric;
+	}
+
+	public void setPathMetric(int pathMetric) {
+		this.pathMetric = pathMetric;
+	}
+
+	public TrellisNode getPathPredecessor() {
+		return pathPredecessor;
+	}
+
+	public void setPathPredecessor(TrellisNode pathPredecessor) {
+		this.pathPredecessor = pathPredecessor;
 	}
 }

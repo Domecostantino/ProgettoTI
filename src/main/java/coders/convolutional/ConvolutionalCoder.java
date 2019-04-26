@@ -32,6 +32,7 @@ import utils.ConvolutionalUtils;
 
 public class ConvolutionalCoder implements Coder {
 	private int K, r;
+	private final int NUM_LEVELS = 7;
 
 	private String[] generatorPolynomial;
 
@@ -46,8 +47,8 @@ public class ConvolutionalCoder implements Coder {
 	 * 
 	 * effettuo la codifica usando i polinomi generatori
 	 * 
-	 * invio l'header (K,r utile al decodificatore per creare il trellis) 
-	 * e il payload codificato
+	 * invio l'header (K,r utile al decodificatore per creare il trellis) e il
+	 * payload codificato
 	 * 
 	 */
 
@@ -79,26 +80,49 @@ public class ConvolutionalCoder implements Coder {
 	 */
 
 	@Override
-	public Message encode(String input) { //TODO pulire stampe
+	public Message encode(String input) { // TODO pulire stampe
 		// conversione dell'input testuale in una stringa di bit
 		String bitInput = new BigInteger(input.getBytes()).toString(2);
 		System.out.println(input);
 		System.out.println(bitInput.length());
 		System.out.println(bitInput);
 
-		// codifica convoluzionale mediante i polinomi generatori
-		String encoding = computeEncoding(bitInput);
-		System.out.println();
-		System.out.println(encoding);
+		StringBuilder encodedPayload = new StringBuilder();
+		int range = NUM_LEVELS;
+		// cicliamo su tutto il payload in input
+		for (int i = 0; i < bitInput.length(); i += range) {
+
+			// scorporiamo blocchi da da 14 o 21 bits dal payload in relazione a r
+			String block;
+			int nextBound = i + range;
+			if (nextBound < bitInput.length()) {
+				block = bitInput.substring(i, nextBound);
+			} else {
+				block = bitInput.substring(i);
+			}
+
+			System.out.println(block);
+			// codifica convoluzionale mediante i polinomi generatori
+			String encodingBlock = computeEncoding(block);
+			System.out.println();
+			System.out.println(encodingBlock);
+
+			encodedPayload.append(encodingBlock);
+
+			System.out.println("\n\n ************************************** \n\n");
+		}
+
+		System.out.println("EncodedPayload: "+encodedPayload.toString());
+		
 
 		Message message = new Message();
 
 		// header
-		ConvolutionalHeader header = new ConvolutionalHeader(K,r);
+		ConvolutionalHeader header = new ConvolutionalHeader(K, r);
 		message.setHeader(header);
 
 		// payload
-		message.setPayload(encoding);
+		message.setPayload(encodedPayload.toString());
 
 		return message;
 	}
@@ -111,59 +135,53 @@ public class ConvolutionalCoder implements Coder {
 
 		StringBuilder result = new StringBuilder();
 
-		//recuperiamo i polinomi generatori
+		memoryRegister = new byte[K + 1];
+		// recuperiamo i polinomi generatori
 		System.out.println(Arrays.toString(generatorPolynomial));
-		//li convertiamo in una matrice di byte per semplicita
-		byte[][] gs = convertGeneratorPolynomials();
-		
-		//ora iteriamo un bit in input per volta
+		// li convertiamo in una matrice di byte per semplicita
+		byte[][] gs = ConvolutionalUtils.convertGeneratorPolynomials(r,K,generatorPolynomial);
+
+		// ora iteriamo un bit in input per volta
 		for (int i = 0; i < bitInput.length(); i++) {
 
 			byte currentBit = (byte) (bitInput.charAt(i) == '0' ? 0 : 1);
 			byte[] currentBitEncoding = new byte[r];
-			
+
 			shiftRegister((byte) currentBit);
-			
-			//considerando tutti i polinomi generatori (r)
+
+			// considerando tutti i polinomi generatori (r)
 			for (int l = 0; l < currentBitEncoding.length; l++) {
-				//e per ognuno tutti i registri di memoria (K+1)
+				// e per ognuno tutti i registri di memoria (K+1)
 				for (int j = 0; j < memoryRegister.length; j++) {
-					currentBitEncoding[l] =  (byte) (currentBitEncoding[l] ^ (memoryRegister[j]*gs[l][j]));
+					currentBitEncoding[l] = (byte) (currentBitEncoding[l] ^ (memoryRegister[j] * gs[l][j]));
 				}
 				result.append(currentBitEncoding[l]);
 //				System.out.println(currentBitEncoding[l]); //TODO eliminare
 			}
-			
-			
 
-		} //TODO controllare a mano se è giusto
+		} // TODO controllare a mano se è giusto
 		return result.toString();
 	}
 
-	private byte[][] convertGeneratorPolynomials() {
-		byte[][] gs = new byte[r][memoryRegister.length];
-		for(int i=0; i<gs.length; i++) {
-			for (int j = 0; j < gs[i].length; j++) {
-				gs[i][j] = (byte) (generatorPolynomial[i].charAt(j)=='0'?0:1);
-			}
-		}
-		return gs;
-	}
-	
 	private void shiftRegister(byte input) {
 		for (int i = memoryRegister.length - 1; i > 0; i--) {
 			memoryRegister[i] = memoryRegister[i - 1];
 		}
 		memoryRegister[0] = input;
 
-		//System.out.println(Arrays.toString(memoryRegister)); //TODO eliminare
+//		System.out.println(Arrays.toString(memoryRegister)); // TODO eliminare
 	}
 
 	public static void main(String[] args) {
-		ConvolutionalCoder cc = new ConvolutionalCoder(5, 3);
+		ConvolutionalCoder cc = new ConvolutionalCoder(7, 3);
 		String q = "ciao";
 		Message m = cc.encode(q);
 		
+		String changedMessage = m.getPayload().replace("0001", "0000");
+		System.out.println("corrupted "+changedMessage);
+		
+		System.out.println("\n\n--------------------- DECODE ----------------------\n\n");
+
 //		String p = new BigInteger(q.getBytes()).toString(2);
 //		p = p.replace("1011", "1010");
 //		System.out.println(p);
@@ -171,9 +189,17 @@ public class ConvolutionalCoder implements Coder {
 //		String text2 = new String(new BigInteger(p, 2).toByteArray());
 //		System.out.println(text2);
 		
+		Message corrupted = new Message();
+		corrupted.setHeader(m.getHeader());
+		corrupted.setPayload(changedMessage);
+		
+
 		ViterbiDecoder dec = new ViterbiDecoder();
-		String d = dec.decode(m);
-		System.out.println(d);
+		String d = dec.decode(corrupted);
+		System.out.println("decodedPayload: "+d);
+		
+		String text2 = new String(new BigInteger(d, 2).toByteArray());
+		System.out.println(text2);
 	}
 
 }

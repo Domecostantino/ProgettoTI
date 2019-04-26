@@ -1,12 +1,12 @@
 package coders.convolutional;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.TreeSet;
 
 import coders.Decoder;
 import coders.Message;
+import utils.ConvolutionalUtils;
 
 /*
  * Esistono diversi metodi per la decodifica di un codice convoluzionale.
@@ -32,7 +32,7 @@ public class ViterbiDecoder implements Decoder {
 	private HashMap<Integer, TreeSet<TrellisNode>> trellis;
 
 	private int K, r;
-	private final int NUM_LEVELS = 3;
+	private final int NUM_LEVELS = 7;
 
 	private String[] generatorPolynomial;
 
@@ -83,18 +83,13 @@ public class ViterbiDecoder implements Decoder {
 	 * http://complextoreal.com/wp-content/uploads/2013/01/convo.pdf
 	 * 
 	 */
-	@SuppressWarnings("unlikely-arg-type")
 	private String createTrellisAndDecode(String block) { // TODO inizialmente per r=2 poi estendere
 
 		createTrellis();
-		System.out.println(trellis);
-		
-		byte[][] gs = convertGeneratorPolynomials();
+		System.out.println("trellis: " + trellis);
 
-		// Initialize PM[…,0] as PM[s,0] = 0 if s == starting_state else ∞
-		TrellisPath initialPath = new TrellisPath();
-		TrellisNode radix = trellis.get(0).first();
-		initialPath.addNode(radix); // la radice
+		byte[][] gs = ConvolutionalUtils.convertGeneratorPolynomials(r,K,generatorPolynomial);
+
 
 		TreeSet<TrellisNode> previousLevel = trellis.get(0);
 
@@ -104,66 +99,119 @@ public class ViterbiDecoder implements Decoder {
 
 			String p_received = block.substring(i, i + r);
 
-			TreeSet<TrellisNode> levelNodes = trellis.get((i+r) / r);
-			System.out.println(levelNodes);
+			TreeSet<TrellisNode> levelNodes = trellis.get((i + r) / r);
+			System.out.println("\nlevelNodes: " + levelNodes);
 			// per ogni nodo del livello
 			for (TrellisNode currentNode : levelNodes) {
 				// recupera i nodi predecessori
 				LinkedList<TrellisNode> predecessors = getPredecessors(previousLevel, currentNode);
-				// per ognuno calcola i bit che avrebbe dovuto trasmettere il codificatore
+				
+				//per ognuno calcoliamo la possibile pathMetric e teniamo conto di quella migliore
+				int bestPathMetric = Integer.MAX_VALUE;
+				TrellisNode predecessorPathCandidate = null;
 				for (TrellisNode predecessor : predecessors) {
-					String p_node = expectedParity(currentNode.getState(), gs);
-					System.out.println("current Node: "+currentNode+"   predec :" + predecessor);
-					System.out.println("paritybits "+p_node);
+					// calcoliamo la Path Metric per il nodo corrente
+					int pathMetric = computePathMetric(currentNode, predecessor, gs, p_received);
+//					System.out.println("pM "+pathMetric);
+					
+					if(pathMetric<bestPathMetric) {
+						bestPathMetric = pathMetric;
+						predecessorPathCandidate = predecessor;
+					}
 				}
-				/*
-				 * 
-				 * x = ((to_state >> (k-2)) << (k-1)) + from_state return [xorbits(g & x) for g
-				 * in glist]
-				 */
-
+				
+				//infine settiamo il predecessore sul path e la pathMetric per il nodo corrente
+				currentNode.setPathMetric(bestPathMetric);
+				currentNode.setPathPredecessor(predecessorPathCandidate);
+				
+				
+				
 			}
-
 			previousLevel = levelNodes;
 
 		}
-		return null;
+		//selezioniamo il nodo finale (tra quelli dell'ultimo livello) con pathMetric minore
+		TrellisNode finalNode = getFinalNode(previousLevel);
+		System.out.println("final Node: "+finalNode+" PM finale: "+finalNode.getPathMetric());
+		
+		//decodifichiamo attraversando il path a pathMetric minima
+		String inverseDecodedPayload = traverseMLPath(finalNode);
+		System.out.println("inverseDecodedPayload: "+inverseDecodedPayload);
+		
+		//reverse dell'output ottenuto
+		StringBuilder decodedPayload = new StringBuilder(inverseDecodedPayload);
+		decodedPayload.reverse();
+		return decodedPayload.toString();
 
 	}
 
+	private String traverseMLPath(TrellisNode finalNode) {
+		StringBuilder inverseDecodedPayload = new StringBuilder();
+		TrellisNode currentNode = finalNode;
+		while(true) {
+			TrellisNode predecessor = currentNode.getPathPredecessor();
+			if(predecessor==null)
+				break;
+			else {
+				inverseDecodedPayload.append(currentNode.getState().charAt(0));
+				currentNode = predecessor;
+			}
+		}
+		return inverseDecodedPayload.toString();
+	}
+
+	private TrellisNode getFinalNode(TreeSet<TrellisNode> finalLevelNodes) {
+		int bestPathMetric = Integer.MAX_VALUE;
+		TrellisNode finalNodeCandidate = null;
+		for (TrellisNode node : finalLevelNodes) {
+//			System.out.println("Node: "+node+" PM finale: "+node.getPathMetric());
+			int nodePM = node.getPathMetric();
+			if(nodePM<bestPathMetric) {
+				bestPathMetric = nodePM;
+				finalNodeCandidate = node;
+			}
+		}
+		return finalNodeCandidate;
+	}
+
+	private int computePathMetric(TrellisNode currentNode, TrellisNode predecessor, byte[][] gs, String p_received) {
+		// ricaviamo il valore di bit di parità che dovrebbe avere il nodo corrente
+		String p_node = expectedParity(currentNode.getState(), gs);
+//		System.out.println("current Node: " + currentNode + "   predec :" + predecessor);
+//		System.out.println("paritybits " + p_node);
+
+//		Calcoliamo la distanza di hamming tra p_node e p_received, ovvero i bit
+//		sicuramente ricevuti errati nel blocco  in relazione allo stato e 
+//		chiamiamo quasta misura branch metric
+		int BM_node = ConvolutionalUtils.hammingDistance(p_received, p_node);
+		
+		//ritorniamo PM_α = PM[α,n-1] + BM_α in maniera incrementale basandoci sul valore del predecessore
+		return predecessor.getPathMetric()+BM_node;
+	}
+
+	
+
 	private String expectedParity(String state, byte[][] gs) {
 		StringBuilder expectedParity = new StringBuilder();
-		byte[] stateBits = getBits(state);
+		
+		byte[] stateBits = ConvolutionalUtils.getBits(state);
 		byte[] ep = new byte[r];
-		//considerando tutti i polinomi generatori (r)
+		
+		// considerando tutti i polinomi generatori (r)
 		for (int l = 0; l < ep.length; l++) {
-			//e per ognuno tutti i registri di memoria (K+1)
+			// e per ognuno tutti i registri di memoria (K+1)
 			for (int j = 0; j < stateBits.length; j++) {
-				ep[l] =  (byte) (ep[l] ^ (stateBits[j]*gs[l][j]));
+				ep[l] = (byte) (ep[l] ^ (stateBits[j] * gs[l][j]));
 			}
 			expectedParity.append(ep[l]);
 		}
 
 		return expectedParity.toString();
 	}
+
 	
-	public static byte[] getBits(String input) {
-		byte[] bits = new byte[input.length()];
-		for (int i = 0; i < bits.length; i++) {
-			bits[i] = (byte) (input.charAt(i)=='0'?0:1);
-		}
-		return bits;
-	}
+
 	
-	private byte[][] convertGeneratorPolynomials() {
-		byte[][] gs = new byte[r][K+1];
-		for(int i=0; i<gs.length; i++) {
-			for (int j = 0; j < gs[i].length; j++) {
-				gs[i][j] = (byte) (generatorPolynomial[i].charAt(j)=='0'?0:1);
-			}
-		}
-		return gs;
-	}
 
 	private LinkedList<TrellisNode> getPredecessors(TreeSet<TrellisNode> previousLevel, TrellisNode currentNode) {
 		LinkedList<TrellisNode> predecessors = new LinkedList<>();
@@ -177,7 +225,7 @@ public class ViterbiDecoder implements Decoder {
 	private void createTrellis() {
 		TrellisNode radix = null;
 		String firstState = "";
-		for (int i = 0; i < K; i++)
+		for (int i = 0; i < K+1; i++)
 			firstState += "0";
 
 		radix = new TrellisNode(firstState, null);

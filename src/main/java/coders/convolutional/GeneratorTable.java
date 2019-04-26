@@ -29,7 +29,6 @@ public class GeneratorTable {
 		HashMap<Integer, String[]> table1_3 = new HashMap<>();
 
 		table1_2.put(2, new String[] { "111", "101" });
-		table1_2.put(2, new String[] { "111", "101" });
 		table1_2.put(3, new String[] { "1111", "1101" });
 		table1_2.put(4, new String[] { "11101", "10011" });
 		table1_2.put(5, new String[] { "111101", "101011" });
