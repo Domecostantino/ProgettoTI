@@ -1,4 +1,4 @@
-package coder_interfaces;
+package coder.source;
 
 
 public interface Decoder {

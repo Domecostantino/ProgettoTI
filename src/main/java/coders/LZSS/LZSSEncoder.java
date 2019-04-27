@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
-import coder_interfaces.Encoder;
+import coder.source.Encoder;
 
 public class LZSSEncoder implements Encoder {
 

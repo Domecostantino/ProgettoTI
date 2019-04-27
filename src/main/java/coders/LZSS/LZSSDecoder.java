@@ -7,7 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import coder_interfaces.Decoder;
+import coder.source.Decoder;
 
 public class LZSSDecoder implements Decoder {
 

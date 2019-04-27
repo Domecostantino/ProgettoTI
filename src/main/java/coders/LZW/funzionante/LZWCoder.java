@@ -2,7 +2,7 @@ package coders.LZW.funzionante;
 
 import java.io.IOException;
 
-import coder_interfaces.Encoder;
+import coder.source.Encoder;
 
 public class LZWCoder implements Encoder {
 
