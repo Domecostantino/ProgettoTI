@@ -176,7 +176,15 @@ public class HammingCode {
 	
 	
 	public static void main(String [] args) {
-		
+		HammingCode hc=new HammingCode(3);
+		boolean[] b={false,true,true,true};
+		System.out.println(Arrays.toString(b));
+		boolean[] enc=hc.encode(b);
+		System.out.println(Arrays.toString(enc));
+		enc[2]=!enc[2];
+		System.out.println(Arrays.toString(enc));
+		boolean[] dec=hc.decode(enc);
+		System.out.println(Arrays.toString(dec));
 	}
 	
 	

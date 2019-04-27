@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Date;
@@ -718,12 +719,18 @@ public class LZSS {
 				long time = d2.getTime() - d1.getTime();
 				System.out.println("Time Taken to run the program = " + time);
 				System.out.println(new String(out));
-				try (FileOutputStream fos = new FileOutputStream(arg[4])) {
-					fos.write(out);
-					// fos.close(); There is no more need for this line since you had created the
-					// instance of "fos" inside the try. And this will automatically close the
-					// OutputStream
-				}
+				
+//				try (FileOutputStream fos = new FileOutputStream(arg[4])) {
+//					fos.write(out);
+//					// fos.close(); There is no more need for this line since you had created the
+//					// instance of "fos" inside the try. And this will automatically close the
+//					// OutputStream
+//				}
+				FileOutputStream fileOut = new FileOutputStream(arg[4]);
+	            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+	            objectOut.writeObject(out);
+	            objectOut.writeChars("\n\n ciaooo");
+	            objectOut.close();
 			}
 			if (arg[2].equals("d")) {
 				Date d1 = new Date();
