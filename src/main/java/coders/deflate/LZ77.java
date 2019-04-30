@@ -104,7 +104,7 @@ public class LZ77 {
 //					k = ind - 1;
 			}
 //			System.out.println(String.valueOf(ind) + "," + String.valueOf(len) + nextChar);
-			String codedSeq = "§" + String.valueOf(ind) + "," + String.valueOf(len) + nextChar;
+			String codedSeq = "§" + String.valueOf(ind) + "," + String.valueOf(len) + "," + nextChar;
 			if (seq.length() > codedSeq.length())
 				outSb.append(codedSeq);
 			else
@@ -122,25 +122,23 @@ public class LZ77 {
 		char character = ' ';
 		in.deleteCharAt(0);
 		while (in.length() != 0) {
-			try {
-				int next = Integer.parseInt("" + in.charAt(0));
-
-//				System.out.println(in.charAt(0));
-				in.deleteCharAt(0);
-				if (count == 0)
-					index += next;
-				else
-					length += next;
-			} catch (NumberFormatException e) {
-				count++;
-//				System.out.println(in.charAt(0));
-				if (count == 1)
+			if (in.charAt(0) != ',') {
+				if (count == 0) {
+					int next = Integer.parseInt("" + in.charAt(0));
 					in.deleteCharAt(0);
-				if (count == 2) {
+					index += next;
+				} else if (count == 1) {
+					int next = Integer.parseInt("" + in.charAt(0));
+					in.deleteCharAt(0);
+					length += next;
+				} else if (count == 2) {
 					character = in.charAt(0);
 					in.deleteCharAt(0);
 					break;
 				}
+			} else {
+				count++;
+				in.deleteCharAt(0);
 			}
 		}
 		if (in.length() == 0) {
@@ -167,9 +165,6 @@ public class LZ77 {
 				if (p.index != 0) {
 					int k = p.index - 1;
 					for (int i = 0; i < p.lenght; i++) {
-						
-//						System.out.println(k);
-
 						int offset = pos - search_size + k;
 //						System.out.println(p.index+","+p.lenght+","+" "+offset);
 						out.append(out.charAt(offset));
@@ -182,8 +177,6 @@ public class LZ77 {
 				}
 
 			}
-//			System.out.println(in);
-//			System.out.println(out);
 		}
 		return out.toString();
 	}
