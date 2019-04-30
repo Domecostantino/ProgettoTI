@@ -10,11 +10,14 @@ import java.util.LinkedList;
 
 public class LZ77 {
 	private int search_size, lookahead_size;
+	private final int OFFSET_SIZE, LENGHT_SIZE;
 	private char[] searchBuffer, lookaheadBuffer;
 
 	public LZ77(int dim_searchBuf, int dim_lookaheadBuf) {
 		this.lookahead_size = dim_lookaheadBuf;
 		this.search_size = dim_searchBuf;
+		OFFSET_SIZE = String.valueOf(search_size).length();
+		LENGHT_SIZE = String.valueOf(lookahead_size).length();
 		searchBuffer = new char[search_size];
 		lookaheadBuffer = new char[lookahead_size];
 	}
@@ -36,8 +39,8 @@ public class LZ77 {
 		}
 	}
 
-	private int charIndexInSBuffer(char c) {
-		for (int i = 0; i < search_size; i++) {
+	private int charIndexInSBuffer(char c, int start) {
+		for (int i = start; i < search_size; i++) {
 			if (searchBuffer[i] == c)
 				return i + 1;
 		}
@@ -82,35 +85,60 @@ public class LZ77 {
 
 		while (lookahead_size != 0) {
 
-			char nextChar = lookaheadBuffer[0];
-			int ind = charIndexInSBuffer(nextChar);
-			int len = 0;
-			int k = ind - 1;
-			int i = 0;
-			StringBuilder seq = new StringBuilder(nextChar);
-			while (i < lookahead_size) {
-				if (ind != 0 && i != lookahead_size - 1 && lookaheadBuffer[i] == searchBuffer[k]) {
-					len++;
-					seq.append(lookaheadBuffer[i]);
-				} else {
-					nextChar = lookaheadBuffer[i];
-					seq.append(lookaheadBuffer[i]);
-					break;
+			char finalNextChar = lookaheadBuffer[0];
+			int start = 0;
+			int ind = charIndexInSBuffer(finalNextChar, start);
+			int finalLenght = 0;
+			int finalOffset = ind;
+			StringBuilder finalSeq = new StringBuilder("" + finalNextChar);
+			while (ind != 0) {
+				int len = 0;
+				int k = ind - 1;
+				int i = 0;
+				char nextChar=lookaheadBuffer[0];
+				StringBuilder seq = new StringBuilder();
+				while (i < lookahead_size) {
+					if (ind != 0 && i != lookahead_size - 1 && lookaheadBuffer[i] == searchBuffer[k]) {
+						len++;
+						seq.append(lookaheadBuffer[i]);
+					} else {
+						nextChar = lookaheadBuffer[i];
+						seq.append(lookaheadBuffer[i]);
+						break;
+					}
+					k = (k + 1) % search_size;
+					k = k == 0 ? ind - 1 : k;
+					i++;
+//					if (k == search_size && i < lookahead_size && searchBuffer[ind - 1] == lookaheadBuffer[i])
+//						k = ind - 1;
 				}
-				k = (k + 1) % search_size;
-				k = k == 0 ? ind - 1 : k;
-				i++;
-//				if (k == search_size && i < lookahead_size && searchBuffer[ind - 1] == lookaheadBuffer[i])
-//					k = ind - 1;
+				if (len >= finalLenght) {
+					finalLenght = len;
+					finalOffset = ind;
+					finalSeq = seq;
+					finalNextChar=nextChar;
+				}
+				start = ind + 1;
+				ind = charIndexInSBuffer(nextChar, start);
+//				System.out.println(seq);
 			}
+
 //			System.out.println(String.valueOf(ind) + "," + String.valueOf(len) + nextChar);
-			String codedSeq = "§" + String.valueOf(ind) + "," + String.valueOf(len) + "," + nextChar;
-			if (seq.length() > codedSeq.length())
+			String offset = String.valueOf(finalOffset);
+			String lenght = String.valueOf(finalLenght);
+			while (offset.length() < OFFSET_SIZE) {
+				offset = '0' + offset;
+			}
+			while (lenght.length() < LENGHT_SIZE) {
+				lenght = '0' + lenght;
+			}
+			String codedSeq = "§" + offset + lenght + finalNextChar;
+			if (finalSeq.length() > codedSeq.length())
 				outSb.append(codedSeq);
 			else
-				outSb.append(seq);
+				outSb.append(finalSeq);
 
-			update(len + 1, br);
+			update(finalLenght + 1, br);
 		}
 		br.close();
 		return outSb.toString();
@@ -122,24 +150,20 @@ public class LZ77 {
 		char character = ' ';
 		in.deleteCharAt(0);
 		while (in.length() != 0) {
-			if (in.charAt(0) != ',') {
-				if (count == 0) {
-					int next = Integer.parseInt("" + in.charAt(0));
-					in.deleteCharAt(0);
-					index += next;
-				} else if (count == 1) {
-					int next = Integer.parseInt("" + in.charAt(0));
-					in.deleteCharAt(0);
-					length += next;
-				} else if (count == 2) {
-					character = in.charAt(0);
-					in.deleteCharAt(0);
-					break;
-				}
-			} else {
-				count++;
+			if (count < OFFSET_SIZE) {
+				int next = Integer.parseInt("" + in.charAt(0));
 				in.deleteCharAt(0);
+				index += next;
+			} else if (count < LENGHT_SIZE+OFFSET_SIZE) {
+				int next = Integer.parseInt("" + in.charAt(0));
+				in.deleteCharAt(0);
+				length += next;
+			} else {
+				character = in.charAt(0);
+				in.deleteCharAt(0);
+				break;
 			}
+			count++;
 		}
 		if (in.length() == 0) {
 			return null;
@@ -194,8 +218,8 @@ public class LZ77 {
 //
 //		br.close();
 		LZ77 coder = new LZ77(99, 99);
-		String coded = coder.encode("ciao.txt");
-		System.out.println(coded);
+		String coded = coder.encode("mail_de_rango.txt");
+//		System.out.println(coded);
 		System.out.println(coder.decode(coded));
 //		StringBuilder sb = new StringBuilder("");
 //		Pointer p = coder.nextPointer(sb);
