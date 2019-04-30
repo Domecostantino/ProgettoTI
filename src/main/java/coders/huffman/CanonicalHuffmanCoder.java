@@ -1,5 +1,6 @@
 package coders.huffman;
 
+import java.util.BitSet;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.PriorityQueue;
@@ -236,6 +237,10 @@ class CanonicalHuffmanCoder implements Coder {
 		Coder c = new CanonicalHuffmanCoder();
 		Message m = c.encode("domenico non è particolarmente convinto che questa versione possa funzionare");
 		System.out.println("\n");
+		String mess=m.getPayload();
+		BitSet bs=HuffmanUtils.fromString(mess);
+		System.out.println("n byte="+"domenico non è particolarmente convinto che questa versione possa funzionare".length());
+		System.out.println("n byte="+bs.toByteArray().length);
 		Decoder dec = new CanonicalHuffmanDecoder();
 		dec.decode(m);
 	}

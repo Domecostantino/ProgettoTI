@@ -73,6 +73,8 @@ public class RepChannelCoder implements ChannelCoder {
 		RepChannelCoder rcc=new RepChannelCoder(3);
 		BitSet bitData=rcc.encode("ciao.txt");
 		bitData.flip(5);
+		bitData.flip(6);
+		bitData.flip(7);
 		rcc.decode(bitData, "ciao2.txt");
 	}
 

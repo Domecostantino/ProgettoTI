@@ -1,5 +1,6 @@
 package utils;
 
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -157,6 +158,16 @@ public class HuffmanUtils {
 			}
 		}
 		return inverseCanonicalCodeTable;
+	}
+	
+	public static BitSet fromString(String binary) {
+	    BitSet bitset = new BitSet(binary.length());
+	    for (int i = 0; i < binary.length(); i++) {
+	        if (binary.charAt(i) == '1') {
+	            bitset.set(i);
+	        }
+	    }
+	    return bitset;
 	}
 
 }
