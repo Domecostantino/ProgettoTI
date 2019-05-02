@@ -17,7 +17,7 @@ import coders.huffman.CanonicalHuffmanDecoder;
 import utils.HuffmanUtils;
 
 public class DeflateCoder implements Coder {
-	LZ77 lz77 = new LZ77(1155, 1155);
+	LZ77 lz77 = new LZ77(3843, 3843);
 
 	@Override
 	public void encode(String inputFileName, String outputFileName) {
@@ -28,6 +28,7 @@ public class DeflateCoder implements Coder {
 			Message mess = hcoder.encode(enc);
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFileName));
 			oos.writeObject(mess.getHeader());
+			oos.writeInt(mess.getPayload().length());
 			byte[] payload=HuffmanUtils.fromString(mess.getPayload()).toByteArray();
 			System.out.println("bytes codifica huffman: "+payload.length);
 			oos.writeObject(payload);
@@ -46,27 +47,27 @@ public class DeflateCoder implements Coder {
 			o = ois.readObject();
 			Message m = new Message();
 			m.setHeader(o);
+			int length=ois.readInt();
 			byte[] payload=(byte[]) ois.readObject();
 			System.out.println("bytes ricevuti "+payload.length);
-			String stringPayload=HuffmanUtils.toBinaryString(BitSet.valueOf(payload));
+			BitSet bs=BitSet.valueOf(payload);
+			//lenght viene passato per evitare di leggere i bit di padding
+			String stringPayload=HuffmanUtils.toBinaryString(bs,length);
 			System.out.println(stringPayload);
 			m.setPayload(stringPayload);
 			ois.close();
 			CanonicalHuffmanDecoder hdec = new CanonicalHuffmanDecoder();
 			PrintWriter pw=new PrintWriter(outputFileName);
 			String decodedString=lz77.decode(hdec.decode(m));
-//			System.out.println(decodedString);
+			System.out.println(decodedString);
 			pw.append(decodedString);
 			pw.flush();
 			pw.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -74,9 +75,9 @@ public class DeflateCoder implements Coder {
 
 	public static void main(String[] args) {
 		DeflateCoder dc=new DeflateCoder();
-		String in="dberr.txt";
-		String out="dberrdec.txt";
-		String cod="deflatedberr";
+		String in="mail_de_rango.txt";
+		String out="maildec.txt";
+		String cod="deflatemail";
 		dc.encode(in, cod);
 		System.out.println("Dimensione file input:"+new File(in).length());
 		System.out.println("Dimensione file codificato:"+new File(cod).length());

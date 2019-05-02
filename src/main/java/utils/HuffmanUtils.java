@@ -170,10 +170,10 @@ public class HuffmanUtils {
 	    return bitset;
 	}
 	
-	public static String toBinaryString(BitSet bitset) {
+	public static String toBinaryString(BitSet bitset,int lenght) {
 	    StringBuffer sb = new StringBuffer();
 
-	    for (int i = 0; i < bitset.length(); i++) {
+	    for (int i = 0; i < lenght; i++) {
 	      sb.append((bitset.get(i)) ? '1' : '0');
 	    }
 

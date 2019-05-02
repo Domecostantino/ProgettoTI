@@ -2,6 +2,7 @@ package coders.deflate;
 
 import java.awt.AlphaComposite;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,11 +16,14 @@ public class LZ77 {
 	private final int OFFSET_SIZE, LENGHT_SIZE;
 	private char[] searchBuffer, lookaheadBuffer;
 	private final char[] alphabet = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f',
-			'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'k', 'r', 's', 't', 'w', 'x', 'y', 'z' };
+			'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A',
+			'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+			'W', 'X', 'Y', 'Z' };
 
 	public LZ77(int dim_searchBuf, int dim_lookaheadBuf) {
 		this.lookahead_size = dim_lookaheadBuf;
 		this.search_size = dim_searchBuf;
+		System.out.println(alphabet.length * alphabet.length);
 		OFFSET_SIZE = alphabetInt(search_size).length();
 		LENGHT_SIZE = alphabetInt(lookahead_size).length();
 		searchBuffer = new char[search_size];
@@ -49,7 +53,7 @@ public class LZ77 {
 	private int intFromAlphabet(String alph) {
 		int ret = 0;
 		for (int i = alph.length() - 1; i >= 0; i--) {
-			ret += charValue(alph.charAt(alph.length() - 1 - i))*Math.pow(alphabet.length, i);
+			ret += charValue(alph.charAt(alph.length() - 1 - i)) * Math.pow(alphabet.length, i);
 		}
 		return ret;
 	}
@@ -249,13 +253,20 @@ public class LZ77 {
 //		}
 //
 //		br.close();
-		LZ77 coder = new LZ77(1155, 1155);
-		String coded = coder.encode("dberr.txt");
-		System.out.println(coded.length());
-		System.out.println(coder.decode(coded).length());
+		LZ77 coder = new LZ77(3843, 3843);
+		String coded = coder.encode("mail_de_rango.txt");
+		System.out.println(new File("mail_de_rango.txt").length());
+		System.out.println(coded);
+		System.out.println(coder.decode(coded));
+		//verifica correttezza della codifica ad alfabeto
+		for (int i = 0; i < 3844; i++) {
+			if (coder.intFromAlphabet(coder.alphabetInt(i)) != i)
+				System.out.println(i + " " + coder.alphabetInt(i) + " " + coder.intFromAlphabet(coder.alphabetInt(i)));
+			;
+		}
 //		System.out.println(coder.alphabet.length);
 //		System.out.println(coder.alphabetInt(34));
-//		System.out.println(coder.intFromAlphabet(coder.alphabetInt(34)));
+//		System.out.println(coder.alphabetInt(1040));
 //		StringBuilder sb = new StringBuilder("");
 //		Pointer p = coder.nextPointer(sb);
 //		System.out.println(p.index + "," + p.lenght + p.character);
