@@ -70,7 +70,7 @@ import utils.HuffmanUtils;
  * 
  */
 
-class CanonicalHuffmanCoder implements Coder {
+public class CanonicalHuffmanCoder implements Coder {
 
 	// struttura usata per tenere ordinate in maniera crescente le lunghezze delle
 	// codifiche e per ognuna in ordine crescenti i simboli corrispondenti

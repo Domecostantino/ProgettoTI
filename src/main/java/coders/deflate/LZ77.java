@@ -1,10 +1,12 @@
 package coders.deflate;
 
+import java.awt.AlphaComposite;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.CharBuffer;
+import java.util.Base64;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -12,14 +14,44 @@ public class LZ77 {
 	private int search_size, lookahead_size;
 	private final int OFFSET_SIZE, LENGHT_SIZE;
 	private char[] searchBuffer, lookaheadBuffer;
+	private final char[] alphabet = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f',
+			'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'k', 'r', 's', 't', 'w', 'x', 'y', 'z' };
 
 	public LZ77(int dim_searchBuf, int dim_lookaheadBuf) {
 		this.lookahead_size = dim_lookaheadBuf;
 		this.search_size = dim_searchBuf;
-		OFFSET_SIZE = String.valueOf(search_size).length();
-		LENGHT_SIZE = String.valueOf(lookahead_size).length();
+		OFFSET_SIZE = alphabetInt(search_size).length();
+		LENGHT_SIZE = alphabetInt(lookahead_size).length();
 		searchBuffer = new char[search_size];
 		lookaheadBuffer = new char[lookahead_size];
+	}
+
+	private String alphabetInt(int integer) {
+		int result = integer / alphabet.length;
+		int rest = integer % alphabet.length;
+		String ret = "" + alphabet[rest];
+		while (result != 0) {
+			rest = result % alphabet.length;
+			result = result / alphabet.length;
+			ret = alphabet[rest] + ret;
+		}
+		return ret;
+	}
+
+	private int charValue(char c) {
+		for (int i = 0; i < alphabet.length; i++) {
+			if (c == alphabet[i])
+				return i;
+		}
+		return -1;
+	}
+
+	private int intFromAlphabet(String alph) {
+		int ret = 0;
+		for (int i = alph.length() - 1; i >= 0; i--) {
+			ret += charValue(alph.charAt(alph.length() - 1 - i))*Math.pow(alphabet.length, i);
+		}
+		return ret;
 	}
 
 	private class Pointer {
@@ -95,7 +127,7 @@ public class LZ77 {
 				int len = 0;
 				int k = ind - 1;
 				int i = 0;
-				char nextChar=lookaheadBuffer[0];
+				char nextChar = lookaheadBuffer[0];
 				StringBuilder seq = new StringBuilder();
 				while (i < lookahead_size) {
 					if (ind != 0 && i != lookahead_size - 1 && lookaheadBuffer[i] == searchBuffer[k]) {
@@ -116,7 +148,7 @@ public class LZ77 {
 					finalLenght = len;
 					finalOffset = ind;
 					finalSeq = seq;
-					finalNextChar=nextChar;
+					finalNextChar = nextChar;
 				}
 				start = ind + 1;
 				ind = charIndexInSBuffer(nextChar, start);
@@ -124,8 +156,8 @@ public class LZ77 {
 			}
 
 //			System.out.println(String.valueOf(ind) + "," + String.valueOf(len) + nextChar);
-			String offset = String.valueOf(finalOffset);
-			String lenght = String.valueOf(finalLenght);
+			String offset = alphabetInt(finalOffset);
+			String lenght = alphabetInt(finalLenght);
 			while (offset.length() < OFFSET_SIZE) {
 				offset = '0' + offset;
 			}
@@ -151,11 +183,11 @@ public class LZ77 {
 		in.deleteCharAt(0);
 		while (in.length() != 0) {
 			if (count < OFFSET_SIZE) {
-				int next = Integer.parseInt("" + in.charAt(0));
+				char next = in.charAt(0);
 				in.deleteCharAt(0);
 				index += next;
-			} else if (count < LENGHT_SIZE+OFFSET_SIZE) {
-				int next = Integer.parseInt("" + in.charAt(0));
+			} else if (count < LENGHT_SIZE + OFFSET_SIZE) {
+				char next = in.charAt(0);
 				in.deleteCharAt(0);
 				length += next;
 			} else {
@@ -169,7 +201,7 @@ public class LZ77 {
 			return null;
 		}
 
-		return new Pointer(Integer.parseInt(index), Integer.parseInt(length), character);
+		return new Pointer(intFromAlphabet(index), intFromAlphabet(length), character);
 	}
 
 	public String decode(String encodedData) {
@@ -217,10 +249,13 @@ public class LZ77 {
 //		}
 //
 //		br.close();
-		LZ77 coder = new LZ77(99, 99);
-		String coded = coder.encode("mail_de_rango.txt");
-//		System.out.println(coded);
-		System.out.println(coder.decode(coded));
+		LZ77 coder = new LZ77(1155, 1155);
+		String coded = coder.encode("dberr.txt");
+		System.out.println(coded.length());
+		System.out.println(coder.decode(coded).length());
+//		System.out.println(coder.alphabet.length);
+//		System.out.println(coder.alphabetInt(34));
+//		System.out.println(coder.intFromAlphabet(coder.alphabetInt(34)));
 //		StringBuilder sb = new StringBuilder("");
 //		Pointer p = coder.nextPointer(sb);
 //		System.out.println(p.index + "," + p.lenght + p.character);

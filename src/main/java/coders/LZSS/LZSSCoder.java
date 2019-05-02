@@ -8,9 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
-import coder.source.Encoder;
+import coder.source.Coder;
 
-public class LZSSEncoder implements Encoder {
+public class LZSSCoder implements Coder {
 
 	@Override
 	public void encode(String inputFileName, String outputFileName) {
@@ -18,6 +18,25 @@ public class LZSSEncoder implements Encoder {
 			InputStream inp = new FileInputStream(new File(inputFileName));
 			LZSS lzss = new LZSS(inp);
 			ByteArrayOutputStream baos = lzss.compress();
+			byte[] out = baos.toByteArray();
+			try (FileOutputStream fos = new FileOutputStream(outputFileName)) {
+				fos.write(out);
+				// fos.close(); There is no more need for this line since you had created the
+				// instance of "fos" inside the try. And this will automatically close the
+				// OutputStream
+			}
+		} catch (IOException e) {
+			// TODO: handle exception
+		}
+
+	}
+	
+	@Override
+	public void decode(String inputFileName, String outputFileName) {
+		try {
+			InputStream inp = new FileInputStream(new File(inputFileName));
+			LZSS lzss = new LZSS(inp);
+			ByteArrayOutputStream baos = lzss.uncompress();
 			byte[] out = baos.toByteArray();
 			try (FileOutputStream fos = new FileOutputStream(outputFileName)) {
 				fos.write(out);

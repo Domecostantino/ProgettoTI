@@ -169,5 +169,15 @@ public class HuffmanUtils {
 	    }
 	    return bitset;
 	}
+	
+	public static String toBinaryString(BitSet bitset) {
+	    StringBuffer sb = new StringBuffer();
+
+	    for (int i = 0; i < bitset.length(); i++) {
+	      sb.append((bitset.get(i)) ? '1' : '0');
+	    }
+
+	    return sb.toString();
+	  }
 
 }
