@@ -174,10 +174,10 @@ public class ConvolutionalCoder implements Coder {
 
 	public static void main(String[] args) {
 		ConvolutionalCoder cc = new ConvolutionalCoder(7, 3);
-		String q = "ciao";
+		String q = "ciao Vincenzo come stai èllamado";
 		Message m = cc.encode(q);
 		
-		String changedMessage = m.getPayload().replace("0001", "0000");
+		String changedMessage = m.getPayload().replace("0000", "0100");
 		System.out.println("corrupted "+changedMessage);
 		
 		System.out.println("\n\n--------------------- DECODE ----------------------\n\n");
@@ -200,6 +200,14 @@ public class ConvolutionalCoder implements Coder {
 		
 		String text2 = new String(new BigInteger(d, 2).toByteArray());
 		System.out.println(text2);
+		
+		System.out.println("con replace(\"0001\", \"0000\") e r=2 si ha: ");
+		System.out.println(q+ " -> "+text2);
+		
+		String p = new BigInteger(q.getBytes()).toString(2);
+		p = p.replace("0000", "0101");
+		String text3 = new String(new BigInteger(p, 2).toByteArray());
+		System.out.println("Messaggio senza codifica di sorgente sempre con replace(\"0001\", \"0000\"); : "+text3);
 	}
 
 }
