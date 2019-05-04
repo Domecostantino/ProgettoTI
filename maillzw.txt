@@ -1,0 +1,29 @@
+Salve Professore,
+sono Domenico Costantino (matr. 189168) studente del corso di Teoria dell'Informazione e Applicazioni. Scrivo a nome del gruppo composto da me, e gli studenti, Vincenzo Bonaccio (matr. 195366), Giovanni Bruno (matr. 189145). Scrivo per fissare la traccia del progetto che lei ci aveva assegnato tempo fa in modo da poter cominciare lo sviluppo. Specifica:
+
+Sviluppo in Java di un simulatore di trasmissione per l'analisi della codifica di sorgente e di canale di file testuali. 
+Tipi di codifica di sorgente:
+- 2 Schemi Lempel-Ziv (avanzati)
+- Codifica di Huffman
+
+Codifica di canale:
+- Codici Concatenati
+- Codici Convoluzionali (non visti a lezione)
+
+Come mezzo simulare un canale wireless con modelli UMTS/WirelessLAN.
+
+Valutare:
+- Ritardo di codifica/decodifica E2E
+- Fattore di compressione
+- Dimensione della memoria occupata da sorgente e destinazione
+- Errori nella codifica
+
+Ciò al variare di:
+- Tasso di errore sul canale
+- Codifica di sorgente
+- Codifica di canale
+- Testi in input
+
+Implementare in Java i codificatori e decodificatori necessari. Allo stesso modo simulare il canale di trasferimento (modalità ed errori). Effettuare uno studio delle codifiche opportunamente composte, evidenziandone le performance, ricavate dai risultati delle simulazioni.
+
+In attesa di un riscontro positivo le auguriamo buona giornata.

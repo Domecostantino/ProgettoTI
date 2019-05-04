@@ -19,14 +19,14 @@ public class ConvolutionalChannelCoder implements ChannelCoder {
 		ConvolutionalCoder coder=new ConvolutionalCoder(k, r);
 		BitSet bs=BitSet.valueOf(inChannelMessage.getPayload());
 		String enc=coder.encode(GenericUtils.toBinaryString(bs,bs.length()));
-		return GenericUtils.fromString(enc);
+		return GenericUtils.getBitSetFromString(enc);
 	}
 
 	@Override
 	public void decode(BitSet encoded_data, ChannelMessage outChannelMessage) {
 		ViterbiDecoder decoder=new ViterbiDecoder(k, r);
 		String dec=decoder.decode(GenericUtils.toBinaryString(encoded_data,encoded_data.length()));
-		outChannelMessage.setPayload(GenericUtils.fromString(dec).toByteArray());
+		outChannelMessage.setPayload(GenericUtils.getBitSetFromString(dec).toByteArray());
 	}
 
 }

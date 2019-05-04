@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import coders.Message;
+import utils.GenericUtils;
 import utils.HuffmanUtils;
 
 /*
@@ -235,7 +236,7 @@ public class CanonicalHuffmanCoder {
 		Message m = c.encode("domenico non è particolarmente convinto che questa versione possa funzionare");
 		System.out.println("\n");
 		String mess=m.getPayload();
-		BitSet bs=HuffmanUtils.fromString(mess);
+		BitSet bs=GenericUtils.getBitSetFromString(mess);
 		System.out.println("n byte="+"domenico non è particolarmente convinto che questa versione possa funzionare".length());
 		System.out.println("n byte="+bs.toByteArray().length);
 		CanonicalHuffmanDecoder dec = new CanonicalHuffmanDecoder();

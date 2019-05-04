@@ -19,7 +19,7 @@ import coders.Message;
 
 public class GenericUtils {
 
-	public static BitSet fromString(String binary) {
+	public static BitSet getBitSetFromString(String binary) {
 	    BitSet bitset = new BitSet(binary.length());
 	    for (int i = 0; i < binary.length(); i++) {
 	        if (binary.charAt(i) == '1') {
@@ -48,11 +48,11 @@ public class GenericUtils {
 			m.setHeader(o);
 			int length = ois.readInt();
 			byte[] payload = (byte[]) ois.readObject();
-			System.out.println("bytes ricevuti " + payload.length);
+//			System.out.println("bytes ricevuti " + payload.length);
 			BitSet bs = BitSet.valueOf(payload);
 			// lenght viene passato per evitare di leggere i bit di padding
-			String stringPayload = HuffmanUtils.toBinaryString(bs, length);
-			System.out.println(stringPayload);
+			String stringPayload = toBinaryString(bs, length);
+//			System.out.println(stringPayload);
 			m.setPayload(stringPayload);
 			ois.close();
 		} catch (IOException e) {
@@ -69,8 +69,8 @@ public class GenericUtils {
 			oos = new ObjectOutputStream(new FileOutputStream(outputFilePath));
 			oos.writeObject(mess.getHeader());
 			oos.writeInt(mess.getPayload().length());
-			byte[] payload = HuffmanUtils.fromString(mess.getPayload()).toByteArray();
-			System.out.println("bytes codifica huffman: " + payload.length);
+			byte[] payload = getBitSetFromString(mess.getPayload()).toByteArray();
+//			System.out.println("bytes codifica huffman: " + payload.length);
 			oos.writeObject(payload);
 			oos.flush();
 			oos.close();

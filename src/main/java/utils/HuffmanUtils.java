@@ -159,25 +159,5 @@ public class HuffmanUtils {
 		}
 		return inverseCanonicalCodeTable;
 	}
-	
-	public static BitSet fromString(String binary) {
-	    BitSet bitset = new BitSet(binary.length());
-	    for (int i = 0; i < binary.length(); i++) {
-	        if (binary.charAt(i) == '1') {
-	            bitset.set(i);
-	        }
-	    }
-	    return bitset;
-	}
-	
-	public static String toBinaryString(BitSet bitset,int lenght) {
-	    StringBuffer sb = new StringBuffer();
-
-	    for (int i = 0; i < lenght; i++) {
-	      sb.append((bitset.get(i)) ? '1' : '0');
-	    }
-
-	    return sb.toString();
-	  }
 
 }

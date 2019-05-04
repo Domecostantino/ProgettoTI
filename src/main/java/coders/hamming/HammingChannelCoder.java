@@ -23,25 +23,26 @@ public class HammingChannelCoder implements ChannelCoder {
 			byte[] b = new byte[1];
 			b[0] = fileContent[i];
 			BitSet bs = BitSet.valueOf(b);
-
-			boolean[] boolData0 = new boolean[bs.length() / 2];
-			boolean[] boolData1 = new boolean[bs.length() / 2];
+//			System.out.println(bs.length());
+			boolean[] boolData0 = new boolean[4];
+			boolean[] boolData1 = new boolean[4];
+			int bits=4;
 			for (int j = 0; j < bs.length(); j++) {
-				if (j < bs.length() / 2)
-					boolData0[i] = bs.get(i);
+				if (j < bits)
+					boolData0[j] = bs.get(j);
 				else
-					boolData1[i] = bs.get(i);
+					boolData1[j-bits] = bs.get(j);
 			}
 			// codifico
 			boolean[] encData0 = coder.encode(boolData0);
 			boolean[] encData1 = coder.encode(boolData1);
 			for (int j = 0; j < encData0.length; j++) {
-				if (encData0[i])
+				if (encData0[j])
 					out.set(setIndex);
 				setIndex++;
 			}
 			for (int j = 0; j < encData1.length; j++) {
-				if (encData1[i])
+				if (encData1[j])
 					out.set(setIndex);
 				setIndex++;
 			}
