@@ -1,39 +1,25 @@
 package coders.deflate;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-import java.util.BitSet;
 
-import coder.source.Coder;
+import coder.source.SourceCoder;
 import coders.Message;
 import coders.huffman.CanonicalHuffmanCoder;
 import coders.huffman.CanonicalHuffmanDecoder;
-import utils.HuffmanUtils;
+import utils.GenericUtils;
 
-public class DeflateCoder implements Coder {
+public class DeflateCoder implements SourceCoder {
 	LZ77 lz77 = new LZ77(3843, 3843);
 
 	@Override
 	public void encode(String inputFileName, String outputFileName) {
 		try {
 			String enc = lz77.encode(inputFileName);
-			System.out.println("bytes codifica lz77: "+enc.length());
+			System.out.println("bytes codifica lz77: " + enc.length());
 			CanonicalHuffmanCoder hcoder = new CanonicalHuffmanCoder();
 			Message mess = hcoder.encode(enc);
-			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFileName));
-			oos.writeObject(mess.getHeader());
-			oos.writeInt(mess.getPayload().length());
-			byte[] payload=HuffmanUtils.fromString(mess.getPayload()).toByteArray();
-			System.out.println("bytes codifica huffman: "+payload.length);
-			oos.writeObject(payload);
-			oos.flush();
-			oos.close();
+			GenericUtils.writeMessageToFile(mess, outputFileName);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -41,47 +27,22 @@ public class DeflateCoder implements Coder {
 
 	@Override
 	public void decode(String inputFileName, String outputFileName) {
-		Object o = null;
-		try {
-			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(inputFileName));
-			o = ois.readObject();
-			Message m = new Message();
-			m.setHeader(o);
-			int length=ois.readInt();
-			byte[] payload=(byte[]) ois.readObject();
-			System.out.println("bytes ricevuti "+payload.length);
-			BitSet bs=BitSet.valueOf(payload);
-			//lenght viene passato per evitare di leggere i bit di padding
-			String stringPayload=HuffmanUtils.toBinaryString(bs,length);
-			System.out.println(stringPayload);
-			m.setPayload(stringPayload);
-			ois.close();
-			CanonicalHuffmanDecoder hdec = new CanonicalHuffmanDecoder();
-			PrintWriter pw=new PrintWriter(outputFileName);
-			String decodedString=lz77.decode(hdec.decode(m));
-			System.out.println(decodedString);
-			pw.append(decodedString);
-			pw.flush();
-			pw.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
+		Message m = GenericUtils.getMessageFromFile(inputFileName);
+		CanonicalHuffmanDecoder hdec = new CanonicalHuffmanDecoder();
+		String decodedString = lz77.decode(hdec.decode(m));
+//		System.out.println(decodedString);
+		GenericUtils.writeString(decodedString, outputFileName);
 	}
 
 	public static void main(String[] args) {
-		DeflateCoder dc=new DeflateCoder();
-		String in="mail_de_rango.txt";
-		String out="maildec.txt";
-		String cod="deflatemail";
+		DeflateCoder dc = new DeflateCoder();
+		String in = "mail_de_rango.txt";
+		String out = "maildec.txt";
+		String cod = "deflatemail";
 		dc.encode(in, cod);
-		System.out.println("Dimensione file input:"+new File(in).length());
-		System.out.println("Dimensione file codificato:"+new File(cod).length());
+		System.out.println("Dimensione file input:" + new File(in).length());
+		System.out.println("Dimensione file codificato:" + new File(cod).length());
 		dc.decode(cod, out);
 	}
-	
+
 }

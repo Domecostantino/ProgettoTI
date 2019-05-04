@@ -3,7 +3,6 @@ package coders.convolutional;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import coders.Coder;
 import coders.Message;
 import utils.ConvolutionalUtils;
 
@@ -30,7 +29,7 @@ import utils.ConvolutionalUtils;
  * 
  */
 
-public class ConvolutionalCoder implements Coder {
+public class ConvolutionalCoder  {
 	private int K, r;
 	private final int NUM_LEVELS = 7;
 
@@ -79,8 +78,7 @@ public class ConvolutionalCoder implements Coder {
 	 * 
 	 */
 
-	@Override
-	public Message encode(String input) { // TODO pulire stampe
+	public String encode(String input) { // TODO pulire stampe
 		// conversione dell'input testuale in una stringa di bit
 		String bitInput = new BigInteger(input.getBytes()).toString(2);
 		System.out.println(input);
@@ -117,14 +115,14 @@ public class ConvolutionalCoder implements Coder {
 
 		Message message = new Message();
 
-		// header
-		ConvolutionalHeader header = new ConvolutionalHeader(K, r);
-		message.setHeader(header);
+//		// header
+//		ConvolutionalHeader header = new ConvolutionalHeader(K, r);
+//		message.setHeader(header);
+//
+//		// payload
+//		message.setPayload(encodedPayload.toString());
 
-		// payload
-		message.setPayload(encodedPayload.toString());
-
-		return message;
+		return encodedPayload.toString();
 	}
 
 	/*
@@ -175,9 +173,9 @@ public class ConvolutionalCoder implements Coder {
 	public static void main(String[] args) {
 		ConvolutionalCoder cc = new ConvolutionalCoder(7, 3);
 		String q = "ciao Vincenzo come stai èllamado";
-		Message m = cc.encode(q);
+		String s = cc.encode(q);
 		
-		String changedMessage = m.getPayload().replace("0000", "0100");
+		String changedMessage = s.replace("0000", "0100");
 		System.out.println("corrupted "+changedMessage);
 		
 		System.out.println("\n\n--------------------- DECODE ----------------------\n\n");
@@ -189,13 +187,13 @@ public class ConvolutionalCoder implements Coder {
 //		String text2 = new String(new BigInteger(p, 2).toByteArray());
 //		System.out.println(text2);
 		
-		Message corrupted = new Message();
-		corrupted.setHeader(m.getHeader());
-		corrupted.setPayload(changedMessage);
+//		Message corrupted = new Message();
+//		corrupted.setHeader(m.getHeader());
+//		corrupted.setPayload(changedMessage);
 		
 
-		ViterbiDecoder dec = new ViterbiDecoder();
-		String d = dec.decode(corrupted);
+		ViterbiDecoder dec = new ViterbiDecoder(7,3);
+		String d = dec.decode(changedMessage);
 		System.out.println("decodedPayload: "+d);
 		
 		String text2 = new String(new BigInteger(d, 2).toByteArray());

@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import coders.Decoder;
 import coders.Message;
 import utils.HuffmanUtils;
 
@@ -12,7 +11,7 @@ import utils.HuffmanUtils;
  * Questa classe ha lo scopo di concretizzare il metodo decode dell'interfaccia Coder
  * e quindi decodificare un messaggio in input
  */
-public class CanonicalHuffmanDecoder implements Decoder {
+public class CanonicalHuffmanDecoder {
 	// struttura usata per tenere ordinate in maniera crescente le lunghezze delle
 	// codifiche e per ognuna in ordine crescenti i simboli corrispondenti
 	private TreeMap<Integer, TreeSet<Character>> lengthTable;
@@ -25,7 +24,6 @@ public class CanonicalHuffmanDecoder implements Decoder {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
 	public String decode(Message input) {
 		// recuperiamo l'header dal messaggio (lengthTable) siamo sicuri che è la
 		// struttura adeguata se stiamo usando Huffman come codifica di sorgente

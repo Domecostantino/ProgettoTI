@@ -1,22 +1,15 @@
 package coders.LZSS;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Scanner;
-
-import coders.LZW.funzionante.LZWCompression;
 
 /**
  * The LZSS compression is a port of code as implemented for STEP. The following

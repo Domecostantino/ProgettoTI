@@ -6,11 +6,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 
-import coder.source.Coder;
+import coder.source.SourceCoder;
 
-public class LZSSCoder implements Coder {
+public class LZSSCoder implements SourceCoder {
 
 	@Override
 	public void encode(String inputFileName, String outputFileName) {

@@ -1,15 +1,10 @@
 package coders.deflate;
 
-import java.awt.AlphaComposite;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.CharBuffer;
-import java.util.Base64;
-import java.util.Iterator;
-import java.util.LinkedList;
 
 public class LZ77 {
 	private int search_size, lookahead_size;

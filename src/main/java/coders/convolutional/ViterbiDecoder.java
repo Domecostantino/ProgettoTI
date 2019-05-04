@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.TreeSet;
 
-import coders.Decoder;
-import coders.Message;
 import utils.ConvolutionalUtils;
 
 /*
@@ -25,7 +23,7 @@ import utils.ConvolutionalUtils;
  * 
  */
 
-public class ViterbiDecoder implements Decoder {
+public class ViterbiDecoder {
 
 	// il traliccio viene rappresentato come una array di livelli con una lista di
 	// nodi per ogni livello
@@ -36,18 +34,21 @@ public class ViterbiDecoder implements Decoder {
 
 	private String[] generatorPolynomial;
 
-	@Override
-	public String decode(Message input) {
+	public ViterbiDecoder(int K, int r) {
+		this.K=K;
+		this.r=r;
+	}
+	
+	public String decode(String payload) {
 
 		// riceviamo il messaggio ed estrapoliamo header e payload
-		ConvolutionalHeader header = (ConvolutionalHeader) input.getHeader();
-		this.K = header.getK();
-		this.r = header.getR();
+//		ConvolutionalHeader header = (ConvolutionalHeader) input.getHeader();
+//		this.K = header.getK();
+//		this.r = header.getR();
 
 		GeneratorTable generatorTable = new GeneratorTable();
 		generatorPolynomial = generatorTable.getGeneratorPolynomials(r, K);
 
-		String payload = input.getPayload();
 		int range = NUM_LEVELS * r;
 
 		StringBuilder decodedPayload = new StringBuilder();

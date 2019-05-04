@@ -2,9 +2,9 @@ package coders.LZW.funzionante;
 
 import java.io.IOException;
 
-import coder.source.Coder;
+import coder.source.SourceCoder;
 
-public class LZWCoder implements Coder {
+public class LZWCoder implements SourceCoder {
 
 	@Override
 	public void encode(String input, String output) {
@@ -24,5 +24,14 @@ public class LZWCoder implements Coder {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void main(String[] args) {
+		LZWCoder c=new LZWCoder();
+		String in = "mail_de_rango.txt";
+		String out = "maillzw.txt";
+		String cod = "lzwmail";
+		c.encode(in, cod);
+		c.decode(cod, out);
 	}
 }

@@ -7,8 +7,6 @@ import java.util.PriorityQueue;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import coders.Coder;
-import coders.Decoder;
 import coders.Message;
 import utils.HuffmanUtils;
 
@@ -70,7 +68,7 @@ import utils.HuffmanUtils;
  * 
  */
 
-public class CanonicalHuffmanCoder implements Coder {
+public class CanonicalHuffmanCoder {
 
 	// struttura usata per tenere ordinate in maniera crescente le lunghezze delle
 	// codifiche e per ognuna in ordine crescenti i simboli corrispondenti
@@ -91,7 +89,6 @@ public class CanonicalHuffmanCoder implements Coder {
 		frequencies = new HashMap<>();
 	}
 
-	@Override
 	public Message encode(String input) {
 		// TODO eliminare
 		System.out.println("Input: " + input + "\n\n");
@@ -234,14 +231,14 @@ public class CanonicalHuffmanCoder implements Coder {
 
 	//main di prova per codifica/decodifica di Huffman, eliminare TODO
 	public static void main(String args[]) {
-		Coder c = new CanonicalHuffmanCoder();
+		CanonicalHuffmanCoder c = new CanonicalHuffmanCoder();
 		Message m = c.encode("domenico non è particolarmente convinto che questa versione possa funzionare");
 		System.out.println("\n");
 		String mess=m.getPayload();
 		BitSet bs=HuffmanUtils.fromString(mess);
 		System.out.println("n byte="+"domenico non è particolarmente convinto che questa versione possa funzionare".length());
 		System.out.println("n byte="+bs.toByteArray().length);
-		Decoder dec = new CanonicalHuffmanDecoder();
+		CanonicalHuffmanDecoder dec = new CanonicalHuffmanDecoder();
 		dec.decode(m);
 	}
 

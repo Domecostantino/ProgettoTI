@@ -1,7 +1,7 @@
 package coder.source;
 
 
-public interface Coder {
+public interface SourceCoder {
 	/**
 	 * Metodo di codifica
 	 * @param inputFileName è il path del file sorgente

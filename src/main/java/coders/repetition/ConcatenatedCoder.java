@@ -2,7 +2,7 @@ package coders.repetition;
 
 import java.util.Arrays;
 
-public class ConcatenatedCode {
+public class ConcatenatedCoder {
 	private int levels;
 	private RepetitionCode[] repCodes;
 
@@ -11,7 +11,7 @@ public class ConcatenatedCode {
 	 * @param rep_per_level è un array che indica il numero di ripetizioni per ogni livello della codifica,
 	 * la dimensione dell'array è pari al numero di livelli
 	 */
-	public ConcatenatedCode(int[] rep_per_level) {
+	public ConcatenatedCoder(int[] rep_per_level) {
 		this.levels=rep_per_level.length;
 		repCodes=new RepetitionCode[levels];
 		for (int i = 0; i < levels; i++) {
@@ -36,8 +36,8 @@ public class ConcatenatedCode {
 	}
 	
 	public static void main(String[] args) {
-		int[] reps= {3,3};
-		ConcatenatedCode cc=new ConcatenatedCode(reps);
+		int[] reps= {3};
+		ConcatenatedCoder cc=new ConcatenatedCoder(reps);
 		boolean[] b = { false, true, true, true };
 		System.out.println(Arrays.toString(b));
 		boolean[] enc = cc.encode(b);

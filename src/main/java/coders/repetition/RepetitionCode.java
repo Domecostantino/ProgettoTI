@@ -1,8 +1,6 @@
 package coders.repetition;
 import java.util.Arrays;
 
-import coders.hamming.HammingCode;
-
 public class RepetitionCode {
 	// parametro ripetizioni
 	private int r;

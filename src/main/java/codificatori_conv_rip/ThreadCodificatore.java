@@ -1,6 +1,5 @@
 package codificatori_conv_rip;
 
-import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 
 public class ThreadCodificatore implements Runnable {

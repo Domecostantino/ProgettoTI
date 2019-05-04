@@ -1,11 +1,16 @@
 package codificatori_tmp;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import coders.Coder;
 import coders.Message;
-import codificatori_tmp.Nodo.IndiceSuccessore;
 import utils.ConvolutionalUtils;
 
 public class ConvolutionalCoder implements Coder {
