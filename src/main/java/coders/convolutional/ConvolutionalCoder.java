@@ -80,23 +80,23 @@ public class ConvolutionalCoder  {
 
 	public String encode(String input) { // TODO pulire stampe
 		// conversione dell'input testuale in una stringa di bit
-		String bitInput = new BigInteger(input.getBytes()).toString(2);
+//		String input = new BigInteger(input.getBytes()).toString(2);
 		System.out.println(input);
-		System.out.println(bitInput.length());
-		System.out.println(bitInput);
+		System.out.println(input.length());
+		System.out.println(input);
 
 		StringBuilder encodedPayload = new StringBuilder();
 		int range = NUM_LEVELS;
 		// cicliamo su tutto il payload in input
-		for (int i = 0; i < bitInput.length(); i += range) {
+		for (int i = 0; i < input.length(); i += range) {
 
 			// scorporiamo blocchi da da 14 o 21 bits dal payload in relazione a r
 			String block;
 			int nextBound = i + range;
-			if (nextBound < bitInput.length()) {
-				block = bitInput.substring(i, nextBound);
+			if (nextBound < input.length()) {
+				block = input.substring(i, nextBound);
 			} else {
-				block = bitInput.substring(i);
+				block = input.substring(i);
 			}
 
 			System.out.println(block);
