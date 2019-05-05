@@ -92,7 +92,7 @@ public class CanonicalHuffmanCoder {
 
 	public Message encode(String input) {
 		// TODO eliminare
-		System.out.println("Input: " + input + "\n\n");
+//		System.out.println("Input: " + input + "\n\n");
 
 		if (input == null || input.length() < 2) {
 			System.out.println("!!!! Input non valido (nullo o minore di 2 caratteri) !!!!");
@@ -111,15 +111,15 @@ public class CanonicalHuffmanCoder {
 		canonicalCodeTable = HuffmanUtils.getCanonicalCodeTable(lengthTable);
 
 		// TODO eliminare
-		printNormalCodeTable();
-		printCanonicalCodeTable();
-		System.out.println(canonicalCodeTable);
-		System.out.println("\nLengthTable:\n"+lengthTable);
+//		printNormalCodeTable();
+//		printCanonicalCodeTable();
+//		System.out.println(canonicalCodeTable);
+//		System.out.println("\nLengthTable:\n"+lengthTable);
 
 		// ottenuta la canonicalCodeTable possiamo codificare il messaggio e aggiungerlo
 		// come payload
 		String encodedPayload = encodePayload(input);
-		System.out.println(encodedPayload); //TODO eliminare
+//		System.out.println(encodedPayload); //TODO eliminare
 
 		// creiamo il messaggio e lo ritorniamo
 		Message mex = new Message();
@@ -152,7 +152,7 @@ public class CanonicalHuffmanCoder {
 		}
 
 		// TODO eliminare
-		System.out.println("Frequenze: " + frequencies + "\n");
+//		System.out.println("Frequenze: " + frequencies + "\n");
 
 		// creazione dell'albero - iterativamente estraiamo i due valori pi� piccoli e
 		// creaimo un

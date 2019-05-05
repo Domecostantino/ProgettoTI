@@ -528,4 +528,4 @@ CatalogDB: 22:24:41 10/04/2019: DONE Adding Catalog File (0ms): Package_1782_for
 CatalogDB: 22:24:41 10/04/2019: DONE Adding Catalog File (0ms): Package_1783_for_KB4493509~31bf3856ad364e35~amd64~~10.0.1.6.cat
 CatalogDB: 22:24:41 10/04/2019: DONE Adding Catalog File (0ms): Package_1810_for_KB4493509~31bf3856ad364e35~amd64~~10.0.1.6.cat
 CatalogDB: 22:24:41 10/04/2019: DONE Adding Catalog File (0ms): Package_2245_for_KB4493509~31bf3856ad364e35~amd64~~10.0.1.6.cat
-CatalogDB: 00:00:04 11/04/2019: d 0Ptt:: Database d 3Ka  l31  :b:\0r  m  Fdod BC40trty  C:\d atndod BNrryr30m32\Catd _ggt3sd N3s50E6C3-38EE-11D1-85E5-00C04FC295EEd ym5Fdb
+CatalogDB: 00:00:04 11/04/2019: Init:: Database previously shutdown dirty  C:\Windows\system32\CatRoot2\{F750E6C3-38EE-11D1-85E5-00C04FC295EE}\catdb

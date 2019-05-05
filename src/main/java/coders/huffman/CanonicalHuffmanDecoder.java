@@ -32,18 +32,18 @@ public class CanonicalHuffmanDecoder {
 		} catch (ClassCastException e) {
 			System.out.println("Non è stato mandato l'header giusto (Codifica di Huffman)");
 		}
-		System.out.println("LengthTable ricevuta:" + lengthTable); // TODO eliminare
+//		System.out.println("LengthTable ricevuta:" + lengthTable); // TODO eliminare
 
 		// ricostruiamo la codeTable dalla lengthTable
 		inverseCanonicalCodeTable = HuffmanUtils.createInverseCanonicalCodeTable(lengthTable);
-		System.out.println("inverseCanonicalCodeTable: " + inverseCanonicalCodeTable); // TODO eliminare
+//		System.out.println("inverseCanonicalCodeTable: " + inverseCanonicalCodeTable); // TODO eliminare
 
 		// recuperiamo il messaggio codificato
 		String payload = input.getPayload();
 
 		// decodifichiamo usando la invCanCodeTable
 		String result = getDecodedMessage(payload);
-		System.out.println(result); // TODO eliminare
+//		System.out.println(result); // TODO eliminare
 		return result;
 	}
 	

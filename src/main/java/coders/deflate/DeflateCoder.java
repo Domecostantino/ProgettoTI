@@ -16,7 +16,8 @@ public class DeflateCoder implements SourceCoder {
 	public void encode(String inputFileName, String outputFileName) {
 		try {
 			String enc = lz77.encode(inputFileName);
-//			System.out.println("bytes codifica lz77: " + enc.length());
+			System.out.println("bytes codifica lz77: " + enc.length());
+//			System.out.println(enc);
 			CanonicalHuffmanCoder hcoder = new CanonicalHuffmanCoder();
 			Message mess = hcoder.encode(enc);
 			GenericUtils.writeMessageToFile(mess, outputFileName);
