@@ -176,6 +176,9 @@ public class LZ77 {
 	}
 
 	public Pointer nextPointer(StringBuilder in) {
+		if (in.length() == 0) {
+			return null;
+		}
 		int count = 0;
 		String index = "", length = "";
 		char character = ' ';
@@ -195,9 +198,6 @@ public class LZ77 {
 				break;
 			}
 			count++;
-		}
-		if (in.length() == 0) {
-			return null;
 		}
 
 		return new Pointer(intFromAlphabet(index), intFromAlphabet(length), character);
@@ -249,16 +249,19 @@ public class LZ77 {
 //
 //		br.close();
 		LZ77 coder = new LZ77(3843, 3843);
-		String coded = coder.encode("mail_de_rango.txt");
-		System.out.println(new File("mail_de_rango.txt").length());
-		System.out.println(coded);
-		System.out.println(coder.decode(coded));
-		//verifica correttezza della codifica ad alfabeto
-		for (int i = 0; i < 3844; i++) {
-			if (coder.intFromAlphabet(coder.alphabetInt(i)) != i)
-				System.out.println(i + " " + coder.alphabetInt(i) + " " + coder.intFromAlphabet(coder.alphabetInt(i)));
-			;
-		}
+		String coded = coder.encode("Lorem ipsum.txt");
+//		System.out.println(new File("mail_de_rango.txt").length());
+//		System.out.println(coded);
+		System.out.println(coded.length()+"/"+new File("Lorem ipsum.txt").length());
+		String decoded=coder.decode(coded);
+//		Pointer p = coder.nextPointer(new StringBuilder("§GV08."));
+//		System.out.println(p.character);
+//		System.out.println(decoded);
+		// verifica correttezza della codifica ad alfabeto
+//		for (int i = 0; i < 3844; i++) {
+//			if (coder.intFromAlphabet(coder.alphabetInt(i)) != i)
+//				System.out.println(i + " " + coder.alphabetInt(i) + " " + coder.intFromAlphabet(coder.alphabetInt(i)));
+//		}
 //		System.out.println(coder.alphabet.length);
 //		System.out.println(coder.alphabetInt(34));
 //		System.out.println(coder.alphabetInt(1040));

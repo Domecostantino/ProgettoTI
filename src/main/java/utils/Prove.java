@@ -22,10 +22,10 @@ public class Prove {
 //		BitSet b=chcoder.encode(mess);
 //		chcoder.decode(b, mess);
 //		GenericUtils.writeChannelMessage(mess, "ciao4");
-		SourceCoder coder=new HuffmanCoder();
-		String in = "Folder.TXT";
-		String out = "Fdec.txt";
-		String cod = "F";
+		SourceCoder coder=new LZWCoder();//TODO Controllare
+		String in = "Lorem ipsum.txt";
+		String out = "LI.txt";
+		String cod = "LI";
 		coder.encode(in, cod);
 		
 		coder.decode(cod, out);
