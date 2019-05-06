@@ -22,7 +22,7 @@ public class GilbertElliot implements ChannelModel {
 	
 	
 	@Override
-	public BitSet send(BitSet encodedPayload) throws Exception {
+	public BitSet send(BitSet encodedPayload) {
 		 
 	        int num_bit = 0;
 

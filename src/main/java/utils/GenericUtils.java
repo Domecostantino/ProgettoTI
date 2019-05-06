@@ -21,11 +21,17 @@ public class GenericUtils {
 
 	public static BitSet getBitSetFromString(String binary) {
 	    BitSet bitset = new BitSet(binary.length());
+	    System.out.println(bitset.length());
 	    for (int i = 0; i < binary.length(); i++) {
 	        if (binary.charAt(i) == '1') {
 	            bitset.set(i);
 	        }
 	    }
+	    if(binary.charAt(binary.length()-1) == '0') {
+	    	bitset.set(binary.length()-1);
+	    	bitset.flip(binary.length()-1);
+	    }
+	    System.out.println(binary.length()+"  "+bitset.length());
 	    return bitset;
 	}
 	

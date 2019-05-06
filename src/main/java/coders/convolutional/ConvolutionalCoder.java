@@ -81,9 +81,9 @@ public class ConvolutionalCoder  {
 	public String encode(String input) { // TODO pulire stampe
 		// conversione dell'input testuale in una stringa di bit
 //		String input = new BigInteger(input.getBytes()).toString(2);
-		System.out.println(input);
-		System.out.println(input.length());
-		System.out.println(input);
+//		System.out.println(input);
+//		System.out.println(input.length());
+//		System.out.println(input);
 
 		StringBuilder encodedPayload = new StringBuilder();
 		int range = NUM_LEVELS;
@@ -99,21 +99,19 @@ public class ConvolutionalCoder  {
 				block = input.substring(i);
 			}
 
-			System.out.println(block);
+//			System.out.println(block);
 			// codifica convoluzionale mediante i polinomi generatori
 			String encodingBlock = computeEncoding(block);
-			System.out.println();
-			System.out.println(encodingBlock);
+//			System.out.println();
+//			System.out.println(encodingBlock);
 
 			encodedPayload.append(encodingBlock);
 
-			System.out.println("\n\n ************************************** \n\n");
+//			System.out.println("\n\n ************************************** \n\n");
 		}
 
-		System.out.println("EncodedPayload: "+encodedPayload.toString());
+//		System.out.println("EncodedPayload: "+encodedPayload.toString());
 		
-
-		Message message = new Message();
 
 //		// header
 //		ConvolutionalHeader header = new ConvolutionalHeader(K, r);
@@ -135,7 +133,7 @@ public class ConvolutionalCoder  {
 
 		memoryRegister = new byte[K + 1];
 		// recuperiamo i polinomi generatori
-		System.out.println(Arrays.toString(generatorPolynomial));
+//		System.out.println(Arrays.toString(generatorPolynomial));
 		// li convertiamo in una matrice di byte per semplicita
 		byte[][] gs = ConvolutionalUtils.convertGeneratorPolynomials(r,K,generatorPolynomial);
 

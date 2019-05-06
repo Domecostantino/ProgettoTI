@@ -45,6 +45,7 @@ public class ViterbiDecoder {
 //		ConvolutionalHeader header = (ConvolutionalHeader) input.getHeader();
 //		this.K = header.getK();
 //		this.r = header.getR();
+		
 
 		GeneratorTable generatorTable = new GeneratorTable();
 		generatorPolynomial = generatorTable.getGeneratorPolynomials(r, K);
@@ -71,9 +72,10 @@ public class ViterbiDecoder {
 
 			decodedPayload.append(decodedBlock);
 
-			System.out.println("\n\n ************************************** \n\n");
+			//System.out.println("\n\n ************************************** \n\n");
 		}
-
+		
+//		System.out.println(decodedPayload);
 		return decodedPayload.toString();
 	}
 
@@ -87,7 +89,7 @@ public class ViterbiDecoder {
 	private String createTrellisAndDecode(String block) { // TODO inizialmente per r=2 poi estendere
 
 		createTrellis();
-		System.out.println("trellis: " + trellis);
+		//System.out.println("trellis: " + trellis);
 
 		byte[][] gs = ConvolutionalUtils.convertGeneratorPolynomials(r,K,generatorPolynomial);
 
@@ -96,12 +98,13 @@ public class ViterbiDecoder {
 
 		// il blocco è multiplo di r, per ogni parity bits block di lunghezza r (si
 		// ciclerà NUM_LEVELS volte)
+		
 		for (int i = 0; i < block.length(); i += r) {
 
 			String p_received = block.substring(i, i + r);
 
 			TreeSet<TrellisNode> levelNodes = trellis.get((i + r) / r);
-			System.out.println("\nlevelNodes: " + levelNodes);
+			//System.out.println("\nlevelNodes: " + levelNodes);
 			// per ogni nodo del livello
 			for (TrellisNode currentNode : levelNodes) {
 				// recupera i nodi predecessori
@@ -133,11 +136,11 @@ public class ViterbiDecoder {
 		}
 		//selezioniamo il nodo finale (tra quelli dell'ultimo livello) con pathMetric minore
 		TrellisNode finalNode = getFinalNode(previousLevel);
-		System.out.println("final Node: "+finalNode+" PM finale: "+finalNode.getPathMetric());
+		//System.out.println("final Node: "+finalNode+" PM finale: "+finalNode.getPathMetric());
 		
 		//decodifichiamo attraversando il path a pathMetric minima
 		String inverseDecodedPayload = traverseMLPath(finalNode);
-		System.out.println("inverseDecodedPayload: "+inverseDecodedPayload);
+		//System.out.println("inverseDecodedPayload: "+inverseDecodedPayload);
 		
 		//reverse dell'output ottenuto
 		StringBuilder decodedPayload = new StringBuilder(inverseDecodedPayload);

@@ -27,7 +27,7 @@ public class Canale3g implements ChannelModel {
 	private static double eb_su_no;
 
 	@Override
-	public BitSet send(BitSet encodedPayload) throws Exception {
+	public BitSet send(BitSet encodedPayload){
 		System.out.println(summary());
 		// mi serve se viene modificata la distanza
 		calcolaBER();

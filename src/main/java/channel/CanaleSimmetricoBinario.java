@@ -8,7 +8,7 @@ public class CanaleSimmetricoBinario implements ChannelModel {
     
     
 	@Override
-	public BitSet send(BitSet encodedPayload) throws Exception {
+	public BitSet send(BitSet encodedPayload) {
 		
 		for (int i = 0; i < encodedPayload.length(); i++) {
              if (Math.random() < ber)

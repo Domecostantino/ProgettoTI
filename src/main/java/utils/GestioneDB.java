@@ -1,356 +1,406 @@
 package utils;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.sql.*;
 
 public class GestioneDB {
 
 	private static Connection conn;
-
-	static void DBConnection() throws ClassNotFoundException {
-
+	private static String DBurl = "jdbc:postgresql://localhost/dbTeoriaInf";
+	private static final String USER = "postgres";
+	private static final String PASS = "password";
+	
+	public static void main(String[] args) {
+		Connection conn = null;
 		Statement stmt = null;
 		try {
-			conn = getConnection();
-			System.out.println("Opened database successfully");
 
+			// STEP 3: Open a connection
+			System.out.println("Connecting to database...");
+			conn = DriverManager.getConnection(DBurl, USER, PASS);
+
+			// STEP 4: Execute a query
+			System.out.println("Creating statement...");
 			stmt = conn.createStatement();
-			String sql = "CREATE TABLE IF NOT EXISTS LISTAPRODOTTI " + "(NOME VARCHAR(32) PRIMARY KEY     NOT NULL,"
-					+ "POMODORI BOOL DEFAULT false," + "INSALATA BOOL DEFAULT false," + "PATATE BOOL DEFAULT false,"
-					+ "OLIO BOOL DEFAULT false," + "PANE BOOL DEFAULT false," + "MERENDINE BOOL DEFAULT false,"
-					+ "BISCOTTI BOOL DEFAULT false," + "BIRRE BOOL DEFAULT false," + "CAFFè BOOL DEFAULT false,"
-					+ "PASTA BOOL DEFAULT false," + "RISO BOOL DEFAULT false," + "LATTE BOOL DEFAULT false,"
-					+ "YOGURT BOOL DEFAULT false," + "TEA BOOL DEFAULT false," + "VINO BOOL DEFAULT false,"
-					+ "FORMAGGI BOOL DEFAULT false," + "SALUMI BOOL DEFAULT false," + "SCATOLAME BOOL DEFAULT false,"
-					+ "SURGELATI BOOL DEFAULT false," + "VERDURE BOOL DEFAULT false," + "SNACKS BOOL DEFAULT false,"
-					+ "ALCOLICI BOOL DEFAULT false," + "AGRUMI BOOL DEFAULT false," + "ACQUA BOOL DEFAULT false,"
-					+ "CARNE BOOL DEFAULT false," + "PESCE BOOL DEFAULT false," + "DETERGENTI BOOL DEFAULT false);";
-
-			stmt.executeUpdate(sql);
-			stmt.close();
-		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
-		}
-		System.out.println("Table created successfully");
-	}
-
-	static Connection getConnection() throws URISyntaxException, SQLException {
-
-		URI dbUri = new URI(System.getenv("DATABASE_URL"));
-
-		String username = dbUri.getUserInfo().split(":")[0];
-		String password = dbUri.getUserInfo().split(":")[1];
-		String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath()
-				+ "?sslmode=require";
-
-		return DriverManager.getConnection(dbUrl, username, password);
-	}
-
-	static void aggiugiUtente(long chat_id) {
-		try {
-			Statement stmt = conn.createStatement();
-			String sql = "INSERT INTO LISTAPRODOTTI (NOME) VALUES ('" + chat_id + "');";
-			stmt.executeUpdate(sql);
-			stmt.close();
-		} catch (SQLException e) {
-			System.err.println(e);
-		}
-
-	}
-
-	static List<Prodotto> ripristinaUtente(long chat_id) {
-		List<Prodotto> listaProdotti = new ArrayList<>();
-		try {
-			Statement stmt = conn.createStatement();
-			String sql = "SELECT * FROM LISTAPRODOTTI WHERE NOME = '" + chat_id + "';";
+			String sql;
+			sql = "SELECT id, first, last, age FROM Employees";
 			ResultSet rs = stmt.executeQuery(sql);
-			rs.next();
-			rs.close();
-			stmt.close();
-		} catch (SQLException e) {
-			System.err.println(e);
-		}
-		return listaProdotti;
 
-	}
-
-	static Map<Long, List<Prodotto>> ripristinaListeUtenti() {
-		Map<Long, List<Prodotto>> mappa = new HashMap<>();
-		try {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM LISTAPRODOTTI;");
+			// STEP 5: Extract data from result set
 			while (rs.next()) {
-				String chat_id = rs.getString("nome");
+				// Retrieve by column name
+				int id = rs.getInt("id");
+				int age = rs.getInt("age");
+				String first = rs.getString("first");
+				String last = rs.getString("last");
 
-				mappa.put(Long.parseLong(chat_id), listaProdotti);
+				// Display values
+				System.out.print("ID: " + id);
+				System.out.print(", Age: " + age);
+				System.out.print(", First: " + first);
+				System.out.println(", Last: " + last);
 			}
+			// STEP 6: Clean-up environment
 			rs.close();
 			stmt.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return mappa;
-	}
-
-	static HashSet<Integer> ripristinaNegoziantiAbilitati() {
-		HashSet<Integer> negozianti = new HashSet<>();
-		try {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM NEGOZIANTI;");
-			while (rs.next()) {
-				Integer chat_id = rs.getInt("codiceNegoziante");
-				negozianti.add(chat_id);
-			}
-			rs.close();
-			stmt.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return negozianti;
-	}
-
-	static void svuotaListaUtente(long chat_id) {
-		try {
-			Statement stmt = conn.createStatement();
-			String sql = "DELETE FROM LISTAPRODOTTI WHERE NOME='" + chat_id + "';";
-			stmt.executeUpdate(sql);
-			sql = "INSERT INTO LISTAPRODOTTI (NOME) VALUES ('" + chat_id + "');";
-			stmt.executeUpdate(sql);
-			stmt.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	static void aggiungiProdotto(Long chat_id, String nomeP) {
-		try {
-			Statement stmt = conn.createStatement();
-			String sql = "UPDATE LISTAPRODOTTI SET " + nomeP + " = TRUE WHERE NOME = '" + chat_id + "';";
-			stmt.executeUpdate(sql);
-			stmt.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	static void rimuoviProdotto(long chat_id, String nomeP) {
-		try {
-			Statement stmt = conn.createStatement();
-			String sql = "UPDATE LISTAPRODOTTI SET " + nomeP + " = FALSE WHERE NOME = '" + chat_id + "';";
-			stmt.executeUpdate(sql);
-			stmt.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	static boolean esisteSupermarket(Long chatId) {
-		boolean result = false;
-		try {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM SUPERMARKETS WHERE id = '" + chatId + "';");
-			rs.next();
-			if (rs.getInt(1) > 0)
-				result = true;
-			rs.close();
-			stmt.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
-
-	static String infoSupermarket(Long chatId) {
-		String result = "";
-		try {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM SUPERMARKETS WHERE id = '" + chatId + "';");
-			StringBuilder sb = new StringBuilder();
-			rs.next();
-			sb.append("_Nome_ = ");
-			sb.append(rs.getString("nome"));
-			sb.append("\n");
-			sb.append("_Città_ = ");
-			sb.append(rs.getString("citta"));
-			sb.append("\n");
-			sb.append("_Indirizzo_ = ");
-			sb.append(rs.getString("indirizzo"));
-			sb.append("\n");
-			sb.append("_Posizione_ = ");
-			sb.append(rs.getDouble("latitudine"));
-			sb.append(", ");
-			sb.append(rs.getDouble("longitudine"));
-			result = sb.toString();
-			rs.close();
-			stmt.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
-
-	static Supermarket posizioneSupermarket(String nome) {
-		Supermarket sm = new Supermarket(0);
-		try {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM SUPERMARKETS WHERE nome = '" + nome + "';");
-			rs.next();
-			sm.setLatitudine((float) rs.getDouble("latitudine"));
-			sm.setLongitudine((float) rs.getDouble("longitudine"));
-			rs.close();
-			stmt.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return sm;
-	}
-
-	static List<Supermarket> listaSupermercati() {
-		List<Supermarket> lista = new LinkedList<>();
-		try {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM SUPERMARKETS;");
-			while (rs.next()) {
-				int chat_id = rs.getInt("id");
-				String nome = rs.getString("nome");
-				String citta = rs.getString("citta");
-				String ind = rs.getString("indirizzo");
-				float lat = rs.getFloat("latitudine");
-				float longi = rs.getFloat("longitudine");
-				Supermarket sm = new Supermarket(chat_id, nome, citta, ind, lat, longi);
-				lista.add(sm);
-			}
-			rs.close();
-			stmt.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return lista;
-	}
-
-	static boolean aggiornaSupermarket(Supermarket supermarket) {
-		try {
-			Statement stmt = conn.createStatement();
-			// prima si eliminano dal db il supermarket precedentemente salvato
-			// (conviene rispetto ad update)
-			String sql = "DELETE FROM SUPERMARKETS WHERE ID = " + supermarket.getProprietario() + ";";
-			stmt.executeUpdate(sql);
-
-			// poi inseriamo la nuova tupla
-			sql = "INSERT INTO SUPERMARKETS (ID,NOME,CITTA,INDIRIZZO,LATITUDINE,LONGITUDINE) " + "VALUES ("
-					+ supermarket.getProprietario() + ", '" + supermarket.getNome() + "', '" + supermarket.getCitta()
-					+ "', '" + supermarket.getIndirizzo() + "', " + supermarket.getLatitudine() + ", "
-					+ supermarket.getLongitudine() + ");";
-			stmt.executeUpdate(sql);
-			stmt.close();
-			return true;
-		} catch (Exception e) {
-			System.err.println(e);
-			return false;
-		}
-	}
-
-	static boolean aggiornaOfferte(int idSuperm, List<Offerta> listaOfferte) {
-		try {
-			Statement stmt = conn.createStatement();
-			// prima si eliminano dal db le offerte precedenti del supermercato
-			String sql = "DELETE FROM OFFERTE WHERE SUPERMARKET = " + idSuperm + ";";
-			stmt.executeUpdate(sql);
-
-			// poi inseriamo le nuove offerte
-			for (Offerta offerta : listaOfferte) {
-				sql = "INSERT INTO OFFERTE (SUPERMARKET,PREZZO,CATEGORIA,DESCRIZIONE) " + "VALUES ("
-						+ offerta.getIdSupermercato() + ", " + offerta.getPrezzo() + ", '"
-						+ offerta.getProdotto().getNome() + "', '" + offerta.getDescrizione() + "');";
-				stmt.executeUpdate(sql);
-			}
-			stmt.close();
-			return true;
-		} catch (Exception e) {
-			System.err.println(e);
-			return false;
-		}
-	}
-
-	static List<Offerta> estraiOfferteSupermarket(String nome, String indirizzo, List<Prodotto> listaPreferenze) {
-		List<Offerta> offerteVol = new LinkedList<>();
-		long idSuper;
-		try {
-			Statement stmt = conn.createStatement();
-
-			// recuperiamo l'id del supermercato dati il nome l'indirizzo
-			String sql = "SELECT ID FROM SUPERMARKETS WHERE NOME = '" + nome + "' AND INDIRIZZO = '" + indirizzo + "';";
-			ResultSet rs = stmt.executeQuery(sql);
-			rs.next();
-			idSuper = Long.parseLong(rs.getString(1));
-
-			// ora recuperiamo le offerte in accordo alla lista dell'utente
-			for (Prodotto categoria : listaPreferenze) {
-				sql = "SELECT * FROM OFFERTE WHERE SUPERMARKET = " + idSuper + " AND CATEGORIA = '"
-						+ categoria.getNome() + "';";
-				rs = stmt.executeQuery(sql);
-				while (rs.next()) {
-					Prodotto prod = new Prodotto(categoria.getNome());
-					double prezzo = rs.getDouble("prezzo");
-					String descr = rs.getString("descrizione");
-					Offerta off = new Offerta(prod, prezzo, descr);
-					offerteVol.add(off);
-				}
-			}
-			stmt.close();
-			return offerteVol;
-		} catch (Exception e) {
-			System.err.println(e);
-			return null;
-		}
-	}
-
-	static boolean offertePresentiNelProssimoSM(String nomeProsSM, List<Prodotto> listaUtenteCorrente) {
-		try {
-			Statement stmt = conn.createStatement();
-			long idSuper;
-			// recuperiamo l'id del supermercato dato il nome
-			String sql = "SELECT ID FROM SUPERMARKETS WHERE NOME = '" + nomeProsSM + "';";
-			ResultSet rs = stmt.executeQuery(sql);
-			rs.next();
-			idSuper = Long.parseLong(rs.getString(1));
-
-			// ora recuperiamo le offerte del prossimo supermarket
-			sql = "SELECT * FROM OFFERTE WHERE SUPERMARKET = " + idSuper + ";";
-			rs = stmt.executeQuery(sql);
-			// verifichiamo se c'è almeno un'offerta relativa alla lista dell'utente
-			while (rs.next()) {
-				if (listaUtenteCorrente.contains(new Prodotto(rs.getString("categoria"))))
-					return true;
-			}
-			stmt.close();
-			return false;
-		} catch (Exception e) {
-			System.err.println(e);
-			return false;
-		}
-	}
-
-	static void chiudiConn() {
-		try {
 			conn.close();
-		} catch (SQLException e) {
+		} catch (SQLException se) {
+			// Handle errors for JDBC
+			se.printStackTrace();
+		} catch (Exception e) {
+			// Handle errors for Class.forName
 			e.printStackTrace();
-		}
+		} finally {
+			// finally block used to close resources
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException se2) {
+			} // nothing we can do
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException se) {
+				se.printStackTrace();
+			} // end finally try
+		} // end try
+		System.out.println("Goodbye!");
+	}// end main
 
-	}
+//	static void DBConnection() throws ClassNotFoundException {
+//
+//		Statement stmt = null;
+//		try {
+//			conn = getConnection();
+//			System.out.println("Opened database successfully");
+//
+//			stmt = conn.createStatement();
+//			String sql = "CREATE TABLE IF NOT EXISTS LISTAPRODOTTI " + "(NOME VARCHAR(32) PRIMARY KEY     NOT NULL,"
+//					+ "POMODORI BOOL DEFAULT false," + "INSALATA BOOL DEFAULT false," + "PATATE BOOL DEFAULT false,"
+//					+ "OLIO BOOL DEFAULT false," + "PANE BOOL DEFAULT false," + "MERENDINE BOOL DEFAULT false,"
+//					+ "BISCOTTI BOOL DEFAULT false," + "BIRRE BOOL DEFAULT false," + "CAFFè BOOL DEFAULT false,"
+//					+ "PASTA BOOL DEFAULT false," + "RISO BOOL DEFAULT false," + "LATTE BOOL DEFAULT false,"
+//					+ "YOGURT BOOL DEFAULT false," + "TEA BOOL DEFAULT false," + "VINO BOOL DEFAULT false,"
+//					+ "FORMAGGI BOOL DEFAULT false," + "SALUMI BOOL DEFAULT false," + "SCATOLAME BOOL DEFAULT false,"
+//					+ "SURGELATI BOOL DEFAULT false," + "VERDURE BOOL DEFAULT false," + "SNACKS BOOL DEFAULT false,"
+//					+ "ALCOLICI BOOL DEFAULT false," + "AGRUMI BOOL DEFAULT false," + "ACQUA BOOL DEFAULT false,"
+//					+ "CARNE BOOL DEFAULT false," + "PESCE BOOL DEFAULT false," + "DETERGENTI BOOL DEFAULT false);";
+//
+//			stmt.executeUpdate(sql);
+//			stmt.close();
+//		} catch (Exception e) {
+//			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+//			System.exit(0);
+//		}
+//		System.out.println("Table created successfully");
+//	}
+//
+//	static Connection getConnection() throws URISyntaxException, SQLException {
+//
+//		URI dbUri = new URI(System.getenv("DATABASE_URL"));
+//
+//		String username = dbUri.getUserInfo().split(":")[0];
+//		String password = dbUri.getUserInfo().split(":")[1];
+//		String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath()
+//				+ "?sslmode=require";
+//
+//		return DriverManager.getConnection(dbUrl, username, password);
+//	}
+//
+//	static void aggiugiUtente(long chat_id) {
+//		try {
+//			Statement stmt = conn.createStatement();
+//			String sql = "INSERT INTO LISTAPRODOTTI (NOME) VALUES ('" + chat_id + "');";
+//			stmt.executeUpdate(sql);
+//			stmt.close();
+//		} catch (SQLException e) {
+//			System.err.println(e);
+//		}
+//
+//	}
+//
+//	static List<Prodotto> ripristinaUtente(long chat_id) {
+//		List<Prodotto> listaProdotti = new ArrayList<>();
+//		try {
+//			Statement stmt = conn.createStatement();
+//			String sql = "SELECT * FROM LISTAPRODOTTI WHERE NOME = '" + chat_id + "';";
+//			ResultSet rs = stmt.executeQuery(sql);
+//			rs.next();
+//			rs.close();
+//			stmt.close();
+//		} catch (SQLException e) {
+//			System.err.println(e);
+//		}
+//		return listaProdotti;
+//
+//	}
+//
+//	static Map<Long, List<Prodotto>> ripristinaListeUtenti() {
+//		Map<Long, List<Prodotto>> mappa = new HashMap<>();
+//		try {
+//			Statement stmt = conn.createStatement();
+//			ResultSet rs = stmt.executeQuery("SELECT * FROM LISTAPRODOTTI;");
+//			while (rs.next()) {
+//				String chat_id = rs.getString("nome");
+//
+//				mappa.put(Long.parseLong(chat_id), listaProdotti);
+//			}
+//			rs.close();
+//			stmt.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return mappa;
+//	}
+//
+//	static HashSet<Integer> ripristinaNegoziantiAbilitati() {
+//		HashSet<Integer> negozianti = new HashSet<>();
+//		try {
+//			Statement stmt = conn.createStatement();
+//			ResultSet rs = stmt.executeQuery("SELECT * FROM NEGOZIANTI;");
+//			while (rs.next()) {
+//				Integer chat_id = rs.getInt("codiceNegoziante");
+//				negozianti.add(chat_id);
+//			}
+//			rs.close();
+//			stmt.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return negozianti;
+//	}
+//
+//	static void svuotaListaUtente(long chat_id) {
+//		try {
+//			Statement stmt = conn.createStatement();
+//			String sql = "DELETE FROM LISTAPRODOTTI WHERE NOME='" + chat_id + "';";
+//			stmt.executeUpdate(sql);
+//			sql = "INSERT INTO LISTAPRODOTTI (NOME) VALUES ('" + chat_id + "');";
+//			stmt.executeUpdate(sql);
+//			stmt.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//
+//	}
+//
+//	static void aggiungiProdotto(Long chat_id, String nomeP) {
+//		try {
+//			Statement stmt = conn.createStatement();
+//			String sql = "UPDATE LISTAPRODOTTI SET " + nomeP + " = TRUE WHERE NOME = '" + chat_id + "';";
+//			stmt.executeUpdate(sql);
+//			stmt.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
+//
+//	static void rimuoviProdotto(long chat_id, String nomeP) {
+//		try {
+//			Statement stmt = conn.createStatement();
+//			String sql = "UPDATE LISTAPRODOTTI SET " + nomeP + " = FALSE WHERE NOME = '" + chat_id + "';";
+//			stmt.executeUpdate(sql);
+//			stmt.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
+//
+//	static boolean esisteSupermarket(Long chatId) {
+//		boolean result = false;
+//		try {
+//			Statement stmt = conn.createStatement();
+//			ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM SUPERMARKETS WHERE id = '" + chatId + "';");
+//			rs.next();
+//			if (rs.getInt(1) > 0)
+//				result = true;
+//			rs.close();
+//			stmt.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return result;
+//	}
+//
+//	static String infoSupermarket(Long chatId) {
+//		String result = "";
+//		try {
+//			Statement stmt = conn.createStatement();
+//			ResultSet rs = stmt.executeQuery("SELECT * FROM SUPERMARKETS WHERE id = '" + chatId + "';");
+//			StringBuilder sb = new StringBuilder();
+//			rs.next();
+//			sb.append("_Nome_ = ");
+//			sb.append(rs.getString("nome"));
+//			sb.append("\n");
+//			sb.append("_Città_ = ");
+//			sb.append(rs.getString("citta"));
+//			sb.append("\n");
+//			sb.append("_Indirizzo_ = ");
+//			sb.append(rs.getString("indirizzo"));
+//			sb.append("\n");
+//			sb.append("_Posizione_ = ");
+//			sb.append(rs.getDouble("latitudine"));
+//			sb.append(", ");
+//			sb.append(rs.getDouble("longitudine"));
+//			result = sb.toString();
+//			rs.close();
+//			stmt.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return result;
+//	}
+//
+//	static Supermarket posizioneSupermarket(String nome) {
+//		Supermarket sm = new Supermarket(0);
+//		try {
+//			Statement stmt = conn.createStatement();
+//			ResultSet rs = stmt.executeQuery("SELECT * FROM SUPERMARKETS WHERE nome = '" + nome + "';");
+//			rs.next();
+//			sm.setLatitudine((float) rs.getDouble("latitudine"));
+//			sm.setLongitudine((float) rs.getDouble("longitudine"));
+//			rs.close();
+//			stmt.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return sm;
+//	}
+//
+//	static List<Supermarket> listaSupermercati() {
+//		List<Supermarket> lista = new LinkedList<>();
+//		try {
+//			Statement stmt = conn.createStatement();
+//			ResultSet rs = stmt.executeQuery("SELECT * FROM SUPERMARKETS;");
+//			while (rs.next()) {
+//				int chat_id = rs.getInt("id");
+//				String nome = rs.getString("nome");
+//				String citta = rs.getString("citta");
+//				String ind = rs.getString("indirizzo");
+//				float lat = rs.getFloat("latitudine");
+//				float longi = rs.getFloat("longitudine");
+//				Supermarket sm = new Supermarket(chat_id, nome, citta, ind, lat, longi);
+//				lista.add(sm);
+//			}
+//			rs.close();
+//			stmt.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return lista;
+//	}
+//
+//	static boolean aggiornaSupermarket(Supermarket supermarket) {
+//		try {
+//			Statement stmt = conn.createStatement();
+//			// prima si eliminano dal db il supermarket precedentemente salvato
+//			// (conviene rispetto ad update)
+//			String sql = "DELETE FROM SUPERMARKETS WHERE ID = " + supermarket.getProprietario() + ";";
+//			stmt.executeUpdate(sql);
+//
+//			// poi inseriamo la nuova tupla
+//			sql = "INSERT INTO SUPERMARKETS (ID,NOME,CITTA,INDIRIZZO,LATITUDINE,LONGITUDINE) " + "VALUES ("
+//					+ supermarket.getProprietario() + ", '" + supermarket.getNome() + "', '" + supermarket.getCitta()
+//					+ "', '" + supermarket.getIndirizzo() + "', " + supermarket.getLatitudine() + ", "
+//					+ supermarket.getLongitudine() + ");";
+//			stmt.executeUpdate(sql);
+//			stmt.close();
+//			return true;
+//		} catch (Exception e) {
+//			System.err.println(e);
+//			return false;
+//		}
+//	}
+//
+//	static boolean aggiornaOfferte(int idSuperm, List<Offerta> listaOfferte) {
+//		try {
+//			Statement stmt = conn.createStatement();
+//			// prima si eliminano dal db le offerte precedenti del supermercato
+//			String sql = "DELETE FROM OFFERTE WHERE SUPERMARKET = " + idSuperm + ";";
+//			stmt.executeUpdate(sql);
+//
+//			// poi inseriamo le nuove offerte
+//			for (Offerta offerta : listaOfferte) {
+//				sql = "INSERT INTO OFFERTE (SUPERMARKET,PREZZO,CATEGORIA,DESCRIZIONE) " + "VALUES ("
+//						+ offerta.getIdSupermercato() + ", " + offerta.getPrezzo() + ", '"
+//						+ offerta.getProdotto().getNome() + "', '" + offerta.getDescrizione() + "');";
+//				stmt.executeUpdate(sql);
+//			}
+//			stmt.close();
+//			return true;
+//		} catch (Exception e) {
+//			System.err.println(e);
+//			return false;
+//		}
+//	}
+//
+//	static List<Offerta> estraiOfferteSupermarket(String nome, String indirizzo, List<Prodotto> listaPreferenze) {
+//		List<Offerta> offerteVol = new LinkedList<>();
+//		long idSuper;
+//		try {
+//			Statement stmt = conn.createStatement();
+//
+//			// recuperiamo l'id del supermercato dati il nome l'indirizzo
+//			String sql = "SELECT ID FROM SUPERMARKETS WHERE NOME = '" + nome + "' AND INDIRIZZO = '" + indirizzo + "';";
+//			ResultSet rs = stmt.executeQuery(sql);
+//			rs.next();
+//			idSuper = Long.parseLong(rs.getString(1));
+//
+//			// ora recuperiamo le offerte in accordo alla lista dell'utente
+//			for (Prodotto categoria : listaPreferenze) {
+//				sql = "SELECT * FROM OFFERTE WHERE SUPERMARKET = " + idSuper + " AND CATEGORIA = '"
+//						+ categoria.getNome() + "';";
+//				rs = stmt.executeQuery(sql);
+//				while (rs.next()) {
+//					Prodotto prod = new Prodotto(categoria.getNome());
+//					double prezzo = rs.getDouble("prezzo");
+//					String descr = rs.getString("descrizione");
+//					Offerta off = new Offerta(prod, prezzo, descr);
+//					offerteVol.add(off);
+//				}
+//			}
+//			stmt.close();
+//			return offerteVol;
+//		} catch (Exception e) {
+//			System.err.println(e);
+//			return null;
+//		}
+//	}
+//
+//	static boolean offertePresentiNelProssimoSM(String nomeProsSM, List<Prodotto> listaUtenteCorrente) {
+//		try {
+//			Statement stmt = conn.createStatement();
+//			long idSuper;
+//			// recuperiamo l'id del supermercato dato il nome
+//			String sql = "SELECT ID FROM SUPERMARKETS WHERE NOME = '" + nomeProsSM + "';";
+//			ResultSet rs = stmt.executeQuery(sql);
+//			rs.next();
+//			idSuper = Long.parseLong(rs.getString(1));
+//
+//			// ora recuperiamo le offerte del prossimo supermarket
+//			sql = "SELECT * FROM OFFERTE WHERE SUPERMARKET = " + idSuper + ";";
+//			rs = stmt.executeQuery(sql);
+//			// verifichiamo se c'è almeno un'offerta relativa alla lista dell'utente
+//			while (rs.next()) {
+//				if (listaUtenteCorrente.contains(new Prodotto(rs.getString("categoria"))))
+//					return true;
+//			}
+//			stmt.close();
+//			return false;
+//		} catch (Exception e) {
+//			System.err.println(e);
+//			return false;
+//		}
+//	}
+//
+//	static void chiudiConn() {
+//		try {
+//			conn.close();
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//
+//	}
+
+	
 
 }
