@@ -1,6 +1,6 @@
 package channel;
 
-import java.util.BitSet;
+import utils.MyBitSet;
 
 public class GilbertElliot implements ChannelModel {
 
@@ -22,7 +22,7 @@ public class GilbertElliot implements ChannelModel {
 	
 	
 	@Override
-	public BitSet send(BitSet encodedPayload) {
+	public MyBitSet send(MyBitSet encodedPayload) {
 		 
 	        int num_bit = 0;
 
@@ -31,7 +31,7 @@ public class GilbertElliot implements ChannelModel {
 	        double rand1, rand2;
 	       
 
-	            for(int i=0; i<encodedPayload.length();i++) {
+	            for(int i=0; i<encodedPayload.getLength();i++) {
 
 	                rand1 = Math.random();
 	                rand2 = Math.random();
@@ -40,7 +40,7 @@ public class GilbertElliot implements ChannelModel {
 
 	                    if (rand1 < ber_good) {
 	                        //flip bit
-	                    	encodedPayload.flip(i);
+	                    	encodedPayload.getBitset().flip(i);
 	                    }
 
 	                    if (rand2 < prob_gb) {
@@ -51,7 +51,7 @@ public class GilbertElliot implements ChannelModel {
 
 	                    if (rand1 < ber_bad) {
 	                        //flip bit
-	                    	encodedPayload.flip(i);
+	                    	encodedPayload.getBitset().flip(i);
 	                    }
 
 	                    if (rand2 < prob_bg) {

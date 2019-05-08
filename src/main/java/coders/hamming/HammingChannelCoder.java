@@ -4,6 +4,7 @@ import java.util.BitSet;
 
 import coder.channel.ChannelCoder;
 import coder.channel.ChannelMessage;
+import utils.MyBitSet;
 
 public class HammingChannelCoder implements ChannelCoder {
 	private HammingCode coder;
@@ -13,11 +14,12 @@ public class HammingChannelCoder implements ChannelCoder {
 	}
 
 	@Override
-	public BitSet encode(ChannelMessage inChannelMessage) {
+	public MyBitSet encode(ChannelMessage inChannelMessage) {
 		BitSet out = null;
 		// trasformo input in array di boolean
 		byte[] fileContent = inChannelMessage.getPayload();
-		out = new BitSet(fileContent.length*8*7/4);
+                int outlength=fileContent.length*8*7/4;
+		out = new BitSet(outlength);
 		int setIndex=0;
 		for (int i = 0; i < fileContent.length; i++) {
 			byte[] b = new byte[1];
@@ -50,17 +52,17 @@ public class HammingChannelCoder implements ChannelCoder {
 
 		
 		
-		return out;
+		return new MyBitSet(out, outlength);
 	}
 
 	@Override
-	public void decode(BitSet encoded_data, ChannelMessage outChannelMessage) {
-		int numBlocks=encoded_data.length()/7;
+	public void decode(MyBitSet encoded_data, ChannelMessage outChannelMessage) {
+		int numBlocks=encoded_data.getLength()/7;
 		BitSet bs = new BitSet(numBlocks*4);
 		for (int j = 0; j < numBlocks; j++) {
 			boolean[] boolData = new boolean[7];
 			for (int i = 0; i < 7; i++) {
-				boolData[i] = encoded_data.get(j*7+i);
+				boolData[i] = encoded_data.getBitset().get(j*7+i);
 			}
 			// decodifico
 			boolean[] decData = coder.decode(boolData);

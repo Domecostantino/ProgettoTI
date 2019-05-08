@@ -12,6 +12,7 @@ import coders.LZW.funzionante.LZWCoder;
 import coders.convolutional.ConvolutionalChannelCoder;
 import coders.hamming.HammingChannelCoder;
 import utils.GenericUtils;
+import utils.MyBitSet;
 import utils.Statistics;
 
 public class Simulation {
@@ -46,11 +47,11 @@ public class Simulation {
 		
 		ChannelMessage mess = GenericUtils.getChannelMessage(sourceCode);
 		
-		BitSet b = channelCoder.encode(mess);
+		MyBitSet b = channelCoder.encode(mess);
 		statistics.setChannelCodingTime(System.currentTimeMillis());
 		
 		//invio su canale
-		BitSet corruptedBits = channel.send(b);
+		MyBitSet corruptedBits = channel.send(b);
 		
 		
 		//decodifica

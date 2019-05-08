@@ -5,6 +5,7 @@ import java.util.BitSet;
 import coder.channel.ChannelCoder;
 import coder.channel.ChannelMessage;
 import utils.GenericUtils;
+import utils.MyBitSet;
 
 public class ConvolutionalChannelCoder implements ChannelCoder {
 	int k, r;
@@ -16,18 +17,18 @@ public class ConvolutionalChannelCoder implements ChannelCoder {
 	}
 
 	@Override
-	public BitSet encode(ChannelMessage inChannelMessage) {
+	public MyBitSet encode(ChannelMessage inChannelMessage) {
 		ConvolutionalCoder coder=new ConvolutionalCoder(k, r);
 		BitSet bs=BitSet.valueOf(inChannelMessage.getPayload());
 		String enc=coder.encode(GenericUtils.toBinaryString(bs,bs.length()));
 		codeLength = enc.length();
-		return GenericUtils.getBitSetFromString(enc);
+		return new MyBitSet(GenericUtils.getBitSetFromString(enc), codeLength);
 	}
 
 	@Override
-	public void decode(BitSet encoded_data, ChannelMessage outChannelMessage) {
+	public void decode(MyBitSet encoded_data, ChannelMessage outChannelMessage) {
 		ViterbiDecoder decoder=new ViterbiDecoder(k, r);
-		String dec=decoder.decode(GenericUtils.toBinaryString(encoded_data,codeLength));
+		String dec=decoder.decode(GenericUtils.toBinaryString(encoded_data.getBitset(),codeLength));
 		outChannelMessage.setPayload(GenericUtils.getBitSetFromString(dec).toByteArray());
 	}
 

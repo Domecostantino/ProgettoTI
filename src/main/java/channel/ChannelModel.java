@@ -1,11 +1,11 @@
 package channel;
 
-import java.util.BitSet;
+import utils.MyBitSet;
 
 public interface ChannelModel {
 	/*
 	 * Metodo che simula l'invio del messaggio flippando i bit in accordo al modello
 	 * di errore che implementa l'interfaccia
 	 */
-	public BitSet send(BitSet encodedPayload);
+	public MyBitSet send(MyBitSet encodedPayload);
 }

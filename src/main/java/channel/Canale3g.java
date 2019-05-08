@@ -3,6 +3,7 @@ package channel;
 import java.util.BitSet;
 
 import org.apache.commons.math3.special.Erf;//utility per il calcolo di integrali
+import utils.MyBitSet;
 
 public class Canale3g implements ChannelModel {
 
@@ -27,11 +28,11 @@ public class Canale3g implements ChannelModel {
 	private static double eb_su_no;
 
 	@Override
-	public BitSet send(BitSet encodedPayload){
+	public MyBitSet send(MyBitSet encodedPayload){
 		System.out.println(summary());
 		// mi serve se viene modificata la distanza
 		calcolaBER();
-		BitSet packet = simulaErrore(encodedPayload);
+		MyBitSet packet = simulaErrore(encodedPayload);
 		statistiche();
 		return packet;
 	}// send
@@ -92,14 +93,14 @@ public class Canale3g implements ChannelModel {
 				"BIT ERROR RATE " + BER * 100 + "% VERIFICA " + (alterati / (inalterati + alterati)) * 100 + " % ");
 	}// statistiche
 
-	public static BitSet simulaErrore(BitSet encodedPayload) {
-		BitSet frameOriginario = (BitSet) encodedPayload.clone();// deepCopy
-		for (int i = 0; i < encodedPayload.length(); i++) {
+	public static MyBitSet simulaErrore(MyBitSet encodedPayload) {
+		BitSet frameOriginario = (BitSet) encodedPayload.getBitset().clone();// deepCopy
+		for (int i = 0; i < encodedPayload.getLength(); i++) {
 			double r = Math.random();
 			if (r <= BER) {
 				// simula errore nel bit
 				alterati++;
-				encodedPayload.flip(i);
+				encodedPayload.getBitset().flip(i);
 			} else {
 				inalterati++;
 			}
@@ -107,7 +108,7 @@ public class Canale3g implements ChannelModel {
 		if (encodedPayload.equals(frameOriginario) && BER == 0) {
 			System.out.println("errore!");
 			System.out.println("il Bitset originario" + frameOriginario);
-			System.out.println("il Bitset alterato" + encodedPayload);
+			System.out.println("il Bitset alterato" + encodedPayload.getBitset());
 		}
 		return encodedPayload;
 	}// simula_errore

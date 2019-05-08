@@ -1,8 +1,8 @@
 package coder.channel;
 
-import java.util.BitSet;
+import utils.MyBitSet;
 
 public interface ChannelCoder {
-	public BitSet encode(ChannelMessage inChannelMessage);
-	public void decode(BitSet encoded_data, ChannelMessage outChannelMessage);
+	public MyBitSet encode(ChannelMessage inChannelMessage);
+	public void decode(MyBitSet encoded_data, ChannelMessage outChannelMessage);
 }

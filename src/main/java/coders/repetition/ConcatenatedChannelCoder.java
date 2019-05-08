@@ -4,6 +4,7 @@ import java.util.BitSet;
 
 import coder.channel.ChannelCoder;
 import coder.channel.ChannelMessage;
+import utils.MyBitSet;
 
 public class ConcatenatedChannelCoder implements ChannelCoder {
 	
@@ -19,13 +20,14 @@ public class ConcatenatedChannelCoder implements ChannelCoder {
 	}
 	
 	@Override
-	public BitSet encode(ChannelMessage inChannelMessage) {
+	public MyBitSet encode(ChannelMessage inChannelMessage) {
 		BitSet out = null;
 		// trasformo input in array di boolean
 		byte[] fileContent = inChannelMessage.getPayload();
 		BitSet bs = BitSet.valueOf(fileContent);
-		boolean[] boolData = new boolean[bs.length()];
-		for (int i = 0; i < bs.length(); i++) {
+                int bslength=fileContent.length*8;
+		boolean[] boolData = new boolean[bslength];
+		for (int i = 0; i < bslength; i++) {
 			boolData[i] = bs.get(i);
 		}
 		// codifico
@@ -35,14 +37,14 @@ public class ConcatenatedChannelCoder implements ChannelCoder {
 			if (encData[i])
 				out.set(i);
 		}
-		return out;
+		return new MyBitSet(out, encData.length);
 	}
 
 	@Override
-	public void decode(BitSet encoded_data, ChannelMessage outChannelMessage) {
-		boolean[] boolData = new boolean[encoded_data.length()];
-		for (int i = 0; i < encoded_data.length(); i++) {
-			boolData[i] = encoded_data.get(i);
+	public void decode(MyBitSet encoded_data, ChannelMessage outChannelMessage) {
+		boolean[] boolData = new boolean[encoded_data.getLength()];
+		for (int i = 0; i < encoded_data.getLength(); i++) {
+			boolData[i] = encoded_data.getBitset().get(i);
 		}
 		//decodifico
 		boolean[] decData = coder.decode(boolData);
