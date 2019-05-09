@@ -20,31 +20,29 @@ import coders.Message;
 public class GenericUtils {
 
 	public static BitSet getBitSetFromString(String binary) {
-	    BitSet bitset = new BitSet(binary.length());
-	    System.out.println(bitset.length());
-	    for (int i = 0; i < binary.length(); i++) {
-	        if (binary.charAt(i) == '1') {
-	            bitset.set(i);
-	        }
-	    }
-	    if(binary.charAt(binary.length()-1) == '0') {
-	    	bitset.set(binary.length()-1);
-	    	bitset.flip(binary.length()-1);
-	    }
-	    System.out.println(binary.length()+"  "+bitset.length());
-	    return bitset;
+		BitSet bitset = new BitSet(binary.length());
+		for (int i = 0; i < binary.length(); i++) {
+			if (binary.charAt(i) == '1') {
+				bitset.set(i);
+			}
+		}
+		if (binary.charAt(binary.length() - 1) == '0') {
+			bitset.set(binary.length() - 1);
+			bitset.flip(binary.length() - 1);
+		}
+		return bitset;
 	}
-	
-	public static String toBinaryString(BitSet bitset,int lenght) {
-	    StringBuilder sb = new StringBuilder();
 
-	    for (int i = 0; i < lenght; i++) {
-	      sb.append((bitset.get(i)) ? '1' : '0');
-	    }
+	public static String toBinaryString(BitSet bitset, int lenght) {
+		StringBuilder sb = new StringBuilder();
 
-	    return sb.toString();
-	  }
-	
+		for (int i = 0; i < lenght; i++) {
+			sb.append((bitset.get(i)) ? '1' : '0');
+		}
+
+		return sb.toString();
+	}
+
 	public static Message getMessageFromFile(String filePath) {
 		Message m = new Message();
 		try {
@@ -120,24 +118,23 @@ public class GenericUtils {
 			mess = new ChannelMessage(o, l, payload);
 			ois.close();
 		} catch (IOException e) {
-			System.out.println("null header");
 //			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		if (mess == null) {
-			try {				
-				byte[] payload=Files.readAllBytes(new File(fileName).toPath());
-				mess=new ChannelMessage(null, payload.length*8, payload);
-			}  catch (IOException e) {
+			try {
+				byte[] payload = Files.readAllBytes(new File(fileName).toPath());
+				mess = new ChannelMessage(null, payload.length * 8, payload);
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		return mess;
 	}
-	
-	public static void writeChannelMessage(ChannelMessage message,String outputPath) {
-		if(message.getHuffmanHeader()!=null) {
+
+	public static void writeChannelMessage(ChannelMessage message, String outputPath) {
+		if (message.getHuffmanHeader() != null) {
 			ObjectOutputStream oos;
 			try {
 				oos = new ObjectOutputStream(new FileOutputStream(outputPath));
@@ -150,9 +147,9 @@ public class GenericUtils {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}else {//se non c'è header
+		} else {// se non c'è header
 			try {
-				DataOutputStream writer=new DataOutputStream(new FileOutputStream(outputPath));
+				DataOutputStream writer = new DataOutputStream(new FileOutputStream(outputPath));
 				writer.write(message.getPayload());
 				writer.flush();
 				writer.close();

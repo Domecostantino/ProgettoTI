@@ -18,7 +18,6 @@ public class LZ77 {
 	public LZ77(int dim_searchBuf, int dim_lookaheadBuf) {
 		this.lookahead_size = dim_lookaheadBuf;
 		this.search_size = dim_searchBuf;
-		System.out.println(alphabet.length * alphabet.length);
 		OFFSET_SIZE = alphabetInt(search_size).length();
 		LENGHT_SIZE = alphabetInt(lookahead_size).length();
 		searchBuffer = new char[search_size];
