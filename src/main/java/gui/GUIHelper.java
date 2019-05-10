@@ -34,6 +34,8 @@ public class GUIHelper {
     private int repR = 3;
     private int repH = 3;
     private int[] concR = {3, 3};
+    private int g_eType=0;
+    private double ber=0.005;
     private File file;
     private static GUIHelper instance = null;
 
@@ -95,6 +97,16 @@ public class GUIHelper {
         this.file = file;
     }
 
+    public void setG_eType(int g_eType) {
+        this.g_eType = g_eType;
+    }
+
+    public void setBer(double ber) {
+        this.ber = ber;
+    }
+
+    
+    
     public void run() {
         SourceCoder scoder = null;
         switch (source) {
@@ -126,10 +138,10 @@ public class GUIHelper {
         ChannelModel errorModel = null;
         switch (error) {
             case G_E:
-                errorModel = new GilbertElliot();
+                errorModel = new GilbertElliot(g_eType);
                 break;
             case SBC:
-                errorModel = new CanaleSimmetricoBinario();
+                errorModel = new CanaleSimmetricoBinario(ber);
                 break;
         }
         Statistics stat = new Statistics();

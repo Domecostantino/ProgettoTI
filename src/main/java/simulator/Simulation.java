@@ -86,8 +86,8 @@ public class Simulation {
 		HammingChannelCoder channelCoder = new HammingChannelCoder();
 
 		ConvolutionalChannelCoder channelCoder2 = new ConvolutionalChannelCoder(7, 3);
-		CanaleSimmetricoBinario channel = new CanaleSimmetricoBinario();
-		GilbertElliot channel2 = new GilbertElliot();
+		CanaleSimmetricoBinario channel = new CanaleSimmetricoBinario(0.01);
+		GilbertElliot channel2 = new GilbertElliot(GilbertElliot.SOFT);
 
 		Simulation sim = new Simulation(sourceCoder3, channelCoder2, channel, new Statistics(), "Lorem ipsum.txt");
 
