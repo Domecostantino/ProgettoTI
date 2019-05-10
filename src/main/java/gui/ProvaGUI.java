@@ -468,7 +468,6 @@ public class ProvaGUI extends javax.swing.JFrame {
             convComboR.setEnabled(true);
             convComboK.setEnabled(true);
             GUIHelper.getInstance().setChannel(GUIHelper.Channel.CONVOLUTIONAL);
-            inputText.append("convoluzionale\n");
         } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
             convLableR.setEnabled(false);
             convLableK.setEnabled(false);
@@ -482,7 +481,6 @@ public class ProvaGUI extends javax.swing.JFrame {
             ripComboR.setEnabled(true);
             ripLableR.setEnabled(true);
             GUIHelper.getInstance().setChannel(GUIHelper.Channel.REPETITION);
-            inputText.append("ripetizione\n");
         } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
             ripComboR.setEnabled(false);
             ripLableR.setEnabled(false);
@@ -493,7 +491,6 @@ public class ProvaGUI extends javax.swing.JFrame {
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             concCombo.setEnabled(true);
             GUIHelper.getInstance().setChannel(GUIHelper.Channel.CONCATENATED);
-            inputText.append("concatenato\n");
         } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
             concCombo.setEnabled(false);
         }
@@ -506,7 +503,6 @@ public class ProvaGUI extends javax.swing.JFrame {
     private void jRadioButton4ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton4ItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             GUIHelper.getInstance().setSource(GUIHelper.Source.HUFFMAN);
-            inputText.append("huffman\n");
         } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
         }
     }//GEN-LAST:event_jRadioButton4ItemStateChanged
@@ -514,7 +510,6 @@ public class ProvaGUI extends javax.swing.JFrame {
     private void jRadioButton5ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton5ItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             GUIHelper.getInstance().setSource(GUIHelper.Source.LZW);
-            inputText.append("lzw\n");
         } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
         }
     }//GEN-LAST:event_jRadioButton5ItemStateChanged
@@ -522,7 +517,6 @@ public class ProvaGUI extends javax.swing.JFrame {
     private void jRadioButton6ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton6ItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             GUIHelper.getInstance().setSource(GUIHelper.Source.DEFLATE);
-            inputText.append("deflate\n");
         } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
         }
     }//GEN-LAST:event_jRadioButton6ItemStateChanged
