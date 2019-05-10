@@ -18,7 +18,10 @@ import coders.huffman.HuffmanCoder;
 import coders.repetition.ConcatenatedChannelCoder;
 import coders.repetition.RepChannelCoder;
 import java.io.File;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import simulator.Simulation;
+import utils.GenericUtils;
 import utils.Statistics;
 
 /**
@@ -95,6 +98,7 @@ public class GUIHelper {
 
     public void setFile(File file) {
         this.file = file;
+        ProvaGUI.getInstance().getSourceText().setText(GenericUtils.readFile(file.getAbsolutePath(), StandardCharsets.UTF_8));
     }
 
     public void setG_eType(int g_eType) {
@@ -163,6 +167,9 @@ public class GUIHelper {
         ProvaGUI.getInstance().getInputText().append("\nerror rate canale solo cod sorgente " + stat.getOnlySourceCodeChannelErrorRate()*100+" %");
         ProvaGUI.getInstance().getInputText().append("\nrecovery rate del codificatore di canale "+ stat.getErrorRecoveryRate()*100+" %");
 
+        ProvaGUI.getInstance().getOutputText().setText(GenericUtils.readFile(Simulation.outputPath(file.getAbsolutePath()), StandardCharsets.UTF_8));
+        
+        
     }
 
 }

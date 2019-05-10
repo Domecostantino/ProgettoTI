@@ -11,6 +11,8 @@ import coders.LZW.funzionante.LZWCoder;
 import coders.deflate.DeflateCoder;
 import coders.huffman.HuffmanCoder;
 import coders.repetition.ConcatenatedChannelCoder;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public class Prove {
 
@@ -22,16 +24,16 @@ public class Prove {
 //		BitSet b=chcoder.encode(mess);
 //		chcoder.decode(b, mess);
 //		GenericUtils.writeChannelMessage(mess, "ciao4");
-//		SourceCoder coder=new LZWCoder();//TODO Controllare
-//		String in = "Lorem ipsum.txt";
-//		String out = "LI.txt";
-//		String cod = "LI";
-//		coder.encode(in, cod);
-//		
-//		coder.decode(cod, out);
-//		System.out.println("Dimensione file input:" + new File(in).length());
-//		System.out.println("Dimensione file codificato:" + GenericUtils.getChannelMessage(cod).getPayload().length);
-                System.out.println("[3, 3]".substring(1, 5).split(", ")[0]);
+		SourceCoder coder=new HuffmanCoder();//TODO Controllare
+		String in = "ciao3.txt";
+		String out = "c.txt";
+		String cod = "c";
+		coder.encode(in, cod);
+		
+		coder.decode(cod, out);
+		System.out.println("Dimensione file input:" + new File(in).length());
+		System.out.println("Dimensione file codificato:" + GenericUtils.getChannelMessage(cod).getPayload().length);
+                System.out.println(GenericUtils.readFile(out, StandardCharsets.UTF_8));
                 
 		
 	}

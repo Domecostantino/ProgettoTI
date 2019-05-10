@@ -6,9 +6,19 @@
 package gui;
 
 import java.awt.event.ItemEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
+import utils.GenericUtils;
 
 /**
  *
@@ -34,6 +44,14 @@ public class ProvaGUI extends javax.swing.JFrame {
 
     public JTextArea getInputText() {
         return inputText;
+    }
+
+    public JTextArea getSourceText() {
+        return sourceText;
+    }
+
+    public JTextArea getOutputText() {
+        return outputText;
     }
 
     /**
@@ -74,6 +92,7 @@ public class ProvaGUI extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         inputLable = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jRadioButton8 = new javax.swing.JRadioButton();
@@ -86,7 +105,9 @@ public class ProvaGUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         inputText = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        sourceText = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        outputText = new javax.swing.JTextArea();
 
         buttonGroup1.add(jRadioButton1);
         buttonGroup1.add(jRadioButton2);
@@ -338,6 +359,13 @@ public class ProvaGUI extends javax.swing.JFrame {
 
         jLabel2.setText("Codifica di sorgente");
 
+        jButton3.setText("Input manuale");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -351,9 +379,11 @@ public class ProvaGUI extends javax.swing.JFrame {
                             .addComponent(jLabel2)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jButton2)
+                                .addGap(4, 4, 4)
+                                .addComponent(jButton3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(inputLable)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 106, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -361,7 +391,8 @@ public class ProvaGUI extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
-                    .addComponent(inputLable))
+                    .addComponent(inputLable)
+                    .addComponent(jButton3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -436,7 +467,7 @@ public class ProvaGUI extends javax.swing.JFrame {
                             .addComponent(sbcCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(geCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel3))
-                .addContainerGap(62, Short.MAX_VALUE))
+                .addContainerGap(90, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1)
@@ -456,18 +487,30 @@ public class ProvaGUI extends javax.swing.JFrame {
                     .addComponent(jRadioButton9)
                     .addComponent(geLable)
                     .addComponent(geCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
 
         inputText.setColumns(20);
         inputText.setRows(5);
+        inputText.setText("Statistiche:");
+        inputText.setEnabled(false);
         jScrollPane1.setViewportView(inputText);
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        sourceText.setColumns(20);
+        sourceText.setRows(5);
+        sourceText.setText("Input sorgente:");
+        sourceText.setEnabled(false);
+        jScrollPane2.setViewportView(sourceText);
+        sourceText.setEditable(false);
+
+        outputText.setColumns(20);
+        outputText.setRows(5);
+        outputText.setText("Output decodifica:");
+        outputText.setEnabled(false);
+        jScrollPane3.setViewportView(outputText);
+        sourceText.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -476,13 +519,15 @@ public class ProvaGUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 284, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 312, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
                     .addComponent(jScrollPane2))
-                .addGap(0, 326, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -496,9 +541,11 @@ public class ProvaGUI extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1)
+                            .addComponent(jScrollPane2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2)))
+                        .addComponent(jScrollPane3)))
                 .addContainerGap())
         );
 
@@ -506,11 +553,34 @@ public class ProvaGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
+        File lastDir = new File("fc.config");
+        String lastPath = null;
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(lastDir)));
+            lastPath = br.readLine();
+            br.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ProvaGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ProvaGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JFileChooser fileChooser = new JFileChooser(lastPath);
         int n = fileChooser.showOpenDialog(this);
-        File f = fileChooser.getSelectedFile();
-        GUIHelper.getInstance().setFile(f);
-        inputLable.setText(fileChooser.getName(f));
+        if (n == JFileChooser.APPROVE_OPTION) {
+            File dir = new File("fc.config");
+            try {
+                PrintWriter pw = new PrintWriter(dir);
+                pw.print(fileChooser.getCurrentDirectory().getAbsolutePath());
+                pw.flush();
+                pw.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(ProvaGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            File f = fileChooser.getSelectedFile();
+            sourceText.setEnabled(true);
+            GUIHelper.getInstance().setFile(f);
+            inputLable.setText(fileChooser.getName(f));
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton5ActionPerformed
@@ -557,7 +627,13 @@ public class ProvaGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jRadioButton3ItemStateChanged
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        GUIHelper.getInstance().run();
+        try {
+            GUIHelper.getInstance().run();
+            inputText.setEnabled(true);
+            outputText.setEnabled(true);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, "Errore");
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jRadioButton4ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton4ItemStateChanged
@@ -654,6 +730,17 @@ public class ProvaGUI extends javax.swing.JFrame {
             GUIHelper.getInstance().setG_eType(1);
     }//GEN-LAST:event_geComboActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        String input = JOptionPane.showInputDialog("Inserisci testo");
+        System.out.println("input:"+input);
+        if (input != null&&input.length()>0) {
+            GenericUtils.writeString(input, "userinput.tmp");
+            GUIHelper.getInstance().setFile(new File("userinput.tmp"));
+            inputLable.setText("userinput");
+            sourceText.setEnabled(rootPaneCheckingEnabled);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -706,6 +793,7 @@ public class ProvaGUI extends javax.swing.JFrame {
     private javax.swing.JTextArea inputText;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -727,10 +815,12 @@ public class ProvaGUI extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTextArea outputText;
     private javax.swing.JComboBox<Integer> ripComboR;
     private javax.swing.JLabel ripLableR;
     private javax.swing.JComboBox<Double> sbcCombo;
     private javax.swing.JLabel sbcLable;
+    private javax.swing.JTextArea sourceText;
     // End of variables declaration//GEN-END:variables
 }
