@@ -561,7 +561,7 @@ public class ProvaGUI extends javax.swing.JFrame {
 
     private void convComboKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_convComboKActionPerformed
         int k=(Integer)convComboK.getSelectedItem();
-        GUIHelper.getInstance().setConvR(k);
+        GUIHelper.getInstance().setConvK(k);
     }//GEN-LAST:event_convComboKActionPerformed
 
     /**
