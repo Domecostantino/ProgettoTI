@@ -62,6 +62,8 @@ public class ProvaGUI extends javax.swing.JFrame {
         ripLableR = new javax.swing.JLabel();
         ripComboR = new javax.swing.JComboBox<>();
         concCombo = new javax.swing.JComboBox<>();
+        hamLableR = new javax.swing.JLabel();
+        hamComboR = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
@@ -122,7 +124,7 @@ public class ProvaGUI extends javax.swing.JFrame {
             }
         });
 
-        jRadioButton7.setText("Hamming(7,4)");
+        jRadioButton7.setText("Hamming");
         jRadioButton7.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jRadioButton7ItemStateChanged(evt);
@@ -172,6 +174,17 @@ public class ProvaGUI extends javax.swing.JFrame {
             }
         });
 
+        hamLableR.setText("R:");
+        hamLableR.setEnabled(false);
+
+        hamComboR.setModel(new javax.swing.DefaultComboBoxModel<>(new Integer[] { 3, 4, 5 }));
+        hamComboR.setEnabled(false);
+        hamComboR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hamComboRActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -200,7 +213,11 @@ public class ProvaGUI extends javax.swing.JFrame {
                         .addComponent(convLableK)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(convComboK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(concCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(concCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(hamLableR)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(hamComboR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(39, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -219,14 +236,15 @@ public class ProvaGUI extends javax.swing.JFrame {
                     .addComponent(jRadioButton2)
                     .addComponent(ripComboR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ripLableR))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(1, 1, 1)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jRadioButton7)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jRadioButton3)
-                            .addComponent(concCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(hamLableR)
+                    .addComponent(hamComboR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRadioButton3)
+                    .addComponent(concCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
@@ -396,7 +414,7 @@ public class ProvaGUI extends javax.swing.JFrame {
                 .addComponent(jRadioButton8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jRadioButton9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
@@ -523,8 +541,12 @@ public class ProvaGUI extends javax.swing.JFrame {
 
     private void jRadioButton7ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton7ItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
+            hamLableR.setEnabled(true);
+            hamComboR.setEnabled(true);
             GUIHelper.getInstance().setChannel(GUIHelper.Channel.HAMMING);
         } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
+            hamLableR.setEnabled(false);
+            hamComboR.setEnabled(false);
         }
     }//GEN-LAST:event_jRadioButton7ItemStateChanged
 
@@ -563,6 +585,11 @@ public class ProvaGUI extends javax.swing.JFrame {
         int k=(Integer)convComboK.getSelectedItem();
         GUIHelper.getInstance().setConvK(k);
     }//GEN-LAST:event_convComboKActionPerformed
+
+    private void hamComboRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hamComboRActionPerformed
+        int r=(Integer)hamComboR.getSelectedItem();
+        GUIHelper.getInstance().setRepH(r);
+    }//GEN-LAST:event_hamComboRActionPerformed
 
     /**
      * @param args the command line arguments
@@ -608,6 +635,8 @@ public class ProvaGUI extends javax.swing.JFrame {
     private javax.swing.JComboBox<Integer> convComboR;
     private javax.swing.JLabel convLableK;
     private javax.swing.JLabel convLableR;
+    private javax.swing.JComboBox<Integer> hamComboR;
+    private javax.swing.JLabel hamLableR;
     private javax.swing.JLabel inputLable;
     private javax.swing.JTextArea inputText;
     private javax.swing.JButton jButton1;

@@ -32,6 +32,7 @@ public class GUIHelper {
     private Error error = null;
     private int convR = 2, convK = 2;
     private int repR = 3;
+    private int repH = 3;
     private int[] concR = {3, 3};
     private File file;
     private static GUIHelper instance = null;
@@ -86,6 +87,10 @@ public class GUIHelper {
         this.concR = concR;
     }
 
+    public void setRepH(int repH) {
+        this.repH = repH;
+    }
+
     public void setFile(File file) {
         this.file = file;
     }
@@ -112,7 +117,7 @@ public class GUIHelper {
                 ccoder = new ConvolutionalChannelCoder(convK, convR);
                 break;
             case HAMMING:
-                ccoder = new HammingChannelCoder();
+                ccoder = new HammingChannelCoder(repH);
                 break;
             case REPETITION:
                 ccoder = new RepChannelCoder(repR);
