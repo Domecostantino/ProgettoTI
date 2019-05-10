@@ -29,10 +29,9 @@ public class LZWCompression {
 
 	/**
 	 * Method to compress which takes in 2 parameter. Input and Output which are
-	 * both file path and the output of this method is file that is
-	 * compressed.The method reads a byte and then it is converted to a 12 byte.
-	 * Store the 2 (12bits) in an array of 3 byte length and the same is written
-	 * to the file.
+	 * both file path and the output of this method is file that is compressed.The
+	 * method reads a byte and then it is converted to a 12 byte. Store the 2
+	 * (12bits) in an array of 3 byte length and the same is written to the file.
 	 * 
 	 * @param input
 	 * @param output
@@ -50,11 +49,9 @@ public class LZWCompression {
 		count = 256;
 
 		/** Pointer to input and output file */
-		DataInputStream read = new DataInputStream(new BufferedInputStream(
-				new FileInputStream(input)));
+		DataInputStream read = new DataInputStream(new BufferedInputStream(new FileInputStream(input)));
 
-		DataOutputStream out = new DataOutputStream(new BufferedOutputStream(
-				new FileOutputStream(output)));
+		DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(output)));
 
 		/** Local Variables */
 		byte input_byte;
@@ -88,20 +85,15 @@ public class LZWCompression {
 				} else {
 					String s12 = to12bit(table.get(temp));
 					/**
-					 * Store the 12 bits into an array and then write it to the
-					 * output file
+					 * Store the 12 bits into an array and then write it to the output file
 					 */
 
 					if (onleft) {
-						buffer[0] = (byte) Integer.parseInt(
-								s12.substring(0, 8), 2);
-						buffer[1] = (byte) Integer.parseInt(
-								s12.substring(8, 12) + "0000", 2);
+						buffer[0] = (byte) Integer.parseInt(s12.substring(0, 8), 2);
+						buffer[1] = (byte) Integer.parseInt(s12.substring(8, 12) + "0000", 2);
 					} else {
-						buffer[1] += (byte) Integer.parseInt(
-								s12.substring(0, 4), 2);
-						buffer[2] = (byte) Integer.parseInt(
-								s12.substring(4, 12), 2);
+						buffer[1] += (byte) Integer.parseInt(s12.substring(0, 4), 2);
+						buffer[2] = (byte) Integer.parseInt(s12.substring(4, 12), 2);
 						for (int b = 0; b < buffer.length; b++) {
 							out.writeByte(buffer[b]);
 							buffer[b] = 0;
@@ -119,15 +111,12 @@ public class LZWCompression {
 			String temp_12 = to12bit(table.get(temp));
 			if (onleft) {
 				buffer[0] = (byte) Integer.parseInt(temp_12.substring(0, 8), 2);
-				buffer[1] = (byte) Integer.parseInt(temp_12.substring(8, 12)
-						+ "0000", 2);
+				buffer[1] = (byte) Integer.parseInt(temp_12.substring(8, 12) + "0000", 2);
 				out.writeByte(buffer[0]);
 				out.writeByte(buffer[1]);
 			} else {
-				buffer[1] += (byte) Integer
-						.parseInt(temp_12.substring(0, 4), 2);
-				buffer[2] = (byte) Integer
-						.parseInt(temp_12.substring(4, 12), 2);
+				buffer[1] += (byte) Integer.parseInt(temp_12.substring(0, 4), 2);
+				buffer[2] = (byte) Integer.parseInt(temp_12.substring(4, 12), 2);
 				for (int b = 0; b < buffer.length; b++) {
 					out.writeByte(buffer[b]);
 					buffer[b] = 0;
@@ -182,16 +171,13 @@ public class LZWCompression {
 	}
 
 	/**
-	 * Decompress Method that takes in input, output as a file path Then
-	 * decompress the input to same file as the one passed to compress method
-	 * without loosing any information. In the decompression method it reads in
-	 * 3 bytes of information and write 2 characters corresponding to the bits
-	 * read.
+	 * Decompress Method that takes in input, output as a file path Then decompress
+	 * the input to same file as the one passed to compress method without loosing
+	 * any information. In the decompression method it reads in 3 bytes of
+	 * information and write 2 characters corresponding to the bits read.
 	 * 
-	 * @param input
-	 *            - file path
-	 * @param output
-	 *            - file path
+	 * @param input  - file path
+	 * @param output - file path
 	 * @throws IOException
 	 */
 	public void LZW_Decompress(String input, String output) throws IOException {
@@ -205,11 +191,9 @@ public class LZWCompression {
 		count = 256;
 
 		/** Stream pointer to input and output file path */
-		DataInputStream in = new DataInputStream(new BufferedInputStream(
-				new FileInputStream(input)));
+		DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(input)));
 
-		DataOutputStream out = new DataOutputStream(new BufferedOutputStream(
-				new FileOutputStream(output)));
+		DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(output)));
 
 		int currword, priorword;
 		byte[] buffer = new byte[3];
@@ -227,37 +211,37 @@ public class LZWCompression {
 			out.writeBytes(Array_char[priorword]);
 
 			/**
-			 * Read every 3 bytes and generate a corresponding characters - 2
-			 * character
+			 * Read every 3 bytes and generate a corresponding characters - 2 character
 			 */
 			while (true) {
+				try {
 
-				if (onleft) {
-					buffer[0] = in.readByte();
-					buffer[1] = in.readByte();
-					currword = getvalue(buffer[0], buffer[1], onleft);
-				} else {
-					buffer[2] = in.readByte();
-					currword = getvalue(buffer[1], buffer[2], onleft);
+					if (onleft) {
+						buffer[0] = in.readByte();
+						buffer[1] = in.readByte();
+						currword = getvalue(buffer[0], buffer[1], onleft);
+					} else {
+						buffer[2] = in.readByte();
+						currword = getvalue(buffer[1], buffer[2], onleft);
+					}
+					onleft = !onleft;
+					if (currword >= count) {
+
+						if (count < 4096)
+							Array_char[count] = Array_char[priorword] + Array_char[priorword].charAt(0);
+						count++;
+						out.writeBytes(Array_char[priorword] + Array_char[priorword].charAt(0));
+					} else {
+
+						if (count < 4096)
+							Array_char[count] = Array_char[priorword] + Array_char[currword].charAt(0);
+						count++;
+						out.writeBytes(Array_char[currword]);
+					}
+					priorword = currword;
+				} catch (IndexOutOfBoundsException e) {
+					System.out.println("Errore decodifica");
 				}
-				onleft = !onleft;
-				if (currword >= count) {
-
-					if (count < 4096)
-						Array_char[count] = Array_char[priorword]
-								+ Array_char[priorword].charAt(0);
-					count++;
-					out.writeBytes(Array_char[priorword]
-							+ Array_char[priorword].charAt(0));
-				} else {
-
-					if (count < 4096)
-						Array_char[count] = Array_char[priorword]
-								+ Array_char[currword].charAt(0);
-					count++;
-					out.writeBytes(Array_char[currword]);
-				}
-				priorword = currword;
 			}
 
 		} catch (EOFException e) {
@@ -269,15 +253,15 @@ public class LZWCompression {
 
 	/**
 	 * The main method is used to test the working of the program. The Compress
-	 * method can read in a txt, video or an excel file and convert it to a
-	 * binary file(compressed version). The decompress method reads in the
-	 * binary compressed file and generates the corresponding file. Based on the
-	 * comparision between 2 data structures HashMap and TreeMap. We can infer
-	 * that HashMap performs better as compared to TreeMap.
+	 * method can read in a txt, video or an excel file and convert it to a binary
+	 * file(compressed version). The decompress method reads in the binary
+	 * compressed file and generates the corresponding file. Based on the
+	 * comparision between 2 data structures HashMap and TreeMap. We can infer that
+	 * HashMap performs better as compared to TreeMap.
 	 * 
-	 * Words and the csv file was compressed to a lower size. But the mp4 file
-	 * was not converted to a lower size in fact the conversion made the file
-	 * increase in size.
+	 * Words and the csv file was compressed to a lower size. But the mp4 file was
+	 * not converted to a lower size in fact the conversion made the file increase
+	 * in size.
 	 * 
 	 * @param args
 	 * @throws IOException
@@ -286,10 +270,8 @@ public class LZWCompression {
 		LZWCompression lzw = new LZWCompression();
 
 		System.out.println("Please enter the command\n ");
-		System.out
-				.println("Command for Compression is: java lzw c shortword.txt zippedfile.txt");
-		System.out
-				.println("Command for Decmpression is : java lzw d zippedfile.txt unzippedfile.txt");
+		System.out.println("Command for Compression is: java lzw c shortword.txt zippedfile.txt");
+		System.out.println("Command for Decmpression is : java lzw d zippedfile.txt unzippedfile.txt");
 
 		/** Scanner object is created to read the values from the keyboard */
 
@@ -312,9 +294,9 @@ public class LZWCompression {
 				long time = d2.getTime() - d1.getTime();
 				System.out.println("Time Taken to run the program = " + time);
 			}
-			File f=new File(arg[3]);
-			File f1=new File(arg[4]);
-			System.out.println(f.length()+", "+f1.length());
+			File f = new File(arg[3]);
+			File f1 = new File(arg[4]);
+			System.out.println(f.length() + ", " + f1.length());
 		}
 
 		in.close();

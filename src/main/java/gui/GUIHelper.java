@@ -118,7 +118,6 @@ public class GUIHelper {
                 ccoder = new RepChannelCoder(repR);
                 break;
         }
-        System.out.println(concR[0]+" "+concR[1]);
         ChannelModel errorModel = null;
         switch (error) {
             case G_E:
@@ -130,9 +129,22 @@ public class GUIHelper {
         }
         Statistics stat = new Statistics();
         Simulation simulation = new Simulation(scoder, ccoder, errorModel, stat, file.getAbsolutePath());
+        long t1 = System.currentTimeMillis();
         simulation.execute();
-        ProvaGUI.getInstance().getInputText().append("Source size:" + stat.getSourceCodeSize() + "\n");
-        ProvaGUI.getInstance().getInputText().append("Compression rate:" + stat.getCompressionRate() + "\n");
+        long t2 = System.currentTimeMillis();
+        ProvaGUI.getInstance().getInputText().append("\nRitardo: " + (t2 - t1)+ " ms");
+        ProvaGUI.getInstance().getInputText().append("\nritardo cod sorg: " + stat.getSourceCodingTime() + " ms");
+        ProvaGUI.getInstance().getInputText().append("\nritardo cod canale: " + stat.getChannelCodingTime() + " ms");
+        ProvaGUI.getInstance().getInputText().append("\nritardo decod canale: " + stat.getChannelDecodingTime() + " ms");
+        ProvaGUI.getInstance().getInputText().append("\nritardo decod sorg: " + stat.getSourceDecodingTime() + " ms");
+
+        ProvaGUI.getInstance().getInputText().append("\n\ndimensione file iniziale " + stat.getInitialSize() + " byte");
+        ProvaGUI.getInstance().getInputText().append("\ndimensione file compressioneSorgente " + stat.getSourceCodeSize() + " byte");
+        ProvaGUI.getInstance().getInputText().append("\ncompression rate: " + stat.getCompressionRate()+"\n");
+
+        ProvaGUI.getInstance().getInputText().append("\nerror rate cod canale " + stat.getChannelDecodingErrorRate()*100+" %");
+        ProvaGUI.getInstance().getInputText().append("\nerror rate canale solo cod sorgente " + stat.getOnlySourceCodeChannelErrorRate()*100+" %");
+        ProvaGUI.getInstance().getInputText().append("\nrecovery rate del codificatore di canale "+ stat.getErrorRecoveryRate()*100+" %");
 
     }
 

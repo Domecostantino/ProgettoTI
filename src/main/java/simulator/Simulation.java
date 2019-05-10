@@ -85,7 +85,7 @@ public class Simulation {
 		HuffmanCoder sourceCoder3 = new HuffmanCoder();
 		HammingChannelCoder channelCoder = new HammingChannelCoder();
 
-		ConvolutionalChannelCoder channelCoder2 = new ConvolutionalChannelCoder(2, 2);
+		ConvolutionalChannelCoder channelCoder2 = new ConvolutionalChannelCoder(7, 3);
 		CanaleSimmetricoBinario channel = new CanaleSimmetricoBinario();
 		GilbertElliot channel2 = new GilbertElliot();
 

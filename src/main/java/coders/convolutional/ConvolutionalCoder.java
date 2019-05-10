@@ -29,7 +29,7 @@ import utils.ConvolutionalUtils;
  * 
  */
 
-public class ConvolutionalCoder  {
+public class ConvolutionalCoder {
 	private int K, r;
 	private final int NUM_LEVELS = 7;
 
@@ -111,7 +111,6 @@ public class ConvolutionalCoder  {
 		}
 
 //		System.out.println("EncodedPayload: "+encodedPayload.toString());
-		
 
 //		// header
 //		ConvolutionalHeader header = new ConvolutionalHeader(K, r);
@@ -135,7 +134,7 @@ public class ConvolutionalCoder  {
 		// recuperiamo i polinomi generatori
 //		System.out.println(Arrays.toString(generatorPolynomial));
 		// li convertiamo in una matrice di byte per semplicita
-		byte[][] gs = ConvolutionalUtils.convertGeneratorPolynomials(r,K,generatorPolynomial);
+		byte[][] gs = ConvolutionalUtils.convertGeneratorPolynomials(r, K, generatorPolynomial);
 
 		// ora iteriamo un bit in input per volta
 		for (int i = 0; i < bitInput.length(); i++) {
@@ -169,11 +168,14 @@ public class ConvolutionalCoder  {
 	}
 
 	public static void main(String[] args) {
-		ConvolutionalCoder cc = new ConvolutionalCoder(7, 3);
+		int k= 7;
+		int r =3;
+		ConvolutionalCoder cc = new ConvolutionalCoder(k, r);
 		String q = "ciao Vincenzo come stai èllamado";
-		String s = cc.encode(q);
+		String in = new BigInteger(q.getBytes()).toString(2);
+		String s = cc.encode(in);
 		
-		String changedMessage = s.replace("0000", "0100");
+		String changedMessage = s.replace("000", "010");
 		System.out.println("corrupted "+changedMessage);
 		
 		System.out.println("\n\n--------------------- DECODE ----------------------\n\n");
@@ -190,20 +192,21 @@ public class ConvolutionalCoder  {
 //		corrupted.setPayload(changedMessage);
 		
 
-		ViterbiDecoder dec = new ViterbiDecoder(7,3);
+		ViterbiDecoder dec = new ViterbiDecoder(k,r);
 		String d = dec.decode(changedMessage);
+		System.out.println("input__Payload: "+in);
 		System.out.println("decodedPayload: "+d);
 		
 		String text2 = new String(new BigInteger(d, 2).toByteArray());
 		System.out.println(text2);
 		
-		System.out.println("con replace(\"0001\", \"0000\") e r=2 si ha: ");
+		System.out.println("con replace ha: ");
 		System.out.println(q+ " -> "+text2);
 		
 		String p = new BigInteger(q.getBytes()).toString(2);
-		p = p.replace("0000", "0101");
+		p = p.replace("000", "010");
 		String text3 = new String(new BigInteger(p, 2).toByteArray());
-		System.out.println("Messaggio senza codifica di sorgente sempre con replace(\"0001\", \"0000\"); : "+text3);
+		System.out.println("Messaggio senza codifica di canale: "+text3);
 	}
 
 }
