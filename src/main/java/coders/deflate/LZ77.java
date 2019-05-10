@@ -215,6 +215,7 @@ public class LZ77 {
 				in.deleteCharAt(0);
 				pos++;
 			} else {
+                            try{
 				p = nextPointer(in);
 				if (p.index != 0) {
 					int k = p.index - 1;
@@ -229,6 +230,7 @@ public class LZ77 {
 					out.append(p.character);
 					pos += p.lenght + 1;
 				}
+                            }catch(Exception e){e.printStackTrace();}
 
 			}
 		}

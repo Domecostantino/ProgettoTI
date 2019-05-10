@@ -22,15 +22,17 @@ public class Prove {
 //		BitSet b=chcoder.encode(mess);
 //		chcoder.decode(b, mess);
 //		GenericUtils.writeChannelMessage(mess, "ciao4");
-		SourceCoder coder=new LZWCoder();//TODO Controllare
-		String in = "Lorem ipsum.txt";
-		String out = "LI.txt";
-		String cod = "LI";
-		coder.encode(in, cod);
-		
-		coder.decode(cod, out);
-		System.out.println("Dimensione file input:" + new File(in).length());
-		System.out.println("Dimensione file codificato:" + GenericUtils.getChannelMessage(cod).getPayload().length);
+//		SourceCoder coder=new LZWCoder();//TODO Controllare
+//		String in = "Lorem ipsum.txt";
+//		String out = "LI.txt";
+//		String cod = "LI";
+//		coder.encode(in, cod);
+//		
+//		coder.decode(cod, out);
+//		System.out.println("Dimensione file input:" + new File(in).length());
+//		System.out.println("Dimensione file codificato:" + GenericUtils.getChannelMessage(cod).getPayload().length);
+                System.out.println("[3, 3]".substring(1, 5).split(", ")[0]);
+                
 		
 	}
 

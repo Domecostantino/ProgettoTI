@@ -6,7 +6,9 @@
 package gui;
 
 import java.awt.event.ItemEvent;
+import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -17,10 +19,23 @@ public class ProvaGUI extends javax.swing.JFrame {
     /**
      * Creates new form ProvaGUI
      */
-    public ProvaGUI() {
+    private ProvaGUI() {
         initComponents();
     }
 
+    private static ProvaGUI instance=null;
+    
+    public static synchronized ProvaGUI getInstance(){
+        if(instance==null){
+            instance=new ProvaGUI();
+        }
+        return instance;
+    }
+
+    public JTextArea getInputText() {
+        return inputText;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -56,13 +71,14 @@ public class ProvaGUI extends javax.swing.JFrame {
         jRadioButton6 = new javax.swing.JRadioButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        inputLable = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jRadioButton8 = new javax.swing.JRadioButton();
         jRadioButton9 = new javax.swing.JRadioButton();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        inputText = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
 
@@ -113,8 +129,13 @@ public class ProvaGUI extends javax.swing.JFrame {
             }
         });
 
-        convComboR.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2", "3" }));
+        convComboR.setModel(new javax.swing.DefaultComboBoxModel<>(new Integer[] { 2, 3 }));
         convComboR.setEnabled(false);
+        convComboR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                convComboRActionPerformed(evt);
+            }
+        });
 
         convLableR.setText("R:");
         convLableR.setEnabled(false);
@@ -122,19 +143,34 @@ public class ProvaGUI extends javax.swing.JFrame {
         convLableK.setText("K:");
         convLableK.setEnabled(false);
 
-        convComboK.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2", "3", "4", "5", "6", "7" }));
+        convComboK.setModel(new javax.swing.DefaultComboBoxModel<>(new Integer[] { 2, 3, 4, 5, 6, 7 }));
         convComboK.setEnabled(false);
+        convComboK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                convComboKActionPerformed(evt);
+            }
+        });
 
         jLabel6.setText("Scegli algoritmo:");
 
         ripLableR.setText("R:");
         ripLableR.setEnabled(false);
 
-        ripComboR.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "3", "5", "7", "9" }));
+        ripComboR.setModel(new javax.swing.DefaultComboBoxModel<>(new Integer[] { 3, 5, 7, 9 }));
         ripComboR.setEnabled(false);
+        ripComboR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ripComboRActionPerformed(evt);
+            }
+        });
 
         concCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "[3, 3]", "[3, 5]", "[5, 5]" }));
         concCombo.setEnabled(false);
+        concCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                concComboActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -152,7 +188,6 @@ public class ProvaGUI extends javax.swing.JFrame {
                     .addComponent(jRadioButton3))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(concCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(ripLableR)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -164,7 +199,8 @@ public class ProvaGUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(convLableK)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(convComboK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(convComboK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(concCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(39, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -189,8 +225,8 @@ public class ProvaGUI extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(concCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jRadioButton3))))
+                            .addComponent(jRadioButton3)
+                            .addComponent(concCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
@@ -287,18 +323,23 @@ public class ProvaGUI extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2)
-                            .addComponent(jLabel2))
-                        .addGap(0, 166, Short.MAX_VALUE))
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel2)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jButton2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(inputLable)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jButton2)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(inputLable))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -360,9 +401,9 @@ public class ProvaGUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        inputText.setColumns(20);
+        inputText.setRows(5);
+        jScrollPane1.setViewportView(inputText);
 
         jTextArea2.setColumns(20);
         jTextArea2.setRows(5);
@@ -375,7 +416,7 @@ public class ProvaGUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 281, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -407,7 +448,9 @@ public class ProvaGUI extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         JFileChooser fileChooser = new JFileChooser();
         int n = fileChooser.showOpenDialog(this);
-        GUIHelper.getInstance().setFile(fileChooser.getSelectedFile());
+        File f=fileChooser.getSelectedFile();
+        GUIHelper.getInstance().setFile(f);
+        inputLable.setText(fileChooser.getName(f));
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton5ActionPerformed
@@ -425,6 +468,7 @@ public class ProvaGUI extends javax.swing.JFrame {
             convComboR.setEnabled(true);
             convComboK.setEnabled(true);
             GUIHelper.getInstance().setChannel(GUIHelper.Channel.CONVOLUTIONAL);
+            inputText.append("convoluzionale\n");
         } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
             convLableR.setEnabled(false);
             convLableK.setEnabled(false);
@@ -438,6 +482,7 @@ public class ProvaGUI extends javax.swing.JFrame {
             ripComboR.setEnabled(true);
             ripLableR.setEnabled(true);
             GUIHelper.getInstance().setChannel(GUIHelper.Channel.REPETITION);
+            inputText.append("ripetizione\n");
         } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
             ripComboR.setEnabled(false);
             ripLableR.setEnabled(false);
@@ -448,6 +493,7 @@ public class ProvaGUI extends javax.swing.JFrame {
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             concCombo.setEnabled(true);
             GUIHelper.getInstance().setChannel(GUIHelper.Channel.CONCATENATED);
+            inputText.append("concatenato\n");
         } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
             concCombo.setEnabled(false);
         }
@@ -460,6 +506,7 @@ public class ProvaGUI extends javax.swing.JFrame {
     private void jRadioButton4ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton4ItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             GUIHelper.getInstance().setSource(GUIHelper.Source.HUFFMAN);
+            inputText.append("huffman\n");
         } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
         }
     }//GEN-LAST:event_jRadioButton4ItemStateChanged
@@ -467,6 +514,7 @@ public class ProvaGUI extends javax.swing.JFrame {
     private void jRadioButton5ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton5ItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             GUIHelper.getInstance().setSource(GUIHelper.Source.LZW);
+            inputText.append("lzw\n");
         } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
         }
     }//GEN-LAST:event_jRadioButton5ItemStateChanged
@@ -474,6 +522,7 @@ public class ProvaGUI extends javax.swing.JFrame {
     private void jRadioButton6ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton6ItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             GUIHelper.getInstance().setSource(GUIHelper.Source.DEFLATE);
+            inputText.append("deflate\n");
         } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
         }
     }//GEN-LAST:event_jRadioButton6ItemStateChanged
@@ -498,6 +547,28 @@ public class ProvaGUI extends javax.swing.JFrame {
         } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
         }
     }//GEN-LAST:event_jRadioButton9ItemStateChanged
+
+    private void ripComboRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ripComboRActionPerformed
+        int r=(Integer)ripComboR.getSelectedItem();
+        GUIHelper.getInstance().setRepR(r);
+    }//GEN-LAST:event_ripComboRActionPerformed
+
+    private void concComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_concComboActionPerformed
+        String s=(String)concCombo.getSelectedItem();
+        String[] vals=s.substring(1, 5).split(", ");
+        int[] reps={Integer.parseInt(vals[0]),Integer.parseInt(vals[1])};
+        GUIHelper.getInstance().setConcR(reps);
+    }//GEN-LAST:event_concComboActionPerformed
+
+    private void convComboRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_convComboRActionPerformed
+        int r=(Integer)convComboR.getSelectedItem();
+        GUIHelper.getInstance().setConvR(r);
+    }//GEN-LAST:event_convComboRActionPerformed
+
+    private void convComboKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_convComboKActionPerformed
+        int k=(Integer)convComboK.getSelectedItem();
+        GUIHelper.getInstance().setConvR(k);
+    }//GEN-LAST:event_convComboKActionPerformed
 
     /**
      * @param args the command line arguments
@@ -529,7 +600,7 @@ public class ProvaGUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ProvaGUI().setVisible(true);
+                getInstance().setVisible(true);
             }
         });
     }
@@ -539,10 +610,12 @@ public class ProvaGUI extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
     private javax.swing.JComboBox<String> concCombo;
-    private javax.swing.JComboBox<String> convComboK;
-    private javax.swing.JComboBox<String> convComboR;
+    private javax.swing.JComboBox<Integer> convComboK;
+    private javax.swing.JComboBox<Integer> convComboR;
     private javax.swing.JLabel convLableK;
     private javax.swing.JLabel convLableR;
+    private javax.swing.JLabel inputLable;
+    private javax.swing.JTextArea inputText;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -566,9 +639,8 @@ public class ProvaGUI extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JComboBox<String> ripComboR;
+    private javax.swing.JComboBox<Integer> ripComboR;
     private javax.swing.JLabel ripLableR;
     // End of variables declaration//GEN-END:variables
 }

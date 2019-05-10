@@ -38,7 +38,7 @@ public class Statistics {
 		flippedBits = set1.cardinality();
 		System.out.println("Bits flippati decodifica canale: "+flippedBits); //TODO eliminare
 
-		channelDecodingErrorRate = (double) flippedBits / (double) set2.length();
+		channelDecodingErrorRate = (double) flippedBits / (double) sourceCoding.length*8;
 		return channelDecodingErrorRate;
 	}
 

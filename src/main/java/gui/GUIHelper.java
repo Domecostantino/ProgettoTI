@@ -34,17 +34,18 @@ public class GUIHelper {
     private int repR = 3;
     private int[] concR = {3, 3};
     private File file;
-    private static GUIHelper instance=null;
-    
-    private GUIHelper(){}
-    
-    public static synchronized GUIHelper getInstance(){
-        if(instance==null){
-            instance=new GUIHelper();
+    private static GUIHelper instance = null;
+
+    private GUIHelper() {
+    }
+
+    public static synchronized GUIHelper getInstance() {
+        if (instance == null) {
+            instance = new GUIHelper();
         }
         return instance;
     }
-    
+
     enum Source {
         HUFFMAN, LZW, DEFLATE;
     }
@@ -56,19 +57,7 @@ public class GUIHelper {
     enum Error {
         SBC, G_E;
     }
-
-    public Source getSource() {
-        return source;
-    }
-
-    public Channel getChannel() {
-        return channel;
-    }
-
-    public Error getError() {
-        return error;
-    }
-
+    
     public void setSource(Source source) {
         this.source = source;
     }
@@ -106,32 +95,45 @@ public class GUIHelper {
         switch (source) {
             case HUFFMAN:
                 scoder = new HuffmanCoder();
+                break;
             case LZW:
                 scoder = new LZWCoder();
+                break;
             case DEFLATE:
                 scoder = new DeflateCoder();
+                break;
         }
         ChannelCoder ccoder = null;
         switch (channel) {
             case CONCATENATED:
                 ccoder = new ConcatenatedChannelCoder(concR);
+                break;
             case CONVOLUTIONAL:
                 ccoder = new ConvolutionalChannelCoder(convK, convR);
+                break;
             case HAMMING:
                 ccoder = new HammingChannelCoder();
+                break;
             case REPETITION:
                 ccoder = new RepChannelCoder(repR);
+                break;
         }
+        System.out.println(concR[0]+" "+concR[1]);
         ChannelModel errorModel = null;
         switch (error) {
             case G_E:
                 errorModel = new GilbertElliot();
+                break;
             case SBC:
                 errorModel = new CanaleSimmetricoBinario();
+                break;
         }
-        Statistics stat=new Statistics();
-        Simulation simulation=new Simulation(scoder, ccoder, errorModel, stat, file.getAbsolutePath());
+        Statistics stat = new Statistics();
+        Simulation simulation = new Simulation(scoder, ccoder, errorModel, stat, file.getAbsolutePath());
         simulation.execute();
+        ProvaGUI.getInstance().getInputText().append("Source size:" + stat.getSourceCodeSize() + "\n");
+        ProvaGUI.getInstance().getInputText().append("Compression rate:" + stat.getCompressionRate() + "\n");
+
     }
 
 }
