@@ -5,6 +5,7 @@
  */
 package gui;
 
+import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,7 +18,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
+import javax.swing.UIManager;
 import utils.GenericUtils;
 
 /**
@@ -52,6 +55,10 @@ public class ProvaGUI extends javax.swing.JFrame {
 
     public JTextArea getOutputText() {
         return outputText;
+    }
+
+    public JProgressBar getProgressBar() {
+        return progressBar;
     }
 
     /**
@@ -102,6 +109,8 @@ public class ProvaGUI extends javax.swing.JFrame {
         geLable = new javax.swing.JLabel();
         sbcCombo = new javax.swing.JComboBox<>();
         geCombo = new javax.swing.JComboBox<>();
+        UIManager.getLookAndFeelDefaults().put("nimbusOrange", new Color(107, 255, 151));
+        progressBar = new javax.swing.JProgressBar();
         jScrollPane1 = new javax.swing.JScrollPane();
         inputText = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -170,7 +179,7 @@ public class ProvaGUI extends javax.swing.JFrame {
         convLableK.setText("K:");
         convLableK.setEnabled(false);
 
-        convComboK.setModel(new javax.swing.DefaultComboBoxModel<>(new Integer[] { 2, 3, 4, 5, 6, 7 }));
+        convComboK.setModel(new javax.swing.DefaultComboBoxModel<>(new Integer[] { 3, 4, 5, 6, 7 }));
         convComboK.setEnabled(false);
         convComboK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -450,25 +459,28 @@ public class ProvaGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(jRadioButton9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(geLable))
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(jRadioButton8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(sbcLable)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(sbcCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(geCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel5Layout.createSequentialGroup()
+                                        .addComponent(jRadioButton9)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(geLable))
+                                    .addGroup(jPanel5Layout.createSequentialGroup()
+                                        .addComponent(jRadioButton8)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(sbcLable)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(sbcCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(geCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel3))
+                        .addGap(0, 52, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1)))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -486,9 +498,13 @@ public class ProvaGUI extends javax.swing.JFrame {
                     .addComponent(geLable)
                     .addComponent(geCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
+
+        progressBar.setMaximum(5);
 
         inputText.setColumns(20);
         inputText.setRows(5);
@@ -626,9 +642,18 @@ public class ProvaGUI extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            GUIHelper.getInstance().run();
-            inputText.setEnabled(true);
-            outputText.setEnabled(true);
+            Runnable start = new Runnable() {
+                @Override
+                public void run() {
+                    GUIHelper.getInstance().run();
+                    inputText.setEnabled(true);
+                    outputText.setEnabled(true);
+                    jButton1.setEnabled(true);
+                }
+            };
+            Thread t=new Thread(start);
+            t.start();
+            jButton1.setEnabled(false);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(rootPane, "Errore");
         }
@@ -730,8 +755,8 @@ public class ProvaGUI extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         String input = JOptionPane.showInputDialog("Inserisci testo");
-        System.out.println("input:"+input);
-        if (input != null&&input.length()>0) {
+        System.out.println("input:" + input);
+        if (input != null && input.length() > 0) {
             GenericUtils.writeString(input, "userinput.tmp");
             GUIHelper.getInstance().setFile(new File("userinput.tmp"));
             inputLable.setText("userinput");
@@ -815,6 +840,7 @@ public class ProvaGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextArea outputText;
+    private javax.swing.JProgressBar progressBar;
     private javax.swing.JComboBox<Integer> ripComboR;
     private javax.swing.JLabel ripLableR;
     private javax.swing.JComboBox<Double> sbcCombo;

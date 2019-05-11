@@ -14,6 +14,7 @@ import coders.convolutional.ConvolutionalChannelCoder;
 import coders.deflate.DeflateCoder;
 import coders.hamming.HammingChannelCoder;
 import coders.huffman.HuffmanCoder;
+import gui.ProvaGUI;
 import utils.GenericUtils;
 import utils.MyBitSet;
 import utils.Statistics;
@@ -50,23 +51,23 @@ public class Simulation {
         String sourceCode = fileInputPath.substring(0, fileInputPath.length() - 4) + "_TMP";
 
         sourceCoder.encode(fileInputPath, sourceCode);
-
+        ProvaGUI.getInstance().getProgressBar().setValue(1);
         statistics.setSourceCodingTime(System.currentTimeMillis());
         ChannelMessage mess = GenericUtils.getChannelMessage(sourceCode);
         MyBitSet b = channelCoder.encode(mess);
         statistics.setChannelCodingTime(System.currentTimeMillis());
-
+        ProvaGUI.getInstance().getProgressBar().setValue(2);
         //invio su canale
         MyBitSet corruptedBits = channel.send(b);
-
+        ProvaGUI.getInstance().getProgressBar().setValue(3);
         //decodifica
         channelCoder.decode(corruptedBits, mess);
         statistics.setChannelDecodingTime(System.currentTimeMillis());
         GenericUtils.writeChannelMessage(mess, sourceCode + "2");
-
+        ProvaGUI.getInstance().getProgressBar().setValue(4);
         sourceCoder.decode(sourceCode + "2", fileOutput);
         statistics.setSourceDecodingTime(System.currentTimeMillis());
-
+        ProvaGUI.getInstance().getProgressBar().setValue(5);
         //dati utili alle statistiche (compressione e errorRate)
         byte[] sourceCodeBits = GenericUtils.getChannelMessage(sourceCode).getPayload();
         byte[] channelDecodedBits = GenericUtils.getChannelMessage(sourceCode + "2").getPayload();
