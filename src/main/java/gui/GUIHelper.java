@@ -45,12 +45,12 @@ public class GUIHelper {
     private Source source = null;
     private Channel channel = null;
     private Error error = null;
-    private int convR = 2, convK = 2;
+    private int convR = 2, convK = 3;
     private int repR = 3;
     private int repH = 3;
     private int[] concR = {3, 3};
     private int g_eType = 0;
-    private double ber = 0.005;
+    private double ber = 0.001;
     private File file;
     private static GUIHelper instance = null;
 
