@@ -29,6 +29,8 @@ public class ViterbiDecoder {
 	// il traliccio viene rappresentato come una array di livelli con una lista di
 	// nodi per ogni livello
 	private HashMap<Integer, TreeSet<TrellisNode>> trellis;
+	
+	int numRip; //TODO eliminare
 
 	private int K, r;
 	private final int NUM_LEVELS;
@@ -38,7 +40,7 @@ public class ViterbiDecoder {
 	public ViterbiDecoder(int K, int r) {
 		this.K=K;
 		this.r=r;
-		NUM_LEVELS = 7;
+		NUM_LEVELS = K;
 	}
 	
 	public String decode(String payload) {
@@ -52,6 +54,7 @@ public class ViterbiDecoder {
 		GeneratorTable generatorTable = new GeneratorTable();
 		generatorPolynomial = generatorTable.getGeneratorPolynomials(r, K);
 
+		createTrellis();
 		int range = NUM_LEVELS * r;
 
 		StringBuilder decodedPayload = new StringBuilder();
@@ -76,6 +79,7 @@ public class ViterbiDecoder {
 			//System.out.println("\n\n ************************************** \n\n");
 		}
 		
+		System.out.println(numRip); //TODO
 		return decodedPayload.toString();
 	}
 
@@ -86,9 +90,7 @@ public class ViterbiDecoder {
 	 * http://complextoreal.com/wp-content/uploads/2013/01/convo.pdf
 	 * 
 	 */
-	private String createTrellisAndDecode(String block) { // TODO inizialmente per r=2 poi estendere
-
-		createTrellis();
+	private String createTrellisAndDecode(String block) {
 		//System.out.println("trellis: " + trellis);
 
 		byte[][] gs = ConvolutionalUtils.convertGeneratorPolynomials(r,K,generatorPolynomial);
@@ -110,13 +112,6 @@ public class ViterbiDecoder {
 				// recupera i nodi predecessori
 				LinkedList<TrellisNode> predecessors = getPredecessors(previousLevel, currentNode);
 				
-				
-				if(i==(block.length()-r)) {
-					for (TrellisNode p : predecessors) {
-						System.out.println(p.getPathMetric());
-					}
-				}
-				
 //				System.out.println(currentNode+" "+predecessors);
 				//per ognuno calcoliamo la possibile pathMetric e teniamo conto di quella migliore
 				int bestPathMetric = Integer.MAX_VALUE;
@@ -137,17 +132,22 @@ public class ViterbiDecoder {
 				currentNode.setPathMetric(bestPathMetric);
 				currentNode.setPathPredecessor(predecessorPathCandidate);
 				
-				if(i==(block.length()-r)) {
-					System.out.println(currentNode.getPathMetric());
-					System.out.println();
-				}
-				
 			}
 			previousLevel = levelNodes;
 
 		}
 		//selezioniamo il nodo finale (tra quelli dell'ultimo livello) con pathMetric minore
 		TrellisNode finalNode = getFinalNode(previousLevel);
+		pathMetricUltimoLivRip(previousLevel); //TODO modifiche
+
+		
+		if(finalNode.getPathMetric()>0) {
+			TrellisNode fn = ritornaNodoInBaseAlPredMigl(getRepeatedNodeLevel(previousLevel));
+			if(!fn.getState().equals(finalNode.getState())) {
+				finalNode = fn;
+			}
+		}
+		
 		//System.out.println("final Node: "+finalNode+" PM finale: "+finalNode.getPathMetric());
 		
 		//decodifichiamo attraversando il path a pathMetric minima
@@ -280,5 +280,55 @@ public class ViterbiDecoder {
 			trellis.put(i, new TreeSet<>(successors));
 		}
 	}
+	
+	// TODO eliminare
+		private void pathMetricUltimoLivRip(TreeSet<TrellisNode> finalLevelNodes) {
+			LinkedList<TrellisNode> nodiRip = new LinkedList<>();
+			int bestPathMetric = Integer.MAX_VALUE;
+			TrellisNode finalNodeCandidate = null;
+			for (TrellisNode node : finalLevelNodes) {
+//				System.out.println("Node: "+node+" PM finale: "+node.getPathMetric());
+				int nodePM = node.getPathMetric();
+				if (nodePM < bestPathMetric) {
+					bestPathMetric = nodePM;
+					finalNodeCandidate = node;
+				}
+			}
+			for (TrellisNode trellisNode : finalLevelNodes) {
+				if (finalNodeCandidate.getPathMetric() == trellisNode.getPathMetric())
+					nodiRip.add(trellisNode);
+			}
+			if (nodiRip.size() > 1) {
+				numRip++;
+			}
+		}
 
+		private TrellisNode ritornaNodoInBaseAlPredMigl(LinkedList<TrellisNode> nodiFinaliFagl) {
+			int conut = 0;
+			for (TrellisNode nodoFin : nodiFinaliFagl) {
+				if(nodoFin.getPathPredecessor().getPathMetric()==0) {
+					return nodoFin;
+				}
+			}
+			return nodiFinaliFagl.getLast();
+		}
+		
+		private LinkedList<TrellisNode> getRepeatedNodeLevel(TreeSet<TrellisNode> finalLevelNodes) {
+			LinkedList<TrellisNode> nodiRip = new LinkedList<>();
+			int bestPathMetric = Integer.MAX_VALUE;
+			TrellisNode finalNodeCandidate = null;
+			for (TrellisNode node : finalLevelNodes) {
+//				System.out.println("Node: "+node+" PM finale: "+node.getPathMetric());
+				int nodePM = node.getPathMetric();
+				if (nodePM < bestPathMetric) {
+					bestPathMetric = nodePM;
+					finalNodeCandidate = node;
+				}
+			}
+			for (TrellisNode trellisNode : finalLevelNodes) {
+				if (finalNodeCandidate.getPathMetric() == trellisNode.getPathMetric())
+					nodiRip.add(trellisNode);
+			}
+			return nodiRip;
+		}
 }
