@@ -1,6 +1,7 @@
 package coders.convolutional;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.TreeSet;
 
@@ -30,13 +31,14 @@ public class ViterbiDecoder {
 	private HashMap<Integer, TreeSet<TrellisNode>> trellis;
 
 	private int K, r;
-	private final int NUM_LEVELS = 7;
+	private final int NUM_LEVELS;
 
 	private String[] generatorPolynomial;
 
 	public ViterbiDecoder(int K, int r) {
 		this.K=K;
 		this.r=r;
+		NUM_LEVELS = 7;
 	}
 	
 	public String decode(String payload) {
@@ -71,11 +73,9 @@ public class ViterbiDecoder {
 			String decodedBlock = createTrellisAndDecode(block);
 
 			decodedPayload.append(decodedBlock);
-
 			//System.out.println("\n\n ************************************** \n\n");
 		}
 		
-//		System.out.println(decodedPayload);
 		return decodedPayload.toString();
 	}
 
@@ -104,12 +104,20 @@ public class ViterbiDecoder {
 			String p_received = block.substring(i, i + r);
 
 			TreeSet<TrellisNode> levelNodes = trellis.get((i + r) / r);
-			//System.out.println("\nlevelNodes: " + levelNodes);
+//			System.out.println("\nlevelNodes: " + levelNodes);
 			// per ogni nodo del livello
 			for (TrellisNode currentNode : levelNodes) {
 				// recupera i nodi predecessori
 				LinkedList<TrellisNode> predecessors = getPredecessors(previousLevel, currentNode);
 				
+				
+				if(i==(block.length()-r)) {
+					for (TrellisNode p : predecessors) {
+						System.out.println(p.getPathMetric());
+					}
+				}
+				
+//				System.out.println(currentNode+" "+predecessors);
 				//per ognuno calcoliamo la possibile pathMetric e teniamo conto di quella migliore
 				int bestPathMetric = Integer.MAX_VALUE;
 				TrellisNode predecessorPathCandidate = null;
@@ -125,10 +133,14 @@ public class ViterbiDecoder {
 				}
 				
 				//infine settiamo il predecessore sul path e la pathMetric per il nodo corrente
+//				System.out.println(bestPathMetric);
 				currentNode.setPathMetric(bestPathMetric);
 				currentNode.setPathPredecessor(predecessorPathCandidate);
 				
-				
+				if(i==(block.length()-r)) {
+					System.out.println(currentNode.getPathMetric());
+					System.out.println();
+				}
 				
 			}
 			previousLevel = levelNodes;
@@ -209,7 +221,7 @@ public class ViterbiDecoder {
 			}
 			expectedParity.append(ep[l]);
 		}
-
+		
 		return expectedParity.toString();
 	}
 

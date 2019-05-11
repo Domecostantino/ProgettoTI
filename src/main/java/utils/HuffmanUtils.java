@@ -83,6 +83,7 @@ public class HuffmanUtils {
 		// dalla seconda entry in poi creiamo un ciclo che lo fa in automatico
 		// basandosi sempre sulla ultima codifica ricordando di appendere lo zero finale
 		// quando si passa alla lunghezza successiva
+		int oldLength = firstEntry.getKey();
 		while (lengthsIterator.hasNext()) {
 			boolean addFinalZero = true;
 			Entry<Integer, TreeSet<Character>> currentEntry = lengthsIterator.next();
@@ -91,7 +92,10 @@ public class HuffmanUtils {
 				char currentSymbol = charIterator.next();
 				String code = HuffmanUtils.addOne(previousCode);
 				if (addFinalZero) {
-					code += "0";
+					for (int i = 0; i < (currentEntry.getKey() - oldLength); i++) {
+						code += "0";
+					}
+					oldLength = currentEntry.getKey();
 					addFinalZero = false;
 				}
 				canonicalCodeTable.put(currentSymbol, code);
@@ -100,14 +104,15 @@ public class HuffmanUtils {
 		}
 		return canonicalCodeTable;
 	}
-	
+
 	/*
 	 * 
 	 * funzione di servizio utile a creare la codeTable relativa al corrente input
 	 * partendo dalla tabella delle lunghezze. Usato in CanonicalHuffmanDecoder.
 	 * 
 	 */
-	public static HashMap<String, Character> createInverseCanonicalCodeTable(TreeMap<Integer, TreeSet<Character>> lengthTable) {
+	public static HashMap<String, Character> createInverseCanonicalCodeTable(
+			TreeMap<Integer, TreeSet<Character>> lengthTable) {
 
 		HashMap<String, Character> inverseCanonicalCodeTable = new HashMap<>();
 
@@ -141,6 +146,7 @@ public class HuffmanUtils {
 		// dalla seconda entry in poi creiamo un ciclo che lo fa in automatico
 		// basandosi sempre sulla ultima codifica ricordando di appendere lo zero finale
 		// quando si passa alla lunghezza successiva
+		int oldLength = firstEntry.getKey();
 		while (lengthsIterator.hasNext()) {
 			boolean addFinalZero = true;
 			Entry<Integer, TreeSet<Character>> currentEntry = lengthsIterator.next();
@@ -149,7 +155,10 @@ public class HuffmanUtils {
 				char currentSymbol = charIterator.next();
 				String code = HuffmanUtils.addOne(previousCode);
 				if (addFinalZero) {
-					code += "0";
+					for (int i = 0; i < (currentEntry.getKey() - oldLength); i++) {
+						code += "0";
+					}
+					oldLength = currentEntry.getKey();
 					addFinalZero = false;
 				}
 				inverseCanonicalCodeTable.put(code, currentSymbol);

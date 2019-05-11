@@ -33,7 +33,7 @@ public class Prove {
 		coder.decode(cod, out);
 		System.out.println("Dimensione file input:" + new File(in).length());
 		System.out.println("Dimensione file codificato:" + GenericUtils.getChannelMessage(cod).getPayload().length);
-                System.out.println(GenericUtils.readFile(out, StandardCharsets.UTF_8));
+        System.out.println(GenericUtils.readFile(out, StandardCharsets.UTF_8));
                 
 		
 	}
