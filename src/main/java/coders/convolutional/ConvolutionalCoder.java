@@ -31,7 +31,7 @@ import utils.ConvolutionalUtils;
 
 public class ConvolutionalCoder {
 	private int K, r;
-	private final int NUM_LEVELS = 7;
+	private final int NUM_LEVELS;
 
 	private String[] generatorPolynomial;
 
@@ -54,6 +54,8 @@ public class ConvolutionalCoder {
 	public ConvolutionalCoder(int constraintLenght, int r) {
 		this.K = constraintLenght;
 		this.r = r;
+		
+		NUM_LEVELS = K;
 
 		GeneratorTable generatorTable = new GeneratorTable();
 		generatorPolynomial = generatorTable.getGeneratorPolynomials(r, K);
@@ -90,7 +92,6 @@ public class ConvolutionalCoder {
 		// cicliamo su tutto il payload in input
 		for (int i = 0; i < input.length(); i += range) {
 
-			// scorporiamo blocchi da da 14 o 21 bits dal payload in relazione a r
 			String block;
 			int nextBound = i + range;
 			if (nextBound < input.length()) {
