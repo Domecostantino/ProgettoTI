@@ -28,9 +28,9 @@ public class LZWCoder implements SourceCoder {
 	
 	public static void main(String[] args) {
 		LZWCoder c=new LZWCoder();
-		String in = "mail_de_rango.txt";
-		String out = "maillzw.txt";
-		String cod = "lzwmail";
+		String in = "userinput.tmp";
+		String out = "us";
+		String cod = "uscod";
 		c.encode(in, cod);
 		c.decode(cod, out);
 	}

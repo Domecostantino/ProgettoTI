@@ -26,7 +26,7 @@ public class RepChannelCoder implements ChannelCoder {
 		// trasformo input in array di boolean
 		byte[] fileContent = input.getPayload();
 		BitSet bs = BitSet.valueOf(fileContent);
-                int bslength=fileContent.length*8;
+                int bslength=input.getPayloadLength();
 		boolean[] boolData = new boolean[bslength];
 		for (int i = 0; i < bslength; i++) {
 			boolData[i] = bs.get(i);
