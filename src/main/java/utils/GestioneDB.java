@@ -3,6 +3,7 @@ package utils;
 import java.sql.*;
 
 import channel.CanaleSimmetricoBinario;
+import channel.GilbertElliot;
 import coders.convolutional.ConvolutionalChannelCoder;
 import coders.hamming.HammingChannelCoder;
 import coders.huffman.HuffmanCoder;
@@ -41,7 +42,20 @@ public class GestioneDB {
 			filename = filename.substring(0, filename.length() - 4);
 			SOURCE_COD source_cod = null;
 			CHAN_COD chan_cod = null;
+			CHANNEL channel = null;
+			Statistics stat = simulation.getStatistics();
+			long sourceCodeTime = stat.getSourceCodingTime();
+			long channelCodeTime = stat.getChannelCodingTime();
+			long sourceDecodeTime = stat.getSourceDecodingTime();
+			long channelDecodeTime = stat.getChannelDecodingTime();
+			long initialSize = stat.getInitialSize();
+			long sourceCodeSize = stat.getSourceCodeSize();
+			float compressionRate = (float) stat.getCompressionRate();
+			float chanDecodeErrorRate = (float) stat.getChannelDecodingErrorRate();
+			float onlySourceDecodeErrorRate = (float) stat.getOnlySourceCodeChannelErrorRate();
+			float recoveryRate = (float) stat.getErrorRecoveryRate();
 
+			// settiamo codificatore sorgente
 			switch (simulation.getSourceCoder().getClass().getName()) { // TODO rivedere i packages
 			case "coders.LZW.funzionante.LZWCoder":
 				source_cod = SOURCE_COD.LZW;
@@ -54,6 +68,7 @@ public class GestioneDB {
 				break;
 			}
 
+			// settiamo codificatore canale
 			switch (simulation.getChannelCoder().getClass().getName()) {
 			case "coders.hamming.HammingChannelCoder":
 				HammingChannelCoder ch = (HammingChannelCoder) simulation.getChannelCoder();
@@ -141,12 +156,40 @@ public class GestioneDB {
 				}
 				break;
 			}
-			
-			//TODO estrapolare gli altri valori dalla simulazione
-			
+
+			// settiamo canale
+			switch (simulation.getChannel().getClass().getName()) {
+			case "channel.CanaleSimmetricoBinario":
+				CanaleSimmetricoBinario ch = (CanaleSimmetricoBinario) simulation.getChannel();
+				switch (ch.getBer()) {
+				case "0.01":
+					channel = CHANNEL.BSC_01;
+					break;
+				case "0.005":
+					channel = CHANNEL.BSC_005;
+					break;
+				case "0.001":
+					channel = CHANNEL.BSC_001;
+					break;
+				}
+				break;
+			case "channel.GilbertElliot":
+				GilbertElliot ch2 = (GilbertElliot) simulation.getChannel();
+				if (ch2.getType() == GilbertElliot.HARD)
+					channel = CHANNEL.GE_HARD;
+				else
+					channel = CHANNEL.GE_SOFT;
+				break;
+			}
+			// TODO estrapolare gli altri valori dalla simulazione
+
 			Statement stmt = conn.createStatement();
-			String sql = "INSERT INTO SIMULATIONS (FILENAME,SOURCE_COD,CHAN_COD) VALUES ('" + filename + "','"
-					+ source_cod + "','" + chan_cod + "');";
+			String sql = "INSERT INTO SIMULATIONS (FILENAME,SOURCE_COD,CHAN_COD,CHANNEL,SOURCE_COD_TIME,CHAN_COD_TIME,"
+					+ "SOURCE_DECODE_TIME,CHAN_DECODE_TIME,INITIAL_SIZE,SOURCE_COD_SIZE,COMPRESSION_RATE,CHAN_DECODE_ERROR_RATE,ONLYSOURCE_CODE_ERROR_RATE,RECOVERY_RATE) VALUES ('"
+					+ filename + "','" + source_cod + "','" + chan_cod + "','" + channel + "','" + sourceCodeTime
+					+ "','" + channelCodeTime + "','" + sourceDecodeTime + "','" + channelDecodeTime + "','"
+					+ initialSize + "','" + sourceCodeSize + "','" + compressionRate + "','" + chanDecodeErrorRate
+					+ "','" + onlySourceDecodeErrorRate + "','" + recoveryRate + "');";
 			stmt.executeUpdate(sql);
 			stmt.close();
 		} catch (SQLException e) {
@@ -163,8 +206,8 @@ public class GestioneDB {
 
 			stmt = conn.createStatement();
 			String sql = "CREATE TABLE IF NOT EXISTS SIMULATIONS " + "(id SERIAL PRIMARY KEY NOT NULL,"
-					+ "FILENAME TEXT, SOURCE_COD TEXT, CHAN_COD TEXT, CHANNEL TEXT, SOURCE_COD_TIME FLOAT,"
-					+ " CHAN_COD_TIME FLOAT, SOURCE_DECODE_TIME FLOAT, CHAN_DECODE_TIME FLOAT, INITIAL_SIZE BIGINT,"
+					+ "FILENAME TEXT, SOURCE_COD TEXT, CHAN_COD TEXT, CHANNEL TEXT, SOURCE_COD_TIME BIGINT,"
+					+ " CHAN_COD_TIME BIGINT, SOURCE_DECODE_TIME BIGINT, CHAN_DECODE_TIME BIGINT, INITIAL_SIZE BIGINT,"
 					+ " SOURCE_COD_SIZE BIGINT, COMPRESSION_RATE FLOAT, CHAN_DECODE_ERROR_RATE FLOAT,"
 					+ " ONLYSOURCE_CODE_ERROR_RATE FLOAT, RECOVERY_RATE FLOAT);";
 
@@ -181,8 +224,9 @@ public class GestioneDB {
 
 		GestioneDB db = new GestioneDB();
 
-		Simulation s = new Simulation(new HuffmanCoder(), new ConvolutionalChannelCoder(7,3), new CanaleSimmetricoBinario(0.01),
-				new Statistics(), "LoremIpsum.txt");
+		Simulation s = new Simulation(new HuffmanCoder(), new ConvolutionalChannelCoder(3, 2),
+				new CanaleSimmetricoBinario(0.01), new Statistics(), "LoremIpsum.txt");
+		s.execute();
 		db.insertSimulation(s);
 
 //		Connection conn = null;

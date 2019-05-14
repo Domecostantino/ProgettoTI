@@ -10,7 +10,8 @@ public class GilbertElliot implements ChannelModel {
     }
     public final static int SOFT = 0, HARD = 1;
     private final int type;
-    private final double[] prob_gg = {0.995, 0.9999918}; // prob. transizione GOOD --> GOOD
+
+	private final double[] prob_gg = {0.995, 0.9999918}; // prob. transizione GOOD --> GOOD
     private final double[] prob_bb = {0.996, 0.999184}; // prob. transizione BAD --> BAD
     private final double prob_gb ; //prob. transizione GOOD --> BAD
     private final double prob_bg ; //prob. transizione BAD --> GOOD
@@ -31,6 +32,10 @@ public class GilbertElliot implements ChannelModel {
         prob_gb = 1 - prob_gg[type];
         prob_bg = 1 - prob_bb[type];
     }
+    
+    public int getType() {
+		return type;
+	}
     
     @Override
     public MyBitSet send(MyBitSet encodedPayload) {

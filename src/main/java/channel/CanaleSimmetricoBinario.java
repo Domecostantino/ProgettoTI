@@ -8,7 +8,7 @@ import utils.MyBitSet;
 public class CanaleSimmetricoBinario implements ChannelModel {
 
     private double ber = 0.02; //Bit Error Rate
-    private double rate = 1000000; //1 Mbps
+	private double rate = 1000000; //1 Mbps
     private Random random = new Random();
 
     public CanaleSimmetricoBinario(double ber) {
@@ -18,6 +18,10 @@ public class CanaleSimmetricoBinario implements ChannelModel {
             System.out.println("ber out of range");
         }
     }
+    
+    public String getBer() {
+		return ""+ber;
+	}
 
     @Override
     public MyBitSet send(MyBitSet encodedPayload) {
