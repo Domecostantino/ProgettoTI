@@ -117,6 +117,10 @@ public class ProvaGUI extends javax.swing.JFrame {
         sourceText = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
         outputText = new javax.swing.JTextArea();
+        statPanel = new javax.swing.JPanel();
+        comprFactorButton = new javax.swing.JButton();
+        showErrButton = new javax.swing.JButton();
+        timeSlices = new javax.swing.JButton();
 
         buttonGroup1.add(jRadioButton1);
         buttonGroup1.add(jRadioButton2);
@@ -526,6 +530,54 @@ public class ProvaGUI extends javax.swing.JFrame {
         jScrollPane3.setViewportView(outputText);
         sourceText.setEditable(false);
 
+        comprFactorButton.setText("Mostra fattore di compressione");
+        comprFactorButton.setEnabled(false);
+        comprFactorButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comprFactorButtonActionPerformed(evt);
+            }
+        });
+
+        showErrButton.setText("Mostra comparazione di errore");
+        showErrButton.setEnabled(false);
+        showErrButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showErrButtonActionPerformed(evt);
+            }
+        });
+
+        timeSlices.setText("Mostra tempistiche");
+        timeSlices.setEnabled(false);
+        timeSlices.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                timeSlicesActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout statPanelLayout = new javax.swing.GroupLayout(statPanel);
+        statPanel.setLayout(statPanelLayout);
+        statPanelLayout.setHorizontalGroup(
+            statPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(statPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(statPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(comprFactorButton)
+                    .addComponent(showErrButton)
+                    .addComponent(timeSlices))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        statPanelLayout.setVerticalGroup(
+            statPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(statPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(comprFactorButton)
+                .addGap(18, 18, 18)
+                .addComponent(showErrButton)
+                .addGap(18, 18, 18)
+                .addComponent(timeSlices)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -536,7 +588,9 @@ public class ProvaGUI extends javax.swing.JFrame {
                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                    .addComponent(statPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
@@ -559,7 +613,9 @@ public class ProvaGUI extends javax.swing.JFrame {
                             .addComponent(jScrollPane1)
                             .addComponent(jScrollPane2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3)
+                            .addComponent(statPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
 
@@ -648,6 +704,9 @@ public class ProvaGUI extends javax.swing.JFrame {
                 GUIHelper.getInstance().run();
                 inputText.setEnabled(true);
                 outputText.setEnabled(true);
+                showErrButton.setEnabled(true);
+                comprFactorButton.setEnabled(true);
+                timeSlices.setEnabled(true);
                 jButton1.setEnabled(true);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(rootPane, "Errore");
@@ -764,6 +823,18 @@ public class ProvaGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void comprFactorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comprFactorButtonActionPerformed
+        GUIHelper.getInstance().showCompressionFactor();
+    }//GEN-LAST:event_comprFactorButtonActionPerformed
+
+    private void showErrButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showErrButtonActionPerformed
+        GUIHelper.getInstance().showErrorComparison();
+    }//GEN-LAST:event_showErrButtonActionPerformed
+
+    private void timeSlicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_timeSlicesActionPerformed
+        GUIHelper.getInstance().showTimeSlices();
+    }//GEN-LAST:event_timeSlicesActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -790,7 +861,6 @@ public class ProvaGUI extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(ProvaGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -803,6 +873,7 @@ public class ProvaGUI extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
+    private javax.swing.JButton comprFactorButton;
     private javax.swing.JComboBox<String> concCombo;
     private javax.swing.JComboBox<Integer> convComboK;
     private javax.swing.JComboBox<Integer> convComboR;
@@ -845,6 +916,9 @@ public class ProvaGUI extends javax.swing.JFrame {
     private javax.swing.JLabel ripLableR;
     private javax.swing.JComboBox<Double> sbcCombo;
     private javax.swing.JLabel sbcLable;
+    private javax.swing.JButton showErrButton;
     private javax.swing.JTextArea sourceText;
+    private javax.swing.JPanel statPanel;
+    private javax.swing.JButton timeSlices;
     // End of variables declaration//GEN-END:variables
 }

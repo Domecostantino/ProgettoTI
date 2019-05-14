@@ -19,7 +19,6 @@ import coders.repetition.ConcatenatedChannelCoder;
 import coders.repetition.RepChannelCoder;
 import java.awt.Color;
 import java.io.File;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,11 +26,18 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.util.Pair;
+import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.HighlightPainter;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PiePlot3D;
+import org.jfree.chart.util.Rotation;
+import org.jfree.data.general.DefaultPieDataset;
 import simulator.Simulation;
 import utils.GenericUtils;
 import utils.Statistics;
@@ -53,6 +59,7 @@ public class GUIHelper {
     private double ber = 0.001;
     private File file;
     private static GUIHelper instance = null;
+    private Statistics stat;
 
     private GUIHelper() {
     }
@@ -64,6 +71,89 @@ public class GUIHelper {
         return instance;
     }
 
+    void showCompressionFactor() {
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        dataset.setValue("Dimensione input", stat.getInitialSize());
+        dataset.setValue("Dimensione codifica", stat.getSourceCodeSize());
+        JFreeChart chart = ChartFactory.createPieChart3D(
+                "Compressione", // chart title
+                dataset, // data
+                true, // include legend
+                true,
+                false
+        );
+
+        PiePlot3D plot = (PiePlot3D) chart.getPlot();
+        plot.setStartAngle(290);
+        plot.setDirection(Rotation.CLOCKWISE);
+        plot.setForegroundAlpha(0.5f);
+        // we put the chart into a panel
+        ChartPanel chartPanel = new ChartPanel(chart);
+        // default size
+        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
+        // add it to our application
+        JFrame piechart = new JFrame();
+        piechart.setContentPane(chartPanel);
+        piechart.pack();
+        piechart.setVisible(true);
+    }
+
+    void showErrorComparison() {
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        dataset.setValue("Errore canale", stat.getOnlySourceCodeChannelErrorRate());
+        dataset.setValue("Errore con codifica", stat.getChannelDecodingErrorRate());
+        JFreeChart chart = ChartFactory.createPieChart3D(
+                "Comparazione di errore", // chart title
+                dataset, // data
+                true, // include legend
+                true,
+                false
+        );
+
+        PiePlot3D plot = (PiePlot3D) chart.getPlot();
+        plot.setStartAngle(290);
+        plot.setDirection(Rotation.CLOCKWISE);
+        plot.setForegroundAlpha(0.5f);
+        // we put the chart into a panel
+        ChartPanel chartPanel = new ChartPanel(chart);
+        // default size
+        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
+        // add it to our application
+        JFrame piechart = new JFrame();
+        piechart.setContentPane(chartPanel);
+        piechart.pack();
+        piechart.setVisible(true);
+    }
+    
+     void showTimeSlices() {
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        dataset.setValue("Codifica di sorgente", stat.getSourceCodingTime());
+        dataset.setValue("Codifica di canale", stat.getChannelCodingTime());
+        dataset.setValue("Decodifica di canale", stat.getChannelDecodingTime());
+        dataset.setValue("Decodifica di sorgente", stat.getSourceDecodingTime());
+        JFreeChart chart = ChartFactory.createPieChart3D(
+                "Tempi degli step di simulazione", // chart title
+                dataset, // data
+                true, // include legend
+                true,
+                false
+        );
+
+        PiePlot3D plot = (PiePlot3D) chart.getPlot();
+        plot.setStartAngle(290);
+        plot.setDirection(Rotation.CLOCKWISE);
+        plot.setForegroundAlpha(0.5f);
+        // we put the chart into a panel
+        ChartPanel chartPanel = new ChartPanel(chart);
+        // default size
+        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
+        // add it to our application
+        JFrame piechart = new JFrame();
+        piechart.setContentPane(chartPanel);
+        piechart.pack();
+        piechart.setVisible(true);
+    }
+    
     enum Source {
         HUFFMAN, LZW, DEFLATE;
     }
@@ -108,6 +198,12 @@ public class GUIHelper {
         this.repH = repH;
     }
 
+    public Statistics getStatistics() {
+        return stat;
+    }
+
+    
+    
     public void setFile(File file) {
         this.file = file;
         JTextArea source = ProvaGUI.getInstance().getSourceText();
@@ -230,7 +326,7 @@ public class GUIHelper {
                 errorModel = new CanaleSimmetricoBinario(ber);
                 break;
         }
-        Statistics stat = new Statistics();
+        stat = new Statistics();
         Simulation simulation = new Simulation(scoder, ccoder, errorModel, stat, file.getAbsolutePath());
         long t1 = System.currentTimeMillis();
         simulation.execute();
