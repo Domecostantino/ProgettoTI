@@ -20,7 +20,7 @@ public class ConvolutionalChannelCoder implements ChannelCoder {
 	public MyBitSet encode(ChannelMessage inChannelMessage) {
 		ConvolutionalCoder coder=new ConvolutionalCoder(k, r);
 		BitSet bs=BitSet.valueOf(inChannelMessage.getPayload());
-		String enc=coder.encode(GenericUtils.toBinaryString(bs,bs.length()));
+		String enc=coder.encode(GenericUtils.toBinaryString(bs,inChannelMessage.getPayloadLength()));
 		codeLength = enc.length();
 		return new MyBitSet(GenericUtils.getBitSetFromString(enc), codeLength);
 	}

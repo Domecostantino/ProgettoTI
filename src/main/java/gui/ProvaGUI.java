@@ -641,22 +641,22 @@ public class ProvaGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jRadioButton3ItemStateChanged
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            Runnable start = new Runnable() {
-                @Override
-                public void run() {
-                    GUIHelper.getInstance().run();
-                    inputText.setEnabled(true);
-                    outputText.setEnabled(true);
-                    jButton1.setEnabled(true);
-                }
-            };
-            Thread t=new Thread(start);
-            t.start();
-            jButton1.setEnabled(false);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(rootPane, "Errore");
-        }
+
+        Runnable start = () -> {
+            try {
+                jButton1.setEnabled(false);
+                GUIHelper.getInstance().run();
+                inputText.setEnabled(true);
+                outputText.setEnabled(true);
+                jButton1.setEnabled(true);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(rootPane, "Errore");
+                jButton1.setEnabled(true);
+            }
+        };
+        Thread t = new Thread(start);
+        t.start();
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jRadioButton4ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton4ItemStateChanged

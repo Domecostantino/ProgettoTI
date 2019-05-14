@@ -10,6 +10,7 @@ import java.util.TreeSet;
 import coders.Message;
 import utils.GenericUtils;
 import utils.HuffmanUtils;
+import utils.MyBitSet;
 
 /*
  * per comprendere di cosa si parla
@@ -81,8 +82,8 @@ public class CanonicalHuffmanCoder {
 
 	// albero usato nella codifica
 	private HuffmanNode root = null;
-	
-	//struttura usata come codebook per la codifica canonica
+
+	// struttura usata come codebook per la codifica canonica
 	private HashMap<Character, String> canonicalCodeTable;
 
 	public CanonicalHuffmanCoder() {
@@ -105,9 +106,12 @@ public class CanonicalHuffmanCoder {
 		createHuffmanTree();
 		// calcola la codifica canonica (lunghezza codi, insieme di simoli ordinati
 		// lexicograf) partendo dall'albero appena creato
-		getLengthTable(root, 0);
-		
-		//otteniamo la codifica canonica esplcita dalla lengthTable
+		if(frequencies.size()==1)
+			getLengthTable(root, 1);
+		else
+			getLengthTable(root, 0);
+
+		// otteniamo la codifica canonica esplcita dalla lengthTable
 		canonicalCodeTable = HuffmanUtils.getCanonicalCodeTable(lengthTable);
 
 		// TODO eliminare
@@ -157,26 +161,35 @@ public class CanonicalHuffmanCoder {
 		// creazione dell'albero - iterativamente estraiamo i due valori pi� piccoli e
 		// creaimo un
 		// nodo "interno" finche' la cardinalita' della coda e' pari a 1
-		while (coppie.size() > 1) {
-			// estrazione due minori
-			HuffmanNode x = coppie.poll();
-			HuffmanNode y = coppie.poll();
-
-			// creazione nuovo nodo
+		if (coppie.size() == 1) {
 			HuffmanNode newNode = new HuffmanNode();
-			newNode.occurrences = x.occurrences + y.occurrences;
-			newNode.symbol = '¶'; // simbolo non-ASCII
-
-			// creazione dei collegamenti con i nodi genitori
-			newNode.left = x;
-			newNode.right = y;
+			HuffmanNode x = coppie.poll();
+			newNode.occurrences = x.occurrences;
+			newNode.symbol = x.symbol;
 			root = newNode;
+		} else {
+			while (coppie.size() > 1) {
+				// estrazione due minori
+				HuffmanNode x = coppie.poll();
+				HuffmanNode y = coppie.poll();
 
-			coppie.add(newNode);
+				// creazione nuovo nodo
+				HuffmanNode newNode = new HuffmanNode();
+				newNode.occurrences = x.occurrences + y.occurrences;
+				newNode.symbol = '¶'; // simbolo non-ASCII
+
+				// creazione dei collegamenti con i nodi genitori
+				newNode.left = x;
+				newNode.right = y;
+				root = newNode;
+
+				coppie.add(newNode);
+			}
 		}
 	}
 
-	// Funzione ricorsiva che dall'albero ricava la codifica canonica (lengthTable, l'informazione da inviare come header)
+	// Funzione ricorsiva che dall'albero ricava la codifica canonica (lengthTable,
+	// l'informazione da inviare come header)
 	private void getLengthTable(HuffmanNode root, int code_length) {
 		if (root == null)
 			return;
@@ -191,11 +204,11 @@ public class CanonicalHuffmanCoder {
 		getLengthTable(root.left, code_length + 1);
 		getLengthTable(root.right, code_length + 1);
 	}
-	
+
 	private void printCanonicalCodeTable() {
-		System.out.println("\nCodifica di Huffman Canonica: "); 
+		System.out.println("\nCodifica di Huffman Canonica: ");
 		for (java.util.Map.Entry<Character, String> entry : canonicalCodeTable.entrySet()) {
-			System.out.println(entry.getKey()+":"+entry.getValue());
+			System.out.println(entry.getKey() + ":" + entry.getValue());
 		}
 	}
 
@@ -230,15 +243,16 @@ public class CanonicalHuffmanCoder {
 		return encodedPayload.toString();
 	}
 
-	//main di prova per codifica/decodifica di Huffman, eliminare TODO
+	// main di prova per codifica/decodifica di Huffman, eliminare TODO
 	public static void main(String args[]) {
 		CanonicalHuffmanCoder c = new CanonicalHuffmanCoder();
 		Message m = c.encode("domenico non è particolarmente convinto che questa versione possa funzionare");
 		System.out.println("\n");
-		String mess=m.getPayload();
-		BitSet bs=GenericUtils.getBitSetFromString(mess);
-		System.out.println("n byte="+"domenico non è particolarmente convinto che questa versione possa funzionare".length());
-		System.out.println("n byte="+bs.toByteArray().length);
+		String mess = m.getPayload();
+//		MyBitSet bs = GenericUtils.getBitSetFromString(mess,mess.length());
+//		System.out.println(
+//				"n byte=" + "domenico non è particolarmente convinto che questa versione possa funzionare".length());
+//		System.out.println("n byte=" + bs.getBitset().toByteArray().length);
 		CanonicalHuffmanDecoder dec = new CanonicalHuffmanDecoder();
 		dec.decode(m);
 	}

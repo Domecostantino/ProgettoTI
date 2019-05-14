@@ -235,6 +235,7 @@ public class GUIHelper {
         long t1 = System.currentTimeMillis();
         simulation.execute();
         long t2 = System.currentTimeMillis();
+        ProvaGUI.getInstance().getInputText().append("\n---------------------------------------------------------------");
         ProvaGUI.getInstance().getInputText().append("\nRitardo: " + (t2 - t1) + " ms");
         ProvaGUI.getInstance().getInputText().append("\nritardo cod sorg: " + stat.getSourceCodingTime() + " ms");
         ProvaGUI.getInstance().getInputText().append("\nritardo cod canale: " + stat.getChannelCodingTime() + " ms");
@@ -247,7 +248,7 @@ public class GUIHelper {
 
         ProvaGUI.getInstance().getInputText().append("\nerror rate cod canale " + stat.getChannelDecodingErrorRate() * 100 + " %");
         ProvaGUI.getInstance().getInputText().append("\nerror rate canale solo cod sorgente " + stat.getOnlySourceCodeChannelErrorRate() * 100 + " %");
-        ProvaGUI.getInstance().getInputText().append("\nrecovery rate del codificatore di canale " + stat.getErrorRecoveryRate() * 100 + " %");
+        ProvaGUI.getInstance().getInputText().append("\nrecovery rate del codificatore di canale " + stat.getErrorRecoveryRate() * 100 + " %\n");
 
         JTextArea output = ProvaGUI.getInstance().getOutputText();
         String outString = GenericUtils.readFile(Simulation.outputPath(file.getAbsolutePath()), StandardCharsets.UTF_8);
