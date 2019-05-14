@@ -9,6 +9,7 @@ import utils.MyBitSet;
 public class ConcatenatedChannelCoder implements ChannelCoder {
 	
 	private ConcatenatedCoder coder;
+	int[] rep_per_level;
 
 	/**
 	 * 
@@ -16,9 +17,14 @@ public class ConcatenatedChannelCoder implements ChannelCoder {
 	 * la dimensione dell'array è pari al numero di livelli
 	 */
 	public ConcatenatedChannelCoder(int[] rep_per_level) {
+		this.rep_per_level = rep_per_level;
 		coder=new ConcatenatedCoder(rep_per_level);
 	}
 	
+	public int[] getRep_per_level() {
+		return rep_per_level;
+	}
+
 	@Override
 	public MyBitSet encode(ChannelMessage inChannelMessage) {
 		BitSet out = null;

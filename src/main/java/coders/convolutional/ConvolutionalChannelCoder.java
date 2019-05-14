@@ -31,5 +31,13 @@ public class ConvolutionalChannelCoder implements ChannelCoder {
 		String dec=decoder.decode(GenericUtils.toBinaryString(encoded_data.getBitset(),codeLength));
 		outChannelMessage.setPayload(GenericUtils.getBitSetFromString(dec).toByteArray());
 	}
+	
+	public int getK() {
+		return k;
+	}
+
+	public int getR() {
+		return r;
+	}
 
 }
