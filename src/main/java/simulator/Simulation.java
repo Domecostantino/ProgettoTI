@@ -54,25 +54,25 @@ public class Simulation {
         statistics.setInitialTime(System.currentTimeMillis());
         sourceCoder.encode(fileInputPath, sourceCode);
         statistics.setSourceCodingTime(System.currentTimeMillis());
-        //ProvaGUI.getInstance().getProgressBar().setValue(1);
+        ProvaGUI.getInstance().getProgressBar().setValue(1);
         
         ChannelMessage mess = GenericUtils.getChannelMessage(sourceCode);
         MyBitSet b = channelCoder.encode(mess);
         statistics.setChannelCodingTime(System.currentTimeMillis());
-        //ProvaGUI.getInstance().getProgressBar().setValue(2);
+        ProvaGUI.getInstance().getProgressBar().setValue(2);
         
         //invio su canale
         MyBitSet corruptedBits = channel.send(b);
-        //ProvaGUI.getInstance().getProgressBar().setValue(3);
+        ProvaGUI.getInstance().getProgressBar().setValue(3);
         
         //decodifica
         channelCoder.decode(corruptedBits, mess);
         statistics.setChannelDecodingTime(System.currentTimeMillis());
         GenericUtils.writeChannelMessage(mess, sourceCode + "2");
-        //ProvaGUI.getInstance().getProgressBar().setValue(4);
+        ProvaGUI.getInstance().getProgressBar().setValue(4);
         sourceCoder.decode(sourceCode + "2", fileOutput);
         statistics.setSourceDecodingTime(System.currentTimeMillis());
-        //ProvaGUI.getInstance().getProgressBar().setValue(5);
+        ProvaGUI.getInstance().getProgressBar().setValue(5);
         
         
         //dati utili alle statistiche (compressione e errorRate)
