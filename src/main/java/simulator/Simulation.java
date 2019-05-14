@@ -46,32 +46,33 @@ public class Simulation {
     }
 
     public void execute() {
-        statistics.setInitialTime(System.currentTimeMillis());
+        
 
         //codifica
         String fileOutput = outputPath(fileInputPath);
         String sourceCode = fileInputPath.substring(0, fileInputPath.length() - 4) + "_TMP";
-
+        statistics.setInitialTime(System.currentTimeMillis());
         sourceCoder.encode(fileInputPath, sourceCode);
-        ProvaGUI.getInstance().getProgressBar().setValue(1);
         statistics.setSourceCodingTime(System.currentTimeMillis());
+        //ProvaGUI.getInstance().getProgressBar().setValue(1);
+        
         ChannelMessage mess = GenericUtils.getChannelMessage(sourceCode);
         MyBitSet b = channelCoder.encode(mess);
         statistics.setChannelCodingTime(System.currentTimeMillis());
-        ProvaGUI.getInstance().getProgressBar().setValue(2);
+        //ProvaGUI.getInstance().getProgressBar().setValue(2);
         
         //invio su canale
         MyBitSet corruptedBits = channel.send(b);
-        ProvaGUI.getInstance().getProgressBar().setValue(3);
+        //ProvaGUI.getInstance().getProgressBar().setValue(3);
         
         //decodifica
         channelCoder.decode(corruptedBits, mess);
         statistics.setChannelDecodingTime(System.currentTimeMillis());
         GenericUtils.writeChannelMessage(mess, sourceCode + "2");
-        ProvaGUI.getInstance().getProgressBar().setValue(4);
+        //ProvaGUI.getInstance().getProgressBar().setValue(4);
         sourceCoder.decode(sourceCode + "2", fileOutput);
         statistics.setSourceDecodingTime(System.currentTimeMillis());
-        ProvaGUI.getInstance().getProgressBar().setValue(5);
+        //ProvaGUI.getInstance().getProgressBar().setValue(5);
         
         
         //dati utili alle statistiche (compressione e errorRate)
@@ -117,7 +118,7 @@ public class Simulation {
         HuffmanCoder sourceCoder3 = new HuffmanCoder();
         HammingChannelCoder channelCoder = new HammingChannelCoder();
 
-        ConvolutionalChannelCoder channelCoder2 = new ConvolutionalChannelCoder(7, 2);
+        ConvolutionalChannelCoder channelCoder2 = new ConvolutionalChannelCoder(3, 3);
         int []a = {3,3};
         ConcatenatedChannelCoder channelCoder3 = new ConcatenatedChannelCoder(a);
         RepChannelCoder channelCoder4 = new RepChannelCoder(5);
@@ -127,7 +128,7 @@ public class Simulation {
         
         System.out.println(channelCoder4.getClass().getName());
 
-        Simulation sim = new Simulation(sourceCoder3, channelCoder, channel, new Statistics(), "Lorem ipsum.txt");
+        Simulation sim = new Simulation(sourceCoder3, channelCoder2, channel, new Statistics(), "dberr.txt");
 
         sim.execute();
         long t2 = System.currentTimeMillis();
