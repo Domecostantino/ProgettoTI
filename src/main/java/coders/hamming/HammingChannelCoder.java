@@ -9,7 +9,7 @@ import utils.MyBitSet;
 
 public class HammingChannelCoder implements ChannelCoder {
 
-    private HammingCode coder;
+	private HammingCode coder;
     private int r;
     private int length;
 
@@ -82,6 +82,10 @@ public class HammingChannelCoder implements ChannelCoder {
         byte[] out = bs.toByteArray();
         outChannelMessage.setPayload(out);
     }
+    
+    public int getR() {
+		return r;
+	}
 
     public static void main(String[] args){
         HammingChannelCoder h=new HammingChannelCoder(3);

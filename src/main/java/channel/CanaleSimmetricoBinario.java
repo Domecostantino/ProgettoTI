@@ -21,13 +21,11 @@ public class CanaleSimmetricoBinario implements ChannelModel {
 
     @Override
     public MyBitSet send(MyBitSet encodedPayload) {
-
         for (int i = 0; i < encodedPayload.getLength(); i++) {
             if (random.nextDouble() < ber) {
                 encodedPayload.getBitset().flip(i);
             }
         }//for
-
         return encodedPayload;
     }
 

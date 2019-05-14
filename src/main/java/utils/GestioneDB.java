@@ -2,68 +2,242 @@ package utils;
 
 import java.sql.*;
 
+import channel.CanaleSimmetricoBinario;
+import coders.convolutional.ConvolutionalChannelCoder;
+import coders.hamming.HammingChannelCoder;
+import coders.huffman.HuffmanCoder;
+import coders.repetition.ConcatenatedChannelCoder;
+import coders.repetition.RepChannelCoder;
+import simulator.Simulation;
+
 public class GestioneDB {
 
 	private static Connection conn;
 	private static String DBurl = "jdbc:postgresql://localhost/dbTeoriaInf";
 	private static final String USER = "postgres";
 	private static final String PASS = "password";
-	
-	public static void main(String[] args) {
-		Connection conn = null;
+
+	private enum SOURCE_COD {
+		DEFLATE, HUFFMAN, LZW
+	}
+
+	private enum CHAN_COD {
+		CONV_2_3, CONV_2_4, CONV_2_5, CONV_2_6, CONV_2_7, CONV_3_3, CONV_3_4, CONV_3_5, CONV_3_6, CONV_3_7, RIP_3,
+		RIP_5, RIP_7, RIP_9, HAMM_7_4, HAMM_15_11, HAMM_31_26, CONC_3_3, CONC_3_5, CONC_5_5
+	}
+
+	private enum CHANNEL {
+		BSC_001, BSC_005, BSC_01, GE_HARD, GE_SOFT
+	}
+
+	public GestioneDB() {
+		System.out.println("Connecting to database...");
+		inizializzaDB();
+	}
+
+	public void insertSimulation(Simulation simulation) {
+		try {
+			String filename = simulation.getFileInputPath();
+			filename = filename.substring(0, filename.length() - 4);
+			SOURCE_COD source_cod = null;
+			CHAN_COD chan_cod = null;
+
+			switch (simulation.getSourceCoder().getClass().getName()) { // TODO rivedere i packages
+			case "coders.LZW.funzionante.LZWCoder":
+				source_cod = SOURCE_COD.LZW;
+				break;
+			case "coders.deflate.DeflateCoder":
+				source_cod = SOURCE_COD.DEFLATE;
+				break;
+			case "coders.huffman.HuffmanCoder":
+				source_cod = SOURCE_COD.HUFFMAN;
+				break;
+			}
+
+			switch (simulation.getChannelCoder().getClass().getName()) {
+			case "coders.hamming.HammingChannelCoder":
+				HammingChannelCoder ch = (HammingChannelCoder) simulation.getChannelCoder();
+				switch (ch.getR()) {
+				case 3:
+					chan_cod = CHAN_COD.HAMM_7_4;
+					break;
+				case 4:
+					chan_cod = CHAN_COD.HAMM_15_11;
+					break;
+				case 5:
+					chan_cod = CHAN_COD.HAMM_31_26;
+					break;
+				}
+				break;
+			case "coders.convolutional.ConvolutionalChannelCoder":
+				ConvolutionalChannelCoder ch1 = (ConvolutionalChannelCoder) simulation.getChannelCoder();
+				switch (ch1.getR()) {
+				case 2:
+					switch (ch1.getK()) {
+					case 3:
+						chan_cod = CHAN_COD.CONV_2_3;
+						break;
+					case 4:
+						chan_cod = CHAN_COD.CONV_2_4;
+						break;
+					case 5:
+						chan_cod = CHAN_COD.CONV_2_5;
+						break;
+					case 6:
+						chan_cod = CHAN_COD.CONV_2_6;
+						break;
+					case 7:
+						chan_cod = CHAN_COD.CONV_2_7;
+						break;
+					}
+					break;
+
+				case 3:
+					switch (ch1.getK()) {
+					case 3:
+						chan_cod = CHAN_COD.CONV_3_3;
+						break;
+					case 4:
+						chan_cod = CHAN_COD.CONV_3_4;
+						break;
+					case 5:
+						chan_cod = CHAN_COD.CONV_3_5;
+						break;
+					case 6:
+						chan_cod = CHAN_COD.CONV_3_6;
+						break;
+					case 7:
+						chan_cod = CHAN_COD.CONV_3_7;
+						break;
+					}
+					break;
+				}
+				break;
+			case "coders.repetition.ConcatenatedChannelCoder":
+				ConcatenatedChannelCoder ch2 = (ConcatenatedChannelCoder) simulation.getChannelCoder();
+				int[] repLev = ch2.getRep_per_level();
+				if (repLev[0] == 3 && repLev[1] == 3)
+					chan_cod = CHAN_COD.CONC_3_3;
+				else if (repLev[0] == 3 && repLev[1] == 5)
+					chan_cod = CHAN_COD.CONC_3_5;
+				else
+					chan_cod = CHAN_COD.CONC_5_5;
+				break;
+			case "coders.repetition.RepChannelCoder":
+				RepChannelCoder ch3 = (RepChannelCoder) simulation.getChannelCoder();
+				switch (ch3.getR()) {
+				case 3:
+					chan_cod = CHAN_COD.RIP_3;
+					break;
+				case 5:
+					chan_cod = CHAN_COD.RIP_5;
+					break;
+				case 7:
+					chan_cod = CHAN_COD.RIP_7;
+					break;
+				case 9:
+					chan_cod = CHAN_COD.RIP_9;
+					break;
+				}
+				break;
+			}
+			
+			//TODO estrapolare gli altri valori dalla simulazione
+			
+			Statement stmt = conn.createStatement();
+			String sql = "INSERT INTO SIMULATIONS (FILENAME,SOURCE_COD,CHAN_COD) VALUES ('" + filename + "','"
+					+ source_cod + "','" + chan_cod + "');";
+			stmt.executeUpdate(sql);
+			stmt.close();
+		} catch (SQLException e) {
+			System.err.println(e);
+		}
+
+	}
+
+	private void inizializzaDB() {
 		Statement stmt = null;
 		try {
-
-			// STEP 3: Open a connection
-			System.out.println("Connecting to database...");
 			conn = DriverManager.getConnection(DBurl, USER, PASS);
+			System.out.println("Opened database successfully");
 
-			// STEP 4: Execute a query
-			System.out.println("Creating statement...");
 			stmt = conn.createStatement();
-			String sql;
-			sql = "SELECT id, first, last, age FROM Employees";
-			ResultSet rs = stmt.executeQuery(sql);
+			String sql = "CREATE TABLE IF NOT EXISTS SIMULATIONS " + "(id SERIAL PRIMARY KEY NOT NULL,"
+					+ "FILENAME TEXT, SOURCE_COD TEXT, CHAN_COD TEXT, CHANNEL TEXT, SOURCE_COD_TIME FLOAT,"
+					+ " CHAN_COD_TIME FLOAT, SOURCE_DECODE_TIME FLOAT, CHAN_DECODE_TIME FLOAT, INITIAL_SIZE BIGINT,"
+					+ " SOURCE_COD_SIZE BIGINT, COMPRESSION_RATE FLOAT, CHAN_DECODE_ERROR_RATE FLOAT,"
+					+ " ONLYSOURCE_CODE_ERROR_RATE FLOAT, RECOVERY_RATE FLOAT);";
 
-			// STEP 5: Extract data from result set
-			while (rs.next()) {
-				// Retrieve by column name
-				int id = rs.getInt("id");
-				int age = rs.getInt("age");
-				String first = rs.getString("first");
-				String last = rs.getString("last");
-
-				// Display values
-				System.out.print("ID: " + id);
-				System.out.print(", Age: " + age);
-				System.out.print(", First: " + first);
-				System.out.println(", Last: " + last);
-			}
-			// STEP 6: Clean-up environment
-			rs.close();
+			stmt.executeUpdate(sql);
 			stmt.close();
-			conn.close();
-		} catch (SQLException se) {
-			// Handle errors for JDBC
-			se.printStackTrace();
 		} catch (Exception e) {
-			// Handle errors for Class.forName
-			e.printStackTrace();
-		} finally {
-			// finally block used to close resources
-			try {
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException se2) {
-			} // nothing we can do
-			try {
-				if (conn != null)
-					conn.close();
-			} catch (SQLException se) {
-				se.printStackTrace();
-			} // end finally try
-		} // end try
-		System.out.println("Goodbye!");
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		System.out.println("Table created successfully");
+	}
+
+	public static void main(String[] args) {
+
+		GestioneDB db = new GestioneDB();
+
+		Simulation s = new Simulation(new HuffmanCoder(), new ConvolutionalChannelCoder(7,3), new CanaleSimmetricoBinario(0.01),
+				new Statistics(), "LoremIpsum.txt");
+		db.insertSimulation(s);
+
+//		Connection conn = null;
+//		Statement stmt = null;
+//		try {
+//			// STEP 3: Open a connection
+//			System.out.println("Connecting to database...");
+//			conn = DriverManager.getConnection(DBurl, USER, PASS);
+//
+//			// STEP 4: Execute a query
+//			System.out.println("Creating statement...");
+//			stmt = conn.createStatement();
+//			String sql;
+//			sql = "SELECT id, first, last, age FROM Employees";
+//			ResultSet rs = stmt.executeQuery(sql);
+//
+//			// STEP 5: Extract data from result set
+//			while (rs.next()) {
+//				// Retrieve by column name
+//				int id = rs.getInt("id");
+//				int age = rs.getInt("age");
+//				String first = rs.getString("first");
+//				String last = rs.getString("last");
+//
+//				// Display values
+//				System.out.print("ID: " + id);
+//				System.out.print(", Age: " + age);
+//				System.out.print(", First: " + first);
+//				System.out.println(", Last: " + last);
+//			}
+//			// STEP 6: Clean-up environment
+//			rs.close();
+//			stmt.close();
+//			conn.close();
+//		} catch (SQLException se) {
+//			// Handle errors for JDBC
+//			se.printStackTrace();
+//		} catch (Exception e) {
+//			// Handle errors for Class.forName
+//			e.printStackTrace();
+//		} finally {
+//			// finally block used to close resources
+//			try {
+//				if (stmt != null)
+//					stmt.close();
+//			} catch (SQLException se2) {
+//			} // nothing we can do
+//			try {
+//				if (conn != null)
+//					conn.close();
+//			} catch (SQLException se) {
+//				se.printStackTrace();
+//			} // end finally try
+//		} // end try
+//		System.out.println("Goodbye!");
 	}// end main
 
 //	static void DBConnection() throws ClassNotFoundException {
@@ -400,7 +574,5 @@ public class GestioneDB {
 //		}
 //
 //	}
-
-	
 
 }

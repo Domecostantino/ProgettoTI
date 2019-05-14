@@ -9,9 +9,15 @@ import utils.MyBitSet;
 
 public class RepChannelCoder implements ChannelCoder {
 	private RepetitionCode repCode;
+	private int r;
 
 	public RepChannelCoder(int r) {
             repCode = new RepetitionCode(r);
+            this.r = r;
+	}
+
+	public int getR() {
+		return r;
 	}
 
 	@Override

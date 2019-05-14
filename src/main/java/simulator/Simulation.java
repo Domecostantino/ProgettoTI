@@ -14,6 +14,8 @@ import coders.convolutional.ConvolutionalChannelCoder;
 import coders.deflate.DeflateCoder;
 import coders.hamming.HammingChannelCoder;
 import coders.huffman.HuffmanCoder;
+import coders.repetition.ConcatenatedChannelCoder;
+import coders.repetition.RepChannelCoder;
 import gui.ProvaGUI;
 import utils.GenericUtils;
 import utils.MyBitSet;
@@ -57,9 +59,11 @@ public class Simulation {
         MyBitSet b = channelCoder.encode(mess);
         statistics.setChannelCodingTime(System.currentTimeMillis());
         ProvaGUI.getInstance().getProgressBar().setValue(2);
+        
         //invio su canale
         MyBitSet corruptedBits = channel.send(b);
         ProvaGUI.getInstance().getProgressBar().setValue(3);
+        
         //decodifica
         channelCoder.decode(corruptedBits, mess);
         statistics.setChannelDecodingTime(System.currentTimeMillis());
@@ -68,6 +72,8 @@ public class Simulation {
         sourceCoder.decode(sourceCode + "2", fileOutput);
         statistics.setSourceDecodingTime(System.currentTimeMillis());
         ProvaGUI.getInstance().getProgressBar().setValue(5);
+        
+        
         //dati utili alle statistiche (compressione e errorRate)
         byte[] sourceCodeBits = GenericUtils.getChannelMessage(sourceCode).getPayload();
         byte[] channelDecodedBits = GenericUtils.getChannelMessage(sourceCode + "2").getPayload();
@@ -75,15 +81,35 @@ public class Simulation {
         statistics.setChannelDecoding(channelDecodedBits);
         //per le statistiche di robustezza del codificatore di canale - simuliamo un invio della codifica di sorgente senza quella di canale per vedere il tasso di errore
         BitSet onlySourceCoding = BitSet.valueOf(sourceCodeBits);
-        MyBitSet onlySourceCodingMess = new MyBitSet(onlySourceCoding, sourceCodeBits.length);
+        MyBitSet onlySourceCodingMess = new MyBitSet(onlySourceCoding, sourceCodeBits.length*8);
         MyBitSet corruptedBitsOnlySourceCodingMess = channel.send(onlySourceCodingMess);
         statistics.setCorruptedSourceCodingWithoutChannelEncoding(corruptedBitsOnlySourceCodingMess.getBitset());
 
-        statistics.setInitialSize(GenericUtils.getChannelMessage(fileInputPath).getPayload().length);
-        statistics.setSourceCodeSize(sourceCodeBits.length);
+        statistics.setInitialSize(GenericUtils.getChannelMessage(fileInputPath).getPayloadLength());
+        statistics.setSourceCodeSize(GenericUtils.getChannelMessage(sourceCode).getPayloadLength());
     }
 
-    public static void main(String[] args) throws InstantiationException, IllegalAccessException {
+    public String getFileInputPath() {
+		return fileInputPath;
+	}
+
+	public ChannelModel getChannel() {
+		return channel;
+	}
+
+	public ChannelCoder getChannelCoder() {
+		return channelCoder;
+	}
+
+	public SourceCoder getSourceCoder() {
+		return sourceCoder;
+	}
+
+	public Statistics getStatistics() {
+		return statistics;
+	}
+
+	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
 
         long t1 = System.currentTimeMillis();
         LZWCoder sourceCoder = new LZWCoder();
@@ -91,11 +117,17 @@ public class Simulation {
         HuffmanCoder sourceCoder3 = new HuffmanCoder();
         HammingChannelCoder channelCoder = new HammingChannelCoder();
 
-        ConvolutionalChannelCoder channelCoder2 = new ConvolutionalChannelCoder(7, 3);
+        ConvolutionalChannelCoder channelCoder2 = new ConvolutionalChannelCoder(7, 2);
+        int []a = {3,3};
+        ConcatenatedChannelCoder channelCoder3 = new ConcatenatedChannelCoder(a);
+        RepChannelCoder channelCoder4 = new RepChannelCoder(5);
+        
         CanaleSimmetricoBinario channel = new CanaleSimmetricoBinario(0.01);
         GilbertElliot channel2 = new GilbertElliot(GilbertElliot.SOFT);
+        
+        System.out.println(channelCoder4.getClass().getName());
 
-        Simulation sim = new Simulation(sourceCoder3, channelCoder2, channel, new Statistics(), "Lorem ipsum.txt");
+        Simulation sim = new Simulation(sourceCoder3, channelCoder, channel, new Statistics(), "Lorem ipsum.txt");
 
         sim.execute();
         long t2 = System.currentTimeMillis();

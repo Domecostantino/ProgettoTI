@@ -38,7 +38,7 @@ public class Statistics {
 		flippedBits = set1.cardinality();
 		System.out.println("Bits flippati decodifica canale: "+flippedBits); //TODO eliminare
 
-		channelDecodingErrorRate = (double) flippedBits / (double) set2.length();
+		channelDecodingErrorRate = (channelDecoding.length*8!=0)? ((double) flippedBits / (double) channelDecoding.length*8):0.0;
 		return channelDecodingErrorRate;
 	}
 
@@ -53,14 +53,12 @@ public class Statistics {
 		flippedBits = set1.cardinality();
 		System.out.println("Bits flippati solo cod sorgente: "+flippedBits); //TODO eliminare
 		
-		onlySourceCodeChannelErrorRate = (double) flippedBits / (double) corruptedSourceCodingWithoutChannelEncoding.length();
+		onlySourceCodeChannelErrorRate = (corruptedSourceCodingWithoutChannelEncoding.length()!=0)? ((double) flippedBits / (double) corruptedSourceCodingWithoutChannelEncoding.length()):0.0;
 		return onlySourceCodeChannelErrorRate;
 	}
 	
 	public double getErrorRecoveryRate() {
-		double a = Math.floor(channelDecodingErrorRate*sourceCodeSize*8);
-		double b = Math.floor(onlySourceCodeChannelErrorRate*sourceCodeSize*8);
-		return (b!=0.0)?1-(a/b):0;
+		return (onlySourceCodeChannelErrorRate!=0.0)?1-(channelDecodingErrorRate/onlySourceCodeChannelErrorRate):0;
 	}
 
 	public void setCorruptedSourceCodingWithoutChannelEncoding(BitSet corruptedSourceCodingWithoutChannelEncoding) {
