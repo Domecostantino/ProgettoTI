@@ -41,6 +41,7 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.util.Rotation;
 import simulator.Simulation;
 import utils.GenericUtils;
+import utils.GestioneDB;
 import utils.Statistics;
 
 /**
@@ -61,7 +62,7 @@ public class GUIHelper {
     private File file;
     private static GUIHelper instance = null;
     private Statistics stat;
-
+    private GestioneDB db=new GestioneDB();
     private GUIHelper() {
     }
 
@@ -90,30 +91,21 @@ public class GUIHelper {
     }
 
     void showErrorComparison() {
-        DefaultPieDataset dataset = new DefaultPieDataset();
-        dataset.setValue("Errore canale", stat.getOnlySourceCodeChannelErrorRate());
-        dataset.setValue("Errore con codifica", stat.getChannelDecodingErrorRate());
-        JFreeChart chart = ChartFactory.createPieChart3D(
-                "Comparazione di errore", // chart title
-                dataset, // data
-                true, // include legend
-                true,
-                false
-        );
-
-        PiePlot3D plot = (PiePlot3D) chart.getPlot();
-        plot.setStartAngle(290);
-        plot.setDirection(Rotation.CLOCKWISE);
-        plot.setForegroundAlpha(0.5f);
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        dataset.setValue( stat.getOnlySourceCodeChannelErrorRate(),"Error rate senza\ncodifica di canale","");
+        dataset.setValue( stat.getChannelDecodingErrorRate(),"Error rate con\ncodifica di canale","" );
+        JFreeChart chart = ChartFactory.createBarChart3D("Codifica di canale", "", "%", dataset);
+                
         // we put the chart into a panel
         ChartPanel chartPanel = new ChartPanel(chart);
         // default size
         chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
         // add it to our application
-        JFrame piechart = new JFrame();
-        piechart.setContentPane(chartPanel);
-        piechart.pack();
-        piechart.setVisible(true);
+        JFrame barchart = new JFrame();
+        barchart.setContentPane(chartPanel);
+        barchart.pack();
+        barchart.setVisible(true);
+        
     }
     
      void showTimeSlices() {
@@ -318,7 +310,7 @@ public class GUIHelper {
                 break;
         }
         stat = new Statistics();
-        Simulation simulation = new Simulation(scoder, ccoder, errorModel, stat, file.getAbsolutePath());
+        Simulation simulation = new Simulation(scoder, ccoder, errorModel, stat, file.getName());
         long t1 = System.currentTimeMillis();
         simulation.execute();
         long t2 = System.currentTimeMillis();
@@ -333,10 +325,13 @@ public class GUIHelper {
         ProvaGUI.getInstance().getInputText().append("\ndimensione file compressioneSorgente " + stat.getSourceCodeSize() + " byte");
         ProvaGUI.getInstance().getInputText().append("\ncompression rate: " + stat.getCompressionRate() + "\n");
 
-        ProvaGUI.getInstance().getInputText().append("\nerror rate cod canale " + stat.getChannelDecodingErrorRate() * 100 + " %");
-        ProvaGUI.getInstance().getInputText().append("\nerror rate canale solo cod sorgente " + stat.getOnlySourceCodeChannelErrorRate() * 100 + " %");
-        ProvaGUI.getInstance().getInputText().append("\nrecovery rate del codificatore di canale " + stat.getErrorRecoveryRate() * 100 + " %\n");
+        ProvaGUI.getInstance().getInputText().append("\nerror rate cod canale " + stat.getChannelDecodingErrorRate() + " %");
+        ProvaGUI.getInstance().getInputText().append("\nerror rate canale solo cod sorgente " + stat.getOnlySourceCodeChannelErrorRate() + " %");
+        ProvaGUI.getInstance().getInputText().append("\nrecovery rate del codificatore di canale " + stat.getErrorRecoveryRate() + " %\n");
 
+        //Inserimento valori nel DB
+        db.insertSimulation(simulation);
+        
         JTextArea output = ProvaGUI.getInstance().getOutputText();
         String outString = GenericUtils.readFile(Simulation.outputPath(file.getAbsolutePath()), StandardCharsets.UTF_8);
         output.setText(outString);

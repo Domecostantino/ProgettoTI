@@ -225,7 +225,7 @@ public class GestioneDB {
 		GestioneDB db = new GestioneDB();
 
 		Simulation s = new Simulation(new HuffmanCoder(), new ConvolutionalChannelCoder(3, 2),
-				new CanaleSimmetricoBinario(0.01), new Statistics(), "LoremIpsum.txt");
+				new CanaleSimmetricoBinario(0.01), new Statistics(), "Lorem ipsum.txt");
 		s.execute();
 		db.insertSimulation(s);
 

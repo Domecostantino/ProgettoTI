@@ -440,7 +440,7 @@ public class ProvaGUI extends javax.swing.JFrame {
         geLable.setText("Type:");
         geLable.setEnabled(false);
 
-        sbcCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new Double[] { 0.001,0.005,0.01 }));
+        sbcCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new Double[] { 0.001,0.01,0.1 }));
         sbcCombo.setEnabled(false);
         sbcCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
