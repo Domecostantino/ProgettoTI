@@ -36,8 +36,9 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot3D;
-import org.jfree.chart.util.Rotation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.util.Rotation;
 import simulator.Simulation;
 import utils.GenericUtils;
 import utils.Statistics;
@@ -72,30 +73,20 @@ public class GUIHelper {
     }
 
     void showCompressionFactor() {
-        DefaultPieDataset dataset = new DefaultPieDataset();
-        dataset.setValue("Dimensione input", stat.getInitialSize());
-        dataset.setValue("Dimensione codifica", stat.getSourceCodeSize());
-        JFreeChart chart = ChartFactory.createPieChart3D(
-                "Compressione", // chart title
-                dataset, // data
-                true, // include legend
-                true,
-                false
-        );
-
-        PiePlot3D plot = (PiePlot3D) chart.getPlot();
-        plot.setStartAngle(290);
-        plot.setDirection(Rotation.CLOCKWISE);
-        plot.setForegroundAlpha(0.5f);
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        dataset.setValue(stat.getInitialSize(),"Dimensione input","");
+        dataset.setValue(stat.getSourceCodeSize(),"Dimensione codifica","" );
+        JFreeChart chart = ChartFactory.createBarChart3D("Compressione", "", "Dimensione", dataset);
+                
         // we put the chart into a panel
         ChartPanel chartPanel = new ChartPanel(chart);
         // default size
         chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
         // add it to our application
-        JFrame piechart = new JFrame();
-        piechart.setContentPane(chartPanel);
-        piechart.pack();
-        piechart.setVisible(true);
+        JFrame barchart = new JFrame();
+        barchart.setContentPane(chartPanel);
+        barchart.pack();
+        barchart.setVisible(true);
     }
 
     void showErrorComparison() {

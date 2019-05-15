@@ -151,7 +151,7 @@ public class GenericUtils {
             try {
                 DataOutputStream writer = new DataOutputStream(new FileOutputStream(outputPath));
                 writer.write(message.getPayload());
-                if (message.getPayload().length < message.getPayloadLength()) {
+                if (message.getPayload().length < message.getPayloadLength()/8) {
                     int i = message.getPayload().length;
                     for (i = 0; i < message.getPayloadLength(); i++) {
                         writer.write(0);
