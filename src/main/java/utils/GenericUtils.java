@@ -14,7 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.BitSet;
 
-import coder.channel.ChannelMessage;
+import coders.ChannelMessage;
 import coders.Message;
 
 public class GenericUtils {

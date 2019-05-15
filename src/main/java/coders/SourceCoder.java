@@ -1,4 +1,4 @@
-package coder.source;
+package coders;
 
 
 public interface SourceCoder {

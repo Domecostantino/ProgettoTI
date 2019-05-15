@@ -4,13 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.BitSet;
 
-import coder.channel.ChannelCoder;
-import coder.channel.ChannelMessage;
-import coder.source.SourceCoder;
-import coders.LZW.funzionante.LZWCoder;
+import coders.ChannelCoder;
+import coders.ChannelMessage;
+import coders.SourceCoder;
+import coders.LZW.LZWSourceCoder;
 import coders.Message;
 import coders.deflate.DeflateCoder;
-import coders.huffman.HuffmanCoder;
+import coders.huffman.HuffmanSourceCoder;
 import coders.repetition.ConcatenatedChannelCoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -26,7 +26,7 @@ public class Prove {
 //		BitSet b=chcoder.encode(mess);
 //		chcoder.decode(b, mess);
 //		GenericUtils.writeChannelMessage(mess, "ciao4");
-//		SourceCoder coder=new HuffmanCoder();//TODO Controllare
+//		SourceCoder coder=new HuffmanSourceCoder();//TODO Controllare
 //		String in = "ciao3.txt";
 //		String out = "c.txt";
 //		String cod = "c";

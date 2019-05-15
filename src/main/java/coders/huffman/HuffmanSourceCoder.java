@@ -2,11 +2,11 @@ package coders.huffman;
 
 import java.nio.charset.StandardCharsets;
 
-import coder.source.SourceCoder;
+import coders.SourceCoder;
 import coders.Message;
 import utils.GenericUtils;
 
-public class HuffmanCoder implements SourceCoder {
+public class HuffmanSourceCoder implements SourceCoder {
 
 	@Override
 	public void encode(String inputFileName, String outputFileName) {

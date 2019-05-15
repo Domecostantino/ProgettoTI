@@ -6,14 +6,14 @@ import java.util.BitSet;
 import channel.CanaleSimmetricoBinario;
 import channel.ChannelModel;
 import channel.GilbertElliot;
-import coder.channel.ChannelCoder;
-import coder.channel.ChannelMessage;
-import coder.source.SourceCoder;
-import coders.LZW.funzionante.LZWCoder;
+import coders.ChannelCoder;
+import coders.ChannelMessage;
+import coders.SourceCoder;
+import coders.LZW.LZWSourceCoder;
 import coders.convolutional.ConvolutionalChannelCoder;
 import coders.deflate.DeflateCoder;
 import coders.hamming.HammingChannelCoder;
-import coders.huffman.HuffmanCoder;
+import coders.huffman.HuffmanSourceCoder;
 import coders.repetition.ConcatenatedChannelCoder;
 import coders.repetition.RepChannelCoder;
 import gui.ProvaGUI;
@@ -61,10 +61,11 @@ public class Simulation {
         statistics.setChannelCodingTime(System.currentTimeMillis());
         ProvaGUI.getInstance().getProgressBar().setValue(2);
         
+        
         //invio su canale
         MyBitSet corruptedBits = channel.send(b);
         ProvaGUI.getInstance().getProgressBar().setValue(3);
-        
+        statistics.setSendingTime(System.currentTimeMillis());
         //decodifica
         channelCoder.decode(corruptedBits, mess);
         statistics.setChannelDecodingTime(System.currentTimeMillis());
@@ -86,8 +87,8 @@ public class Simulation {
         MyBitSet corruptedBitsOnlySourceCodingMess = channel.send(onlySourceCodingMess);
         statistics.setCorruptedSourceCodingWithoutChannelEncoding(corruptedBitsOnlySourceCodingMess.getBitset());
 
-        statistics.setInitialSize(GenericUtils.getChannelMessage(fileInputPath).getPayloadLength());
-        statistics.setSourceCodeSize(GenericUtils.getChannelMessage(sourceCode).getPayloadLength());
+        statistics.setInitialSize(GenericUtils.getChannelMessage(fileInputPath).getPayloadLength()/8);
+        statistics.setSourceCodeSize(GenericUtils.getChannelMessage(sourceCode).getPayloadLength()/8);
     }
 
     public String getFileInputPath() {
@@ -113,9 +114,9 @@ public class Simulation {
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
 
         long t1 = System.currentTimeMillis();
-        LZWCoder sourceCoder = new LZWCoder();
+        LZWSourceCoder sourceCoder = new LZWSourceCoder();
         DeflateCoder sourceCoder2 = new DeflateCoder();
-        HuffmanCoder sourceCoder3 = new HuffmanCoder();
+        HuffmanSourceCoder sourceCoder3 = new HuffmanSourceCoder();
         HammingChannelCoder channelCoder = new HammingChannelCoder();
 
         ConvolutionalChannelCoder channelCoder2 = new ConvolutionalChannelCoder(3, 3);

@@ -1,4 +1,4 @@
-package coders.LZW.funzionante;
+package coders.LZW;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

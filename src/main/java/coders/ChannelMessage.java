@@ -1,4 +1,4 @@
-package coder.channel;
+package coders;
 
 public class ChannelMessage {
 	Object huffmanHeader=null;

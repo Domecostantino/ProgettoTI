@@ -6,7 +6,7 @@ import channel.CanaleSimmetricoBinario;
 import channel.GilbertElliot;
 import coders.convolutional.ConvolutionalChannelCoder;
 import coders.hamming.HammingChannelCoder;
-import coders.huffman.HuffmanCoder;
+import coders.huffman.HuffmanSourceCoder;
 import coders.repetition.ConcatenatedChannelCoder;
 import coders.repetition.RepChannelCoder;
 import simulator.Simulation;
@@ -224,7 +224,7 @@ public class GestioneDB {
 
 		GestioneDB db = new GestioneDB();
 
-		Simulation s = new Simulation(new HuffmanCoder(), new ConvolutionalChannelCoder(3, 2),
+		Simulation s = new Simulation(new HuffmanSourceCoder(), new ConvolutionalChannelCoder(3, 2),
 				new CanaleSimmetricoBinario(0.01), new Statistics(), "Lorem ipsum.txt");
 		s.execute();
 		db.insertSimulation(s);

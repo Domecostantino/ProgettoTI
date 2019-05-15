@@ -3,7 +3,7 @@ package coders.deflate;
 import java.io.File;
 import java.io.IOException;
 
-import coder.source.SourceCoder;
+import coders.SourceCoder;
 import coders.Message;
 import coders.huffman.CanonicalHuffmanCoder;
 import coders.huffman.CanonicalHuffmanDecoder;

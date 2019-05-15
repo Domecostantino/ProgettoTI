@@ -2,8 +2,8 @@ package coders.repetition;
 
 import java.util.BitSet;
 
-import coder.channel.ChannelCoder;
-import coder.channel.ChannelMessage;
+import coders.ChannelCoder;
+import coders.ChannelMessage;
 import utils.MyBitSet;
 
 public class ConcatenatedChannelCoder implements ChannelCoder {

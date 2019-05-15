@@ -2,8 +2,8 @@ package coders.convolutional;
 
 import java.util.BitSet;
 
-import coder.channel.ChannelCoder;
-import coder.channel.ChannelMessage;
+import coders.ChannelCoder;
+import coders.ChannelMessage;
 import utils.GenericUtils;
 import utils.MyBitSet;
 

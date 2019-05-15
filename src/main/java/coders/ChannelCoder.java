@@ -1,4 +1,4 @@
-package coder.channel;
+package coders;
 
 import utils.MyBitSet;
 

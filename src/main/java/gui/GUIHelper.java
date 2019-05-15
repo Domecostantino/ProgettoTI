@@ -8,13 +8,13 @@ package gui;
 import channel.CanaleSimmetricoBinario;
 import channel.ChannelModel;
 import channel.GilbertElliot;
-import coder.channel.ChannelCoder;
-import coder.source.SourceCoder;
-import coders.LZW.funzionante.LZWCoder;
+import coders.ChannelCoder;
+import coders.SourceCoder;
+import coders.LZW.LZWSourceCoder;
 import coders.convolutional.ConvolutionalChannelCoder;
 import coders.deflate.DeflateCoder;
 import coders.hamming.HammingChannelCoder;
-import coders.huffman.HuffmanCoder;
+import coders.huffman.HuffmanSourceCoder;
 import coders.repetition.ConcatenatedChannelCoder;
 import coders.repetition.RepChannelCoder;
 import java.awt.Color;
@@ -62,7 +62,8 @@ public class GUIHelper {
     private File file;
     private static GUIHelper instance = null;
     private Statistics stat;
-    private GestioneDB db=new GestioneDB();
+    private GestioneDB db = new GestioneDB();
+
     private GUIHelper() {
     }
 
@@ -75,10 +76,10 @@ public class GUIHelper {
 
     void showCompressionFactor() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        dataset.setValue(stat.getInitialSize(),"Dimensione input","");
-        dataset.setValue(stat.getSourceCodeSize(),"Dimensione codifica","" );
+        dataset.setValue(stat.getInitialSize(), "Dimensione input", "");
+        dataset.setValue(stat.getSourceCodeSize(), "Dimensione codifica", "");
         JFreeChart chart = ChartFactory.createBarChart3D("Compressione", "", "Dimensione", dataset);
-                
+
         // we put the chart into a panel
         ChartPanel chartPanel = new ChartPanel(chart);
         // default size
@@ -92,10 +93,10 @@ public class GUIHelper {
 
     void showErrorComparison() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        dataset.setValue( stat.getOnlySourceCodeChannelErrorRate(),"Error rate senza\ncodifica di canale","");
-        dataset.setValue( stat.getChannelDecodingErrorRate(),"Error rate con\ncodifica di canale","" );
+        dataset.setValue(stat.getOnlySourceCodeChannelErrorRate(), "Error rate senza\ncodifica di canale", "");
+        dataset.setValue(stat.getChannelDecodingErrorRate(), "Error rate con\ncodifica di canale", "");
         JFreeChart chart = ChartFactory.createBarChart3D("Codifica di canale", "", "%", dataset);
-                
+
         // we put the chart into a panel
         ChartPanel chartPanel = new ChartPanel(chart);
         // default size
@@ -105,13 +106,14 @@ public class GUIHelper {
         barchart.setContentPane(chartPanel);
         barchart.pack();
         barchart.setVisible(true);
-        
+
     }
-    
-     void showTimeSlices() {
+
+    void showTimeSlices() {
         DefaultPieDataset dataset = new DefaultPieDataset();
         dataset.setValue("Codifica di sorgente", stat.getSourceCodingTime());
         dataset.setValue("Codifica di canale", stat.getChannelCodingTime());
+        dataset.setValue("Tempo di invio", stat.getSendingTime());
         dataset.setValue("Decodifica di canale", stat.getChannelDecodingTime());
         dataset.setValue("Decodifica di sorgente", stat.getSourceDecodingTime());
         JFreeChart chart = ChartFactory.createPieChart3D(
@@ -136,7 +138,7 @@ public class GUIHelper {
         piechart.pack();
         piechart.setVisible(true);
     }
-    
+
     enum Source {
         HUFFMAN, LZW, DEFLATE;
     }
@@ -185,8 +187,6 @@ public class GUIHelper {
         return stat;
     }
 
-    
-    
     public void setFile(File file) {
         this.file = file;
         JTextArea source = ProvaGUI.getInstance().getSourceText();
@@ -276,10 +276,10 @@ public class GUIHelper {
         SourceCoder scoder = null;
         switch (source) {
             case HUFFMAN:
-                scoder = new HuffmanCoder();
+                scoder = new HuffmanSourceCoder();
                 break;
             case LZW:
-                scoder = new LZWCoder();
+                scoder = new LZWSourceCoder();
                 break;
             case DEFLATE:
                 scoder = new DeflateCoder();
@@ -318,6 +318,7 @@ public class GUIHelper {
         ProvaGUI.getInstance().getInputText().append("\nRitardo: " + (t2 - t1) + " ms");
         ProvaGUI.getInstance().getInputText().append("\nritardo cod sorg: " + stat.getSourceCodingTime() + " ms");
         ProvaGUI.getInstance().getInputText().append("\nritardo cod canale: " + stat.getChannelCodingTime() + " ms");
+        ProvaGUI.getInstance().getInputText().append("\nritardo di invio: " + stat.getSendingTime() + " ms");
         ProvaGUI.getInstance().getInputText().append("\nritardo decod canale: " + stat.getChannelDecodingTime() + " ms");
         ProvaGUI.getInstance().getInputText().append("\nritardo decod sorg: " + stat.getSourceDecodingTime() + " ms");
 
@@ -331,7 +332,7 @@ public class GUIHelper {
 
         //Inserimento valori nel DB
         db.insertSimulation(simulation);
-        
+
         JTextArea output = ProvaGUI.getInstance().getOutputText();
         String outString = GenericUtils.readFile(Simulation.outputPath(file.getAbsolutePath()), StandardCharsets.UTF_8);
         output.setText(outString);

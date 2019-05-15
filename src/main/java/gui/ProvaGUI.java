@@ -23,7 +23,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import utils.GenericUtils;
-
+import javax.swing.BorderFactory;
 /**
  *
  * @author jonny

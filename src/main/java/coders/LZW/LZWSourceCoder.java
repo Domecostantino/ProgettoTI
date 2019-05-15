@@ -1,10 +1,10 @@
-package coders.LZW.funzionante;
+package coders.LZW;
 
 import java.io.IOException;
 
-import coder.source.SourceCoder;
+import coders.SourceCoder;
 
-public class LZWCoder implements SourceCoder {
+public class LZWSourceCoder implements SourceCoder {
 
 	@Override
 	public void encode(String input, String output) {
@@ -27,7 +27,7 @@ public class LZWCoder implements SourceCoder {
 	}
 	
 	public static void main(String[] args) {
-		LZWCoder c=new LZWCoder();
+		LZWSourceCoder c=new LZWSourceCoder();
 		String in = "userinput.tmp";
 		String out = "us";
 		String cod = "uscod";
