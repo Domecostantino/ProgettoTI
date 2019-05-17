@@ -20,8 +20,10 @@ import coders.repetition.RepChannelCoder;
 import java.awt.Color;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -73,6 +75,80 @@ public class GUIHelper {
             instance = new GUIHelper();
         }
         return instance;
+    }
+
+    void showMeanRecoveryRatePerChannelModel() {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        HashMap<String, Double> diz = db.getRecoveryRatePerChannelModel(simulation);
+
+        for (Map.Entry<String, Double> e : diz.entrySet()) {
+            dataset.setValue(e.getValue(), e.getKey(), "");
+        }
+        GestioneDB.SOURCE_COD source_cod = db.getSourceCodeSim(simulation.getSourceCoder().getClass().getName());
+        GestioneDB.CHAN_COD chan_cod = db.getChanCodeSim(simulation.getChannelCoder().getClass().getName(), simulation);
+        JFreeChart chart = ChartFactory.createBarChart3D("Recovery rate medio per modello di canale\ncodificatore di canale: " + chan_cod, "", "Rate", dataset);
+
+        // we put the chart into a panel
+        ChartPanel chartPanel = new ChartPanel(chart);
+        // default size
+        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
+        // add it to our application
+        JFrame barchart = new JFrame();
+        barchart.setContentPane(chartPanel);
+        barchart.pack();
+        barchart.setVisible(true);
+    }
+
+    void showCompressionRatePerFile() {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        HashMap<String, Double> diz = db.getCompressionRatePerFile(simulation);
+
+        for (Map.Entry<String, Double> e : diz.entrySet()) {
+            dataset.setValue(e.getValue(), e.getKey(), "");
+        }
+
+        JFreeChart chart = ChartFactory.createBarChart3D("Compression rate per file", "", "Rate", dataset);
+
+        // we put the chart into a panel
+        ChartPanel chartPanel = new ChartPanel(chart);
+        // default size
+        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
+        // add it to our application
+        JFrame barchart = new JFrame();
+        barchart.setContentPane(chartPanel);
+        barchart.pack();
+        barchart.setVisible(true);
+    }
+
+    void showDelayMeans() {
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        LinkedList<Double> list = db.calcolaRitardiMedi(simulation);
+        dataset.setValue("Codifica di sorgente", list.get(0));
+        dataset.setValue("Codifica di canale", list.get(1));
+        dataset.setValue("Tempo di invio", list.get(2));
+        dataset.setValue("Decodifica di canale", list.get(3));
+        dataset.setValue("Decodifica di sorgente", list.get(4));
+        JFreeChart chart = ChartFactory.createPieChart3D(
+                "Tempi medi degli step di simulazione", // chart title
+                dataset, // data
+                true, // include legend
+                true,
+                false
+        );
+
+        PiePlot3D plot = (PiePlot3D) chart.getPlot();
+        plot.setStartAngle(290);
+        plot.setDirection(Rotation.CLOCKWISE);
+        plot.setForegroundAlpha(0.5f);
+        // we put the chart into a panel
+        ChartPanel chartPanel = new ChartPanel(chart);
+        // default size
+        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
+        // add it to our application
+        JFrame piechart = new JFrame();
+        piechart.setContentPane(chartPanel);
+        piechart.pack();
+        piechart.setVisible(true);
     }
 
     void showCompressionFactor() {
@@ -329,7 +405,6 @@ public class GUIHelper {
         ProvaGUI.getInstance().getInputText().append("\nerror rate canale solo cod sorgente " + stat.getOnlySourceCodeChannelErrorRate() + " %");
         ProvaGUI.getInstance().getInputText().append("\nrecovery rate del codificatore di canale " + stat.getErrorRecoveryRate() + " %\n");
 
-        
         //Inserimento valori nel DB
         db.insertSimulation(simulation);
 

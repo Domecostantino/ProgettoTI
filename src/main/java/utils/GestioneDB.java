@@ -21,16 +21,16 @@ public class GestioneDB {
 	private static final String USER = "postgres";
 	private static final String PASS = "password";
 
-	private enum SOURCE_COD {
+	public enum SOURCE_COD {
 		DEFLATE, HUFFMAN, LZW
 	}
 
-	private enum CHAN_COD {
+	public enum CHAN_COD {
 		CONV_2_3, CONV_2_4, CONV_2_5, CONV_2_6, CONV_2_7, CONV_3_3, CONV_3_4, CONV_3_5, CONV_3_6, CONV_3_7, RIP_3,
 		RIP_5, RIP_7, RIP_9, HAMM_7_4, HAMM_15_11, HAMM_31_26, CONC_3_3, CONC_3_5, CONC_5_5
 	}
 
-	private enum CHANNEL {
+	public enum CHANNEL {
 		BSC_01, BSC_001, BSC_0001, GE_HARD, GE_SOFT
 	}
 
@@ -105,7 +105,7 @@ public class GestioneDB {
 		}
 	}
 
-	private SOURCE_COD getSourceCodeSim(String nomeClasse) {
+	public SOURCE_COD getSourceCodeSim(String nomeClasse) {
 		switch (nomeClasse) { // TODO rivedere i packages
 		case "coders.LZW.LZWSourceCoder":
 			return SOURCE_COD.LZW;
@@ -117,7 +117,7 @@ public class GestioneDB {
 		return null;
 	}
 
-	private CHANNEL getChannelSim(String nomeClasse, Simulation simulation) {
+	public CHANNEL getChannelSim(String nomeClasse, Simulation simulation) {
 		switch (nomeClasse) {
 		case "channel.CanaleSimmetricoBinario":
 			CanaleSimmetricoBinario ch = (CanaleSimmetricoBinario) simulation.getChannel();
@@ -140,7 +140,7 @@ public class GestioneDB {
 		return null;
 	}
 
-	private CHAN_COD getChanCodeSim(String nomeClasse, Simulation simulation) {
+	public CHAN_COD getChanCodeSim(String nomeClasse, Simulation simulation) {
 		switch (nomeClasse) {
 		case "coders.hamming.HammingChannelCoder":
 			HammingChannelCoder ch = (HammingChannelCoder) simulation.getChannelCoder();

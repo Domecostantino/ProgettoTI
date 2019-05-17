@@ -77,7 +77,7 @@ public class ProvaGUI extends javax.swing.JFrame {
 
             super.paintComponent(g);
 
-            g.drawImage(image, 0, 0, null);
+            g.drawImage(image, 0, 0,450,1000, null);
         }
     }
 
@@ -109,7 +109,7 @@ public class ProvaGUI extends javax.swing.JFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
         buttonGroup3 = new javax.swing.ButtonGroup();
-        jPanel3 = new MyJPanel();
+        jPanel3 = new JPanel();
         jButton2 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jRadioButton5 = new javax.swing.JRadioButton();
@@ -153,6 +153,9 @@ public class ProvaGUI extends javax.swing.JFrame {
         comprFactorButton = new javax.swing.JButton();
         showErrButton = new javax.swing.JButton();
         timeSlices = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         outputText = new javax.swing.JTextArea();
         jLabel4 = new javax.swing.JLabel();
@@ -175,6 +178,8 @@ public class ProvaGUI extends javax.swing.JFrame {
 
         jPanel3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(153, 153, 153), new java.awt.Color(204, 204, 204), new java.awt.Color(204, 204, 204), new java.awt.Color(153, 153, 153)));
 
+        jButton2.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(91, 97, 115));
         jButton2.setText("Apri File");
         jButton2.setOpaque(false);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -185,6 +190,8 @@ public class ProvaGUI extends javax.swing.JFrame {
 
         jPanel4.setOpaque(false);
 
+        jRadioButton5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jRadioButton5.setForeground(new java.awt.Color(77, 77, 86));
         jRadioButton5.setText("Lempel-Ziv Welch");
         jRadioButton5.setOpaque(false);
         jRadioButton5.addItemListener(new java.awt.event.ItemListener() {
@@ -198,6 +205,8 @@ public class ProvaGUI extends javax.swing.JFrame {
             }
         });
 
+        jRadioButton4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jRadioButton4.setForeground(new java.awt.Color(77, 77, 86));
         jRadioButton4.setText("Huffman");
         jRadioButton4.setOpaque(false);
         jRadioButton4.addItemListener(new java.awt.event.ItemListener() {
@@ -206,6 +215,8 @@ public class ProvaGUI extends javax.swing.JFrame {
             }
         });
 
+        jRadioButton6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jRadioButton6.setForeground(new java.awt.Color(77, 77, 86));
         jRadioButton6.setText("Deflate");
         jRadioButton6.setOpaque(false);
         jRadioButton6.addItemListener(new java.awt.event.ItemListener() {
@@ -214,6 +225,8 @@ public class ProvaGUI extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(77, 77, 86));
         jLabel2.setText("Codifica di sorgente");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -244,6 +257,8 @@ public class ProvaGUI extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jButton3.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(91, 97, 115));
         jButton3.setText("Input manuale");
         jButton3.setOpaque(false);
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -254,6 +269,8 @@ public class ProvaGUI extends javax.swing.JFrame {
 
         jPanel2.setOpaque(false);
 
+        jRadioButton1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jRadioButton1.setForeground(new java.awt.Color(77, 77, 86));
         jRadioButton1.setText("Convoluzionale");
         jRadioButton1.setOpaque(false);
         jRadioButton1.addItemListener(new java.awt.event.ItemListener() {
@@ -267,6 +284,8 @@ public class ProvaGUI extends javax.swing.JFrame {
             }
         });
 
+        jRadioButton2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jRadioButton2.setForeground(new java.awt.Color(77, 77, 86));
         jRadioButton2.setText("Ripetizione");
         jRadioButton2.setOpaque(false);
         jRadioButton2.addItemListener(new java.awt.event.ItemListener() {
@@ -275,6 +294,8 @@ public class ProvaGUI extends javax.swing.JFrame {
             }
         });
 
+        jRadioButton3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jRadioButton3.setForeground(new java.awt.Color(77, 77, 86));
         jRadioButton3.setText("Concatenato");
         jRadioButton3.setOpaque(false);
         jRadioButton3.addItemListener(new java.awt.event.ItemListener() {
@@ -283,6 +304,8 @@ public class ProvaGUI extends javax.swing.JFrame {
             }
         });
 
+        jRadioButton7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jRadioButton7.setForeground(new java.awt.Color(77, 77, 86));
         jRadioButton7.setText("Hamming");
         jRadioButton7.setOpaque(false);
         jRadioButton7.addItemListener(new java.awt.event.ItemListener() {
@@ -300,9 +323,11 @@ public class ProvaGUI extends javax.swing.JFrame {
             }
         });
 
+        convLableR.setForeground(new java.awt.Color(91, 97, 115));
         convLableR.setText("R:");
         convLableR.setEnabled(false);
 
+        convLableK.setForeground(new java.awt.Color(91, 97, 115));
         convLableK.setText("K:");
         convLableK.setEnabled(false);
 
@@ -315,6 +340,7 @@ public class ProvaGUI extends javax.swing.JFrame {
             }
         });
 
+        ripLableR.setForeground(new java.awt.Color(91, 97, 115));
         ripLableR.setText("R:");
         ripLableR.setEnabled(false);
 
@@ -336,6 +362,7 @@ public class ProvaGUI extends javax.swing.JFrame {
             }
         });
 
+        hamLableR.setForeground(new java.awt.Color(91, 97, 115));
         hamLableR.setText("R:");
         hamLableR.setEnabled(false);
 
@@ -348,6 +375,8 @@ public class ProvaGUI extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(77, 77, 86));
         jLabel1.setText("Codifica di canale");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -415,8 +444,12 @@ public class ProvaGUI extends javax.swing.JFrame {
 
         jPanel6.setOpaque(false);
 
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(77, 77, 86));
         jLabel3.setText("Modello di errore");
 
+        jRadioButton8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jRadioButton8.setForeground(new java.awt.Color(77, 77, 86));
         jRadioButton8.setText("Canale simmetrico binario");
         jRadioButton8.setOpaque(false);
         jRadioButton8.addItemListener(new java.awt.event.ItemListener() {
@@ -425,6 +458,8 @@ public class ProvaGUI extends javax.swing.JFrame {
             }
         });
 
+        jRadioButton9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jRadioButton9.setForeground(new java.awt.Color(77, 77, 86));
         jRadioButton9.setText("Gilbert-Elliot");
         jRadioButton9.setOpaque(false);
         jRadioButton9.addItemListener(new java.awt.event.ItemListener() {
@@ -433,6 +468,7 @@ public class ProvaGUI extends javax.swing.JFrame {
             }
         });
 
+        sbcLable.setForeground(new java.awt.Color(91, 97, 115));
         sbcLable.setText("BER:");
         sbcLable.setEnabled(false);
 
@@ -454,6 +490,7 @@ public class ProvaGUI extends javax.swing.JFrame {
             }
         });
 
+        geLable.setForeground(new java.awt.Color(91, 97, 115));
         geLable.setText("Type:");
         geLable.setEnabled(false);
 
@@ -495,7 +532,7 @@ public class ProvaGUI extends javax.swing.JFrame {
                     .addComponent(jRadioButton9)
                     .addComponent(geLable)
                     .addComponent(geCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 1, Short.MAX_VALUE))
         );
 
         jButton1.setText("Start!");
@@ -526,7 +563,7 @@ public class ProvaGUI extends javax.swing.JFrame {
                             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 38, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
+                        .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton1)))
                 .addContainerGap())
@@ -540,9 +577,9 @@ public class ProvaGUI extends javax.swing.JFrame {
                     .addComponent(jButton3))
                 .addGap(26, 26, 26)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(32, 32, 32)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(30, 30, 30)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -566,6 +603,8 @@ public class ProvaGUI extends javax.swing.JFrame {
         jScrollPane2.setViewportView(sourceText);
         sourceText.setEditable(false);
 
+        comprFactorButton.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        comprFactorButton.setForeground(new java.awt.Color(91, 97, 115));
         comprFactorButton.setText("Mostra fattore di compressione");
         comprFactorButton.setEnabled(false);
         comprFactorButton.addActionListener(new java.awt.event.ActionListener() {
@@ -574,6 +613,8 @@ public class ProvaGUI extends javax.swing.JFrame {
             }
         });
 
+        showErrButton.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        showErrButton.setForeground(new java.awt.Color(91, 97, 115));
         showErrButton.setText("Mostra comparazione di errore");
         showErrButton.setEnabled(false);
         showErrButton.addActionListener(new java.awt.event.ActionListener() {
@@ -582,11 +623,34 @@ public class ProvaGUI extends javax.swing.JFrame {
             }
         });
 
+        timeSlices.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        timeSlices.setForeground(new java.awt.Color(91, 97, 115));
         timeSlices.setText("Mostra tempistiche");
         timeSlices.setEnabled(false);
         timeSlices.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 timeSlicesActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Mostra tempi medi");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setText("Mostra compression rate per file");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setText("Mostra recovery rate medio per modello di canale");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
             }
         });
 
@@ -599,8 +663,11 @@ public class ProvaGUI extends javax.swing.JFrame {
                 .addGroup(statPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(comprFactorButton)
                     .addComponent(showErrButton)
-                    .addComponent(timeSlices))
-                .addContainerGap(222, Short.MAX_VALUE))
+                    .addComponent(timeSlices)
+                    .addComponent(jButton4)
+                    .addComponent(jButton5)
+                    .addComponent(jButton6))
+                .addContainerGap(171, Short.MAX_VALUE))
         );
         statPanelLayout.setVerticalGroup(
             statPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -611,7 +678,13 @@ public class ProvaGUI extends javax.swing.JFrame {
                 .addComponent(showErrButton)
                 .addGap(18, 18, 18)
                 .addComponent(timeSlices)
-                .addContainerGap(259, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton4)
+                .addGap(18, 18, 18)
+                .addComponent(jButton5)
+                .addGap(18, 18, 18)
+                .addComponent(jButton6)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         outputText.setColumns(20);
@@ -621,10 +694,16 @@ public class ProvaGUI extends javax.swing.JFrame {
         jScrollPane3.setViewportView(outputText);
         sourceText.setEditable(false);
 
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(91, 97, 115));
         jLabel4.setText("Statistiche:");
 
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(91, 97, 115));
         jLabel5.setText("Input sorgente:");
 
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(91, 97, 115));
         jLabel6.setText("Output decodifica:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -632,16 +711,22 @@ public class ProvaGUI extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(statPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel4)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2)))
+                    .addComponent(statPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(115, 115, 115)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6))
+                        .addContainerGap(226, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -652,14 +737,14 @@ public class ProvaGUI extends javax.swing.JFrame {
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
                     .addComponent(jScrollPane1))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE))
                     .addComponent(statPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
@@ -895,6 +980,18 @@ public class ProvaGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jRadioButton8ItemStateChanged
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        GUIHelper.getInstance().showDelayMeans();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        GUIHelper.getInstance().showCompressionRatePerFile();
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        GUIHelper.getInstance().showMeanRecoveryRatePerChannelModel();
+    }//GEN-LAST:event_jButton6ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -921,7 +1018,7 @@ public class ProvaGUI extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(ProvaGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        WebLookAndFeel.install();
+//      WebLookAndFeel.install();
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -949,6 +1046,9 @@ public class ProvaGUI extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

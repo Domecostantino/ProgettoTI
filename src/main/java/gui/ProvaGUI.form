@@ -70,7 +70,7 @@
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="//jPanel3.setBorder(new RoundedBorder(10, Color.GRAY));"/>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new MyJPanel()"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JPanel()"/>
       </AuxValues>
 
       <Layout>
@@ -95,7 +95,7 @@
                           <EmptySpace min="0" pref="38" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="progressBar" pref="197" max="32767" attributes="0"/>
+                          <Component id="progressBar" pref="209" max="32767" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -114,9 +114,9 @@
                   </Group>
                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                   <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                   <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                   <Component id="jPanel6" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -131,6 +131,12 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="jButton2">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Arial" size="11" style="0"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="73" green="61" red="5b" type="rgb"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Apri File"/>
             <Property name="opaque" type="boolean" value="false"/>
           </Properties>
@@ -180,6 +186,12 @@
           <SubComponents>
             <Component class="javax.swing.JRadioButton" name="jRadioButton5">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="56" green="4d" red="4d" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Lempel-Ziv Welch"/>
                 <Property name="opaque" type="boolean" value="false"/>
               </Properties>
@@ -190,6 +202,12 @@
             </Component>
             <Component class="javax.swing.JRadioButton" name="jRadioButton4">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="56" green="4d" red="4d" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Huffman"/>
                 <Property name="opaque" type="boolean" value="false"/>
               </Properties>
@@ -199,6 +217,12 @@
             </Component>
             <Component class="javax.swing.JRadioButton" name="jRadioButton6">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="56" green="4d" red="4d" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Deflate"/>
                 <Property name="opaque" type="boolean" value="false"/>
               </Properties>
@@ -208,6 +232,12 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel2">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="1"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="56" green="4d" red="4d" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Codifica di sorgente"/>
               </Properties>
             </Component>
@@ -217,6 +247,12 @@
         </Component>
         <Component class="javax.swing.JButton" name="jButton3">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Arial" size="11" style="0"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="73" green="61" red="5b" type="rgb"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Input manuale"/>
             <Property name="opaque" type="boolean" value="false"/>
           </Properties>
@@ -308,6 +344,12 @@
           <SubComponents>
             <Component class="javax.swing.JRadioButton" name="jRadioButton1">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="56" green="4d" red="4d" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Convoluzionale"/>
                 <Property name="opaque" type="boolean" value="false"/>
               </Properties>
@@ -318,6 +360,12 @@
             </Component>
             <Component class="javax.swing.JRadioButton" name="jRadioButton2">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="56" green="4d" red="4d" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Ripetizione"/>
                 <Property name="opaque" type="boolean" value="false"/>
               </Properties>
@@ -327,6 +375,12 @@
             </Component>
             <Component class="javax.swing.JRadioButton" name="jRadioButton3">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="56" green="4d" red="4d" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Concatenato"/>
                 <Property name="opaque" type="boolean" value="false"/>
               </Properties>
@@ -336,6 +390,12 @@
             </Component>
             <Component class="javax.swing.JRadioButton" name="jRadioButton7">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="56" green="4d" red="4d" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Hamming"/>
                 <Property name="opaque" type="boolean" value="false"/>
               </Properties>
@@ -360,12 +420,18 @@
             </Component>
             <Component class="javax.swing.JLabel" name="convLableR">
               <Properties>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="73" green="61" red="5b" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="R:"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="convLableK">
               <Properties>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="73" green="61" red="5b" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="K:"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
@@ -387,6 +453,9 @@
             </Component>
             <Component class="javax.swing.JLabel" name="ripLableR">
               <Properties>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="73" green="61" red="5b" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="R:"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
@@ -423,6 +492,9 @@
             </Component>
             <Component class="javax.swing.JLabel" name="hamLableR">
               <Properties>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="73" green="61" red="5b" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="R:"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
@@ -444,6 +516,12 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="1"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="56" green="4d" red="4d" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Codifica di canale"/>
               </Properties>
             </Component>
@@ -501,7 +579,7 @@
                           <Component id="geLable" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="geCombo" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="1" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -509,11 +587,23 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel3">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="1"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="56" green="4d" red="4d" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Modello di errore"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JRadioButton" name="jRadioButton8">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="56" green="4d" red="4d" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Canale simmetrico binario"/>
                 <Property name="opaque" type="boolean" value="false"/>
               </Properties>
@@ -523,6 +613,12 @@
             </Component>
             <Component class="javax.swing.JRadioButton" name="jRadioButton9">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="56" green="4d" red="4d" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Gilbert-Elliot"/>
                 <Property name="opaque" type="boolean" value="false"/>
               </Properties>
@@ -532,6 +628,9 @@
             </Component>
             <Component class="javax.swing.JLabel" name="sbcLable">
               <Properties>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="73" green="61" red="5b" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="BER:"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
@@ -568,6 +667,9 @@
             </Component>
             <Component class="javax.swing.JLabel" name="geLable">
               <Properties>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="73" green="61" red="5b" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Type:"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
@@ -597,17 +699,27 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="statPanel" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" min="-2" pref="413" max="-2" attributes="0"/>
+                      <Component id="statPanel" alignment="0" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                      <Component id="jScrollPane3" pref="448" max="32767" attributes="0"/>
-                      <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="115" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace pref="226" max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jScrollPane3" alignment="0" min="-2" pref="400" max="-2" attributes="0"/>
+                              <Component id="jScrollPane2" min="-2" pref="400" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
                   </Group>
               </Group>
           </Group>
@@ -622,7 +734,7 @@
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jScrollPane2" pref="345" max="32767" attributes="0"/>
+                      <Component id="jScrollPane2" pref="360" max="32767" attributes="0"/>
                       <Component id="jScrollPane1" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
@@ -630,7 +742,7 @@
                       <Group type="102" attributes="0">
                           <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="jScrollPane3" max="32767" attributes="0"/>
+                          <Component id="jScrollPane3" pref="340" max="32767" attributes="0"/>
                       </Group>
                       <Component id="statPanel" max="32767" attributes="0"/>
                   </Group>
@@ -687,8 +799,11 @@
                           <Component id="comprFactorButton" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="showErrButton" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="timeSlices" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jButton4" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jButton5" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jButton6" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="222" max="32767" attributes="0"/>
+                      <EmptySpace pref="171" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -701,7 +816,13 @@
                       <Component id="showErrButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="timeSlices" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="259" max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jButton4" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jButton5" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jButton6" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -709,6 +830,12 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="comprFactorButton">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="11" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="73" green="61" red="5b" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Mostra fattore di compressione"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
@@ -718,6 +845,12 @@
             </Component>
             <Component class="javax.swing.JButton" name="showErrButton">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="11" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="73" green="61" red="5b" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Mostra comparazione di errore"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
@@ -727,11 +860,41 @@
             </Component>
             <Component class="javax.swing.JButton" name="timeSlices">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="11" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="73" green="61" red="5b" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Mostra tempistiche"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="timeSlicesActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="jButton4">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Mostra tempi medi"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="jButton5">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Mostra compression rate per file"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton5ActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="jButton6">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Mostra recovery rate medio per modello di canale"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton6ActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
@@ -758,16 +921,34 @@
         </Container>
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Arial" size="11" style="0"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="73" green="61" red="5b" type="rgb"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Statistiche:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Arial" size="11" style="0"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="73" green="61" red="5b" type="rgb"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Input sorgente:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Arial" size="11" style="0"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="73" green="61" red="5b" type="rgb"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Output decodifica:"/>
           </Properties>
         </Component>
