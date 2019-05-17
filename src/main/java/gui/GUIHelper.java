@@ -63,6 +63,7 @@ public class GUIHelper {
     private static GUIHelper instance = null;
     private Statistics stat;
     private GestioneDB db = new GestioneDB();
+    private Simulation simulation;
 
     private GUIHelper() {
     }
@@ -310,12 +311,10 @@ public class GUIHelper {
                 break;
         }
         stat = new Statistics();
-        Simulation simulation = new Simulation(scoder, ccoder, errorModel, stat, file.getName());
-        long t1 = System.currentTimeMillis();
+        simulation = new Simulation(scoder, ccoder, errorModel, stat, file.getName());
         simulation.execute();
-        long t2 = System.currentTimeMillis();
         ProvaGUI.getInstance().getInputText().append("\n---------------------------------------------------------------");
-        ProvaGUI.getInstance().getInputText().append("\nRitardo: " + (t2 - t1) + " ms");
+        ProvaGUI.getInstance().getInputText().append("\nRitardo: " + stat.getTotalTime() + " ms");
         ProvaGUI.getInstance().getInputText().append("\nritardo cod sorg: " + stat.getSourceCodingTime() + " ms");
         ProvaGUI.getInstance().getInputText().append("\nritardo cod canale: " + stat.getChannelCodingTime() + " ms");
         ProvaGUI.getInstance().getInputText().append("\nritardo di invio: " + stat.getSendingTime() + " ms");
@@ -330,6 +329,7 @@ public class GUIHelper {
         ProvaGUI.getInstance().getInputText().append("\nerror rate canale solo cod sorgente " + stat.getOnlySourceCodeChannelErrorRate() + " %");
         ProvaGUI.getInstance().getInputText().append("\nrecovery rate del codificatore di canale " + stat.getErrorRecoveryRate() + " %\n");
 
+        
         //Inserimento valori nel DB
         db.insertSimulation(simulation);
 

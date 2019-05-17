@@ -113,7 +113,6 @@ public class Simulation {
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
 
-        long t1 = System.currentTimeMillis();
         LZWSourceCoder sourceCoder = new LZWSourceCoder();
         DeflateCoder sourceCoder2 = new DeflateCoder();
         HuffmanSourceCoder sourceCoder3 = new HuffmanSourceCoder();
@@ -132,10 +131,9 @@ public class Simulation {
         Simulation sim = new Simulation(sourceCoder3, channelCoder2, channel, new Statistics(), "dberr.txt");
 
         sim.execute();
-        long t2 = System.currentTimeMillis();
         System.out.println("Sorgente: " + sim.sourceCoder.getClass() + " ,CodCanale: " + sim.channelCoder.getClass()
                 + " ,modelloCanale: " + sim.channel.getClass());
-        System.out.println("Ritardo: " + (t2 - t1) + " ms");
+        System.out.println("Ritardo: " + sim.statistics.getTotalTime() + " ms");
         System.out.println("ritardo cod sorg: " + sim.statistics.getSourceCodingTime() + " ms");
         System.out.println("ritardo cod canale: " + sim.statistics.getChannelCodingTime() + " ms");
         System.out.println("ritardo decod canale: " + sim.statistics.getChannelDecodingTime() + " ms");
@@ -145,9 +143,9 @@ public class Simulation {
         System.out.println("dimensione file compressioneSorgente " + sim.statistics.getSourceCodeSize() + " byte");
         System.out.println("compression rate: " + sim.statistics.getCompressionRate() + "\n");
 
-        System.out.println("error rate cod canale " + sim.statistics.getChannelDecodingErrorRate() * 100 + " %");
-        System.out.println("error rate canale solo cod sorgente " + sim.statistics.getOnlySourceCodeChannelErrorRate() * 100 + " %");
-        System.out.println("recovery rate del codificatore di canale " + sim.statistics.getErrorRecoveryRate() * 100 + " %");
+        System.out.println("error rate cod canale " + sim.statistics.getChannelDecodingErrorRate() + " %");
+        System.out.println("error rate canale solo cod sorgente " + sim.statistics.getOnlySourceCodeChannelErrorRate() + " %");
+        System.out.println("recovery rate del codificatore di canale " + sim.statistics.getErrorRecoveryRate() + " %");
 
     }
 

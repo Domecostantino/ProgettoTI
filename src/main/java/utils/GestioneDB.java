@@ -1,6 +1,9 @@
 package utils;
 
 import java.sql.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map.Entry;
 
 import channel.CanaleSimmetricoBinario;
 import channel.GilbertElliot;
@@ -28,174 +31,12 @@ public class GestioneDB {
 	}
 
 	private enum CHANNEL {
-		BSC_001, BSC_005, BSC_01, GE_HARD, GE_SOFT
+		BSC_01, BSC_001, BSC_0001, GE_HARD, GE_SOFT
 	}
 
 	public GestioneDB() {
 		System.out.println("Connecting to database...");
 		inizializzaDB();
-	}
-
-	public void insertSimulation(Simulation simulation) {
-		try {
-			String filename = simulation.getFileInputPath();
-			filename = filename.substring(0, filename.length() - 4);
-			SOURCE_COD source_cod = null;
-			CHAN_COD chan_cod = null;
-			CHANNEL channel = null;
-			Statistics stat = simulation.getStatistics();
-			long sourceCodeTime = stat.getSourceCodingTime();
-			long channelCodeTime = stat.getChannelCodingTime();
-			long sourceDecodeTime = stat.getSourceDecodingTime();
-			long channelDecodeTime = stat.getChannelDecodingTime();
-			long initialSize = stat.getInitialSize();
-			long sourceCodeSize = stat.getSourceCodeSize();
-			float compressionRate = (float) stat.getCompressionRate();
-			float chanDecodeErrorRate = (float) stat.getChannelDecodingErrorRate();
-			float onlySourceDecodeErrorRate = (float) stat.getOnlySourceCodeChannelErrorRate();
-			float recoveryRate = (float) stat.getErrorRecoveryRate();
-
-			// settiamo codificatore sorgente
-			switch (simulation.getSourceCoder().getClass().getName()) { // TODO rivedere i packages
-			case "coders.LZW.funzionante.LZWCoder":
-				source_cod = SOURCE_COD.LZW;
-				break;
-			case "coders.deflate.DeflateCoder":
-				source_cod = SOURCE_COD.DEFLATE;
-				break;
-			case "coders.huffman.HuffmanCoder":
-				source_cod = SOURCE_COD.HUFFMAN;
-				break;
-			}
-
-			// settiamo codificatore canale
-			switch (simulation.getChannelCoder().getClass().getName()) {
-			case "coders.hamming.HammingChannelCoder":
-				HammingChannelCoder ch = (HammingChannelCoder) simulation.getChannelCoder();
-				switch (ch.getR()) {
-				case 3:
-					chan_cod = CHAN_COD.HAMM_7_4;
-					break;
-				case 4:
-					chan_cod = CHAN_COD.HAMM_15_11;
-					break;
-				case 5:
-					chan_cod = CHAN_COD.HAMM_31_26;
-					break;
-				}
-				break;
-			case "coders.convolutional.ConvolutionalChannelCoder":
-				ConvolutionalChannelCoder ch1 = (ConvolutionalChannelCoder) simulation.getChannelCoder();
-				switch (ch1.getR()) {
-				case 2:
-					switch (ch1.getK()) {
-					case 3:
-						chan_cod = CHAN_COD.CONV_2_3;
-						break;
-					case 4:
-						chan_cod = CHAN_COD.CONV_2_4;
-						break;
-					case 5:
-						chan_cod = CHAN_COD.CONV_2_5;
-						break;
-					case 6:
-						chan_cod = CHAN_COD.CONV_2_6;
-						break;
-					case 7:
-						chan_cod = CHAN_COD.CONV_2_7;
-						break;
-					}
-					break;
-
-				case 3:
-					switch (ch1.getK()) {
-					case 3:
-						chan_cod = CHAN_COD.CONV_3_3;
-						break;
-					case 4:
-						chan_cod = CHAN_COD.CONV_3_4;
-						break;
-					case 5:
-						chan_cod = CHAN_COD.CONV_3_5;
-						break;
-					case 6:
-						chan_cod = CHAN_COD.CONV_3_6;
-						break;
-					case 7:
-						chan_cod = CHAN_COD.CONV_3_7;
-						break;
-					}
-					break;
-				}
-				break;
-			case "coders.repetition.ConcatenatedChannelCoder":
-				ConcatenatedChannelCoder ch2 = (ConcatenatedChannelCoder) simulation.getChannelCoder();
-				int[] repLev = ch2.getRep_per_level();
-				if (repLev[0] == 3 && repLev[1] == 3)
-					chan_cod = CHAN_COD.CONC_3_3;
-				else if (repLev[0] == 3 && repLev[1] == 5)
-					chan_cod = CHAN_COD.CONC_3_5;
-				else
-					chan_cod = CHAN_COD.CONC_5_5;
-				break;
-			case "coders.repetition.RepChannelCoder":
-				RepChannelCoder ch3 = (RepChannelCoder) simulation.getChannelCoder();
-				switch (ch3.getR()) {
-				case 3:
-					chan_cod = CHAN_COD.RIP_3;
-					break;
-				case 5:
-					chan_cod = CHAN_COD.RIP_5;
-					break;
-				case 7:
-					chan_cod = CHAN_COD.RIP_7;
-					break;
-				case 9:
-					chan_cod = CHAN_COD.RIP_9;
-					break;
-				}
-				break;
-			}
-
-			// settiamo canale
-			switch (simulation.getChannel().getClass().getName()) {
-			case "channel.CanaleSimmetricoBinario":
-				CanaleSimmetricoBinario ch = (CanaleSimmetricoBinario) simulation.getChannel();
-				switch (ch.getBer()) {
-				case "0.01":
-					channel = CHANNEL.BSC_01;
-					break;
-				case "0.005":
-					channel = CHANNEL.BSC_005;
-					break;
-				case "0.001":
-					channel = CHANNEL.BSC_001;
-					break;
-				}
-				break;
-			case "channel.GilbertElliot":
-				GilbertElliot ch2 = (GilbertElliot) simulation.getChannel();
-				if (ch2.getType() == GilbertElliot.HARD)
-					channel = CHANNEL.GE_HARD;
-				else
-					channel = CHANNEL.GE_SOFT;
-				break;
-			}
-			// TODO estrapolare gli altri valori dalla simulazione
-
-			Statement stmt = conn.createStatement();
-			String sql = "INSERT INTO SIMULATIONS (FILENAME,SOURCE_COD,CHAN_COD,CHANNEL,SOURCE_COD_TIME,CHAN_COD_TIME,"
-					+ "SOURCE_DECODE_TIME,CHAN_DECODE_TIME,INITIAL_SIZE,SOURCE_COD_SIZE,COMPRESSION_RATE,CHAN_DECODE_ERROR_RATE,ONLYSOURCE_CODE_ERROR_RATE,RECOVERY_RATE) VALUES ('"
-					+ filename + "','" + source_cod + "','" + chan_cod + "','" + channel + "','" + sourceCodeTime
-					+ "','" + channelCodeTime + "','" + sourceDecodeTime + "','" + channelDecodeTime + "','"
-					+ initialSize + "','" + sourceCodeSize + "','" + compressionRate + "','" + chanDecodeErrorRate
-					+ "','" + onlySourceDecodeErrorRate + "','" + recoveryRate + "');";
-			stmt.executeUpdate(sql);
-			stmt.close();
-		} catch (SQLException e) {
-			System.err.println(e);
-		}
-
 	}
 
 	private void inizializzaDB() {
@@ -207,7 +48,7 @@ public class GestioneDB {
 			stmt = conn.createStatement();
 			String sql = "CREATE TABLE IF NOT EXISTS SIMULATIONS " + "(id SERIAL PRIMARY KEY NOT NULL,"
 					+ "FILENAME TEXT, SOURCE_COD TEXT, CHAN_COD TEXT, CHANNEL TEXT, SOURCE_COD_TIME BIGINT,"
-					+ " CHAN_COD_TIME BIGINT, SOURCE_DECODE_TIME BIGINT, CHAN_DECODE_TIME BIGINT, INITIAL_SIZE BIGINT,"
+					+ "SENDING_TIME BIGINT, CHAN_COD_TIME BIGINT, SOURCE_DECODE_TIME BIGINT, CHAN_DECODE_TIME BIGINT, INITIAL_SIZE BIGINT,"
 					+ " SOURCE_COD_SIZE BIGINT, COMPRESSION_RATE FLOAT, CHAN_DECODE_ERROR_RATE FLOAT,"
 					+ " ONLYSOURCE_CODE_ERROR_RATE FLOAT, RECOVERY_RATE FLOAT);";
 
@@ -220,6 +61,276 @@ public class GestioneDB {
 		System.out.println("Table created successfully");
 	}
 
+	public void insertSimulation(Simulation simulation) {
+		try {
+			String filename = simulation.getFileInputPath();
+			filename = filename.substring(0, filename.length() - 4);
+			SOURCE_COD source_cod = null;
+			CHAN_COD chan_cod = null;
+			CHANNEL channel = null;
+			Statistics stat = simulation.getStatistics();
+			long sourceCodeTime = stat.getSourceCodingTime();
+			long channelCodeTime = stat.getChannelCodingTime();
+			long sendingTime = stat.getSendingTime();
+			long sourceDecodeTime = stat.getSourceDecodingTime();
+			System.out.println(sendingTime);
+			long channelDecodeTime = stat.getChannelDecodingTime();
+			long initialSize = stat.getInitialSize();
+			long sourceCodeSize = stat.getSourceCodeSize();
+			float compressionRate = (float) stat.getCompressionRate();
+			float chanDecodeErrorRate = (float) stat.getChannelDecodingErrorRate();
+			float onlySourceDecodeErrorRate = (float) stat.getOnlySourceCodeChannelErrorRate();
+			float recoveryRate = (float) stat.getErrorRecoveryRate();
+
+			// settiamo codificatore sorgente
+			source_cod = getSourceCodeSim(simulation.getSourceCoder().getClass().getName());
+
+			// settiamo codificatore canale
+			chan_cod = getChanCodeSim(simulation.getChannelCoder().getClass().getName(), simulation);
+
+			// settiamo canale
+			channel = getChannelSim(simulation.getChannel().getClass().getName(), simulation);
+
+			Statement stmt = conn.createStatement();
+			String sql = "INSERT INTO SIMULATIONS (FILENAME,SOURCE_COD,CHAN_COD,CHANNEL,SOURCE_COD_TIME,CHAN_COD_TIME,SENDING_TIME,"
+					+ "SOURCE_DECODE_TIME,CHAN_DECODE_TIME,INITIAL_SIZE,SOURCE_COD_SIZE,COMPRESSION_RATE,CHAN_DECODE_ERROR_RATE,ONLYSOURCE_CODE_ERROR_RATE,RECOVERY_RATE) VALUES ('"
+					+ filename + "','" + source_cod + "','" + chan_cod + "','" + channel + "','" + sourceCodeTime
+					+ "','" + channelCodeTime + "','" + sendingTime + "','" + sourceDecodeTime + "','"
+					+ channelDecodeTime + "','" + initialSize + "','" + sourceCodeSize + "','" + compressionRate + "','"
+					+ chanDecodeErrorRate + "','" + onlySourceDecodeErrorRate + "','" + recoveryRate + "');";
+			stmt.executeUpdate(sql);
+			stmt.close();
+		} catch (SQLException e) {
+			System.err.println(e);
+		}
+	}
+
+	private SOURCE_COD getSourceCodeSim(String nomeClasse) {
+		switch (nomeClasse) { // TODO rivedere i packages
+		case "coders.LZW.LZWSourceCoder":
+			return SOURCE_COD.LZW;
+		case "coders.deflate.DeflateCoder":
+			return SOURCE_COD.DEFLATE;
+		case "coders.huffman.HuffmanSourceCoder":
+			return SOURCE_COD.HUFFMAN;
+		}
+		return null;
+	}
+
+	private CHANNEL getChannelSim(String nomeClasse, Simulation simulation) {
+		switch (nomeClasse) {
+		case "channel.CanaleSimmetricoBinario":
+			CanaleSimmetricoBinario ch = (CanaleSimmetricoBinario) simulation.getChannel();
+			switch (ch.getBer()) {
+			case "0.1":
+				return CHANNEL.BSC_01;
+			case "0.01":
+				return CHANNEL.BSC_001;
+			case "0.001":
+				return CHANNEL.BSC_0001;
+			}
+			break;
+		case "channel.GilbertElliot":
+			GilbertElliot ch2 = (GilbertElliot) simulation.getChannel();
+			if (ch2.getType() == GilbertElliot.HARD)
+				return CHANNEL.GE_HARD;
+			else
+				return CHANNEL.GE_SOFT;
+		}
+		return null;
+	}
+
+	private CHAN_COD getChanCodeSim(String nomeClasse, Simulation simulation) {
+		switch (nomeClasse) {
+		case "coders.hamming.HammingChannelCoder":
+			HammingChannelCoder ch = (HammingChannelCoder) simulation.getChannelCoder();
+			switch (ch.getR()) {
+			case 3:
+				return CHAN_COD.HAMM_7_4;
+			case 4:
+				return CHAN_COD.HAMM_15_11;
+			case 5:
+				return CHAN_COD.HAMM_31_26;
+			}
+			break;
+		case "coders.convolutional.ConvolutionalChannelCoder":
+			ConvolutionalChannelCoder ch1 = (ConvolutionalChannelCoder) simulation.getChannelCoder();
+			switch (ch1.getR()) {
+			case 2:
+				switch (ch1.getK()) {
+				case 3:
+					return CHAN_COD.CONV_2_3;
+				case 4:
+					return CHAN_COD.CONV_2_4;
+				case 5:
+					return CHAN_COD.CONV_2_5;
+				case 6:
+					return CHAN_COD.CONV_2_6;
+				case 7:
+					return CHAN_COD.CONV_2_7;
+				}
+				break;
+
+			case 3:
+				switch (ch1.getK()) {
+				case 3:
+					return CHAN_COD.CONV_3_3;
+				case 4:
+					return CHAN_COD.CONV_3_4;
+				case 5:
+					return CHAN_COD.CONV_3_5;
+				case 6:
+					return CHAN_COD.CONV_3_6;
+				case 7:
+					return CHAN_COD.CONV_3_7;
+				}
+				break;
+			}
+			break;
+		case "coders.repetition.ConcatenatedChannelCoder":
+			ConcatenatedChannelCoder ch2 = (ConcatenatedChannelCoder) simulation.getChannelCoder();
+			int[] repLev = ch2.getRep_per_level();
+			if (repLev[0] == 3 && repLev[1] == 3)
+				return CHAN_COD.CONC_3_3;
+			else if (repLev[0] == 3 && repLev[1] == 5)
+				return CHAN_COD.CONC_3_5;
+			else
+				return CHAN_COD.CONC_5_5;
+		case "coders.repetition.RepChannelCoder":
+			RepChannelCoder ch3 = (RepChannelCoder) simulation.getChannelCoder();
+			switch (ch3.getR()) {
+			case 3:
+				return CHAN_COD.RIP_3;
+			case 5:
+				return CHAN_COD.RIP_5;
+			case 7:
+				return CHAN_COD.RIP_7;
+			case 9:
+				return CHAN_COD.RIP_9;
+			}
+			break;
+		}
+		return null;
+	}
+
+	public LinkedList<Double> calcolaRitardiMedi(Simulation sim) {
+		LinkedList<Double> result = new LinkedList<>();
+		SOURCE_COD source_cod = getSourceCodeSim(sim.getSourceCoder().getClass().getName());
+		CHAN_COD chan_cod = getChanCodeSim(sim.getChannelCoder().getClass().getName(), sim);
+
+		long sourceCodeTime = 0;
+		long channelCodeTime = 0;
+		long sendingTime = 0;
+		long sourceDecodeTime = 0;
+		long channelDecodeTime = 0;
+		int resultSetSize = 0;
+		try {
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT * FROM SIMULATIONS WHERE SOURCE_COD = '" + source_cod + "' AND CHAN_COD = '" + chan_cod
+					+ "';";
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				sourceCodeTime += rs.getLong("SOURCE_COD_TIME");
+				channelCodeTime += rs.getLong("CHAN_COD_TIME");
+				sendingTime += rs.getLong("SENDING_TIME");
+				channelDecodeTime += rs.getLong("CHAN_DECODE_TIME");
+				sourceDecodeTime += rs.getLong("SOURCE_DECODE_TIME");
+				resultSetSize++;
+			}
+			System.out.println();
+			rs.close();
+			stmt.close();
+		} catch (SQLException e) {
+			System.err.println(e);
+		}
+
+		result.add(sourceCodeTime / (double) resultSetSize);
+		result.add(channelCodeTime / (double) resultSetSize);
+		result.add(sendingTime / (double) resultSetSize);
+		result.add(channelDecodeTime / (double) resultSetSize);
+		result.add(sourceDecodeTime / (double) resultSetSize);
+
+		System.out.println(result);
+		return result;
+	}
+
+	public HashMap<String, Double> getCompressionRatePerFile(Simulation sim) {
+		HashMap<String, Double> result = new HashMap<>();
+		SOURCE_COD source_cod = getSourceCodeSim(sim.getSourceCoder().getClass().getName());
+
+		try {
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT * FROM SIMULATIONS WHERE SOURCE_COD = '" + source_cod + "';";
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				String fileNameRS = rs.getString("FILENAME");
+				if (!result.containsKey(fileNameRS)) {
+					double compressionRateFile = rs.getDouble("COMPRESSION_RATE");
+					result.put(fileNameRS, compressionRateFile);
+				}
+			}
+			rs.close();
+			stmt.close();
+		} catch (SQLException e) {
+			System.err.println(e);
+		}
+		System.out.println(result);
+		return result;
+	}
+	
+	
+	public HashMap<String, Double> getRecoveryRatePerChannelModel(Simulation sim) {
+		HashMap<String, Double> result = new HashMap<>();
+		
+		HashMap<String , LinkedList<Double>> elements = new HashMap<>();
+		CHAN_COD chan_cod = getChanCodeSim(sim.getChannelCoder().getClass().getName(), sim);
+
+		try {
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT * FROM SIMULATIONS WHERE CHAN_COD = '" + chan_cod + "';";
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				String chanModel = rs.getString("CHANNEL");
+				double recoveryRateChanModel = rs.getDouble("RECOVERY_RATE");
+				if (!elements.containsKey(chanModel)) {
+					LinkedList<Double> values = new LinkedList<>();
+					values.add(recoveryRateChanModel);
+					elements.put(chanModel, values);
+				} else {
+					elements.get(chanModel).add(recoveryRateChanModel);
+				}
+			}
+			rs.close();
+			stmt.close();
+		} catch (SQLException e) {
+			System.err.println(e);
+		}
+		
+		//calcoliamo la media
+		for (Entry<String, LinkedList<Double>> iterable_element : elements.entrySet()) {
+			double tmp = 0D;
+			for (Double elem : iterable_element.getValue()) {
+				tmp += elem;
+			}
+			tmp = tmp/iterable_element.getValue().size();
+			result.put(iterable_element.getKey(), tmp);
+		}
+		
+		System.out.println(result);
+		return result;
+	}
+	
+	
+
+	public void chiudiConn() {
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
 	public static void main(String[] args) {
 
 		GestioneDB db = new GestioneDB();
@@ -228,6 +339,12 @@ public class GestioneDB {
 				new CanaleSimmetricoBinario(0.01), new Statistics(), "Lorem ipsum.txt");
 		s.execute();
 		db.insertSimulation(s);
+
+		db.calcolaRitardiMedi(s);
+		
+		db.getCompressionRatePerFile(s);
+		
+		db.getRecoveryRatePerChannelModel(s);
 
 //		Connection conn = null;
 //		Statement stmt = null;
@@ -610,13 +727,5 @@ public class GestioneDB {
 //		}
 //	}
 //
-//	static void chiudiConn() {
-//		try {
-//			conn.close();
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//
-//	}
 
 }

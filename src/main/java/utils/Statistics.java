@@ -137,5 +137,9 @@ public class Statistics {
     public void setChannelDecodingTime(long channelDecodingTime) {
         this.channelDecodingTime = channelDecodingTime;
     }
+    
+    public long getTotalTime() {
+    	return sourceDecodingTime - initialTime;
+    }
 
 }// Statistics
