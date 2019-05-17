@@ -6,7 +6,12 @@
 package gui;
 
 import com.alee.laf.WebLookAndFeel;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,13 +22,20 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.embed.swing.JFXPanel;
+import javax.imageio.ImageIO;
+import javax.swing.border.Border;
+import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
+import javax.swing.border.EtchedBorder;
+import javax.swing.plaf.basic.BasicBorders;
 import utils.GenericUtils;
-import javax.swing.BorderFactory;
+
 /**
  *
  * @author jonny
@@ -44,6 +56,29 @@ public class ProvaGUI extends javax.swing.JFrame {
             instance = new ProvaGUI();
         }
         return instance;
+    }
+
+    private class MyJPanel extends JPanel {
+
+        private Image image = null;
+
+        public MyJPanel() {
+            super();
+            try {
+                File pathToFile = new File("panel.jpeg");
+                image = ImageIO.read(pathToFile);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+
+            super.paintComponent(g);
+
+            g.drawImage(image, 0, 0, null);
+        }
     }
 
     public JTextArea getInputText() {
@@ -74,7 +109,15 @@ public class ProvaGUI extends javax.swing.JFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
         buttonGroup3 = new javax.swing.ButtonGroup();
-        jPanel1 = new javax.swing.JPanel();
+        jPanel3 = new MyJPanel();
+        jButton2 = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        jRadioButton5 = new javax.swing.JRadioButton();
+        jRadioButton4 = new javax.swing.JRadioButton();
+        jRadioButton6 = new javax.swing.JRadioButton();
+        jLabel2 = new javax.swing.JLabel();
+        inputLable = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
@@ -84,44 +127,37 @@ public class ProvaGUI extends javax.swing.JFrame {
         convLableR = new javax.swing.JLabel();
         convLableK = new javax.swing.JLabel();
         convComboK = new javax.swing.JComboBox<>();
-        jLabel6 = new javax.swing.JLabel();
         ripLableR = new javax.swing.JLabel();
         ripComboR = new javax.swing.JComboBox<>();
         concCombo = new javax.swing.JComboBox<>();
         hamLableR = new javax.swing.JLabel();
         hamComboR = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        jPanel4 = new javax.swing.JPanel();
-        jRadioButton5 = new javax.swing.JRadioButton();
-        jRadioButton4 = new javax.swing.JRadioButton();
-        jRadioButton6 = new javax.swing.JRadioButton();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        inputLable = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jRadioButton8 = new javax.swing.JRadioButton();
         jRadioButton9 = new javax.swing.JRadioButton();
-        jButton1 = new javax.swing.JButton();
         sbcLable = new javax.swing.JLabel();
-        geLable = new javax.swing.JLabel();
         sbcCombo = new javax.swing.JComboBox<>();
         geCombo = new javax.swing.JComboBox<>();
+        geLable = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         UIManager.getLookAndFeelDefaults().put("nimbusOrange", new Color(107, 255, 151));
         progressBar = new javax.swing.JProgressBar();
+        jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         inputText = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         sourceText = new javax.swing.JTextArea();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        outputText = new javax.swing.JTextArea();
         statPanel = new javax.swing.JPanel();
         comprFactorButton = new javax.swing.JButton();
         showErrButton = new javax.swing.JButton();
         timeSlices = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        outputText = new javax.swing.JTextArea();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         buttonGroup1.add(jRadioButton1);
         buttonGroup1.add(jRadioButton2);
@@ -137,7 +173,89 @@ public class ProvaGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(153, 153, 153), new java.awt.Color(204, 204, 204), new java.awt.Color(204, 204, 204), new java.awt.Color(153, 153, 153)));
+
+        jButton2.setText("Apri File");
+        jButton2.setOpaque(false);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jPanel4.setOpaque(false);
+
+        jRadioButton5.setText("Lempel-Ziv Welch");
+        jRadioButton5.setOpaque(false);
+        jRadioButton5.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jRadioButton5ItemStateChanged(evt);
+            }
+        });
+        jRadioButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton5ActionPerformed(evt);
+            }
+        });
+
+        jRadioButton4.setText("Huffman");
+        jRadioButton4.setOpaque(false);
+        jRadioButton4.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jRadioButton4ItemStateChanged(evt);
+            }
+        });
+
+        jRadioButton6.setText("Deflate");
+        jRadioButton6.setOpaque(false);
+        jRadioButton6.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jRadioButton6ItemStateChanged(evt);
+            }
+        });
+
+        jLabel2.setText("Codifica di sorgente");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jRadioButton5)
+                            .addComponent(jRadioButton6)
+                            .addComponent(jRadioButton4)))
+                    .addComponent(jLabel2))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addComponent(jLabel2)
+                .addGap(7, 7, 7)
+                .addComponent(jRadioButton4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jRadioButton5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jRadioButton6)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jButton3.setText("Input manuale");
+        jButton3.setOpaque(false);
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jPanel2.setOpaque(false);
+
         jRadioButton1.setText("Convoluzionale");
+        jRadioButton1.setOpaque(false);
         jRadioButton1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jRadioButton1ItemStateChanged(evt);
@@ -150,6 +268,7 @@ public class ProvaGUI extends javax.swing.JFrame {
         });
 
         jRadioButton2.setText("Ripetizione");
+        jRadioButton2.setOpaque(false);
         jRadioButton2.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jRadioButton2ItemStateChanged(evt);
@@ -157,6 +276,7 @@ public class ProvaGUI extends javax.swing.JFrame {
         });
 
         jRadioButton3.setText("Concatenato");
+        jRadioButton3.setOpaque(false);
         jRadioButton3.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jRadioButton3ItemStateChanged(evt);
@@ -164,6 +284,7 @@ public class ProvaGUI extends javax.swing.JFrame {
         });
 
         jRadioButton7.setText("Hamming");
+        jRadioButton7.setOpaque(false);
         jRadioButton7.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jRadioButton7ItemStateChanged(evt);
@@ -172,6 +293,7 @@ public class ProvaGUI extends javax.swing.JFrame {
 
         convComboR.setModel(new javax.swing.DefaultComboBoxModel<>(new Integer[] { 2, 3 }));
         convComboR.setEnabled(false);
+        convComboR.setOpaque(false);
         convComboR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 convComboRActionPerformed(evt);
@@ -186,19 +308,19 @@ public class ProvaGUI extends javax.swing.JFrame {
 
         convComboK.setModel(new javax.swing.DefaultComboBoxModel<>(new Integer[] { 3, 4, 5, 6, 7 }));
         convComboK.setEnabled(false);
+        convComboK.setOpaque(false);
         convComboK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 convComboKActionPerformed(evt);
             }
         });
 
-        jLabel6.setText("Scegli algoritmo:");
-
         ripLableR.setText("R:");
         ripLableR.setEnabled(false);
 
         ripComboR.setModel(new javax.swing.DefaultComboBoxModel<>(new Integer[] { 3, 5, 7, 9 }));
         ripComboR.setEnabled(false);
+        ripComboR.setOpaque(false);
         ripComboR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ripComboRActionPerformed(evt);
@@ -207,6 +329,7 @@ public class ProvaGUI extends javax.swing.JFrame {
 
         concCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "[3, 3]", "[3, 5]", "[5, 5]" }));
         concCombo.setEnabled(false);
+        concCombo.setOpaque(false);
         concCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 concComboActionPerformed(evt);
@@ -218,19 +341,19 @@ public class ProvaGUI extends javax.swing.JFrame {
 
         hamComboR.setModel(new javax.swing.DefaultComboBoxModel<>(new Integer[] { 3, 4, 5 }));
         hamComboR.setEnabled(false);
+        hamComboR.setOpaque(false);
         hamComboR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hamComboRActionPerformed(evt);
             }
         });
 
+        jLabel1.setText("Codifica di canale");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel6)
-                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -258,11 +381,14 @@ public class ProvaGUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(hamComboR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel6)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jRadioButton1)
@@ -284,100 +410,99 @@ public class ProvaGUI extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jRadioButton3)
                     .addComponent(concCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel1.setText("Codifica di canale");
+        jPanel6.setOpaque(false);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addContainerGap(44, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        jLabel3.setText("Modello di errore");
 
-        jButton2.setText("Apri File");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jRadioButton8.setText("Canale simmetrico binario");
+        jRadioButton8.setOpaque(false);
+        jRadioButton8.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jRadioButton8ItemStateChanged(evt);
+            }
+        });
+
+        jRadioButton9.setText("Gilbert-Elliot");
+        jRadioButton9.setOpaque(false);
+        jRadioButton9.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jRadioButton9ItemStateChanged(evt);
+            }
+        });
+
+        sbcLable.setText("BER:");
+        sbcLable.setEnabled(false);
+
+        sbcCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new Double[] { 0.001,0.01,0.1 }));
+        sbcCombo.setEnabled(false);
+        sbcCombo.setOpaque(false);
+        sbcCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                sbcComboActionPerformed(evt);
             }
         });
 
-        jRadioButton5.setText("Lempel-Ziv Welch");
-        jRadioButton5.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jRadioButton5ItemStateChanged(evt);
-            }
-        });
-        jRadioButton5.addActionListener(new java.awt.event.ActionListener() {
+        geCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Soft", "Hard"}));
+        geCombo.setEnabled(false);
+        geCombo.setOpaque(false);
+        geCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton5ActionPerformed(evt);
+                geComboActionPerformed(evt);
             }
         });
 
-        jRadioButton4.setText("Huffman");
-        jRadioButton4.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jRadioButton4ItemStateChanged(evt);
-            }
-        });
+        geLable.setText("Type:");
+        geLable.setEnabled(false);
 
-        jRadioButton6.setText("Deflate");
-        jRadioButton6.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jRadioButton6ItemStateChanged(evt);
-            }
-        });
-
-        jLabel5.setText("Scegli algoritmo:");
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jRadioButton5)
-                            .addComponent(jRadioButton6)
-                            .addComponent(jRadioButton4))))
-                .addGap(0, 111, Short.MAX_VALUE))
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addComponent(jRadioButton9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(geLable))
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addComponent(jRadioButton8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(sbcLable)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(sbcCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(geCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel3))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addComponent(jLabel5)
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jRadioButton4)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRadioButton8)
+                    .addComponent(sbcLable)
+                    .addComponent(sbcCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton6)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRadioButton9)
+                    .addComponent(geLable)
+                    .addComponent(geCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        jLabel2.setText("Codifica di sorgente");
-
-        jButton3.setText("Input manuale");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        jButton1.setText("Start!");
+        jButton1.setOpaque(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -388,15 +513,23 @@ public class ProvaGUI extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButton2)
-                        .addGap(4, 4, 4)
-                        .addComponent(jButton3)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jButton2)
+                                .addGap(4, 4, 4)
+                                .addComponent(jButton3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(inputLable))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 38, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(inputLable)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jButton1)))
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -405,107 +538,16 @@ public class ProvaGUI extends javax.swing.JFrame {
                     .addComponent(jButton2)
                     .addComponent(inputLable)
                     .addComponent(jButton3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
-        jLabel3.setText("Modello di errore");
-
-        jRadioButton8.setText("Canale simmetrico binario");
-        jRadioButton8.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jRadioButton8ItemStateChanged(evt);
-            }
-        });
-
-        jRadioButton9.setText("Gilbert-Elliot");
-        jRadioButton9.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jRadioButton9ItemStateChanged(evt);
-            }
-        });
-
-        jButton1.setText("Start!");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        sbcLable.setText("BER:");
-        sbcLable.setEnabled(false);
-
-        geLable.setText("Type:");
-        geLable.setEnabled(false);
-
-        sbcCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new Double[] { 0.001,0.01,0.1 }));
-        sbcCombo.setEnabled(false);
-        sbcCombo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sbcComboActionPerformed(evt);
-            }
-        });
-
-        geCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Soft", "Hard"}));
-        geCombo.setEnabled(false);
-        geCombo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                geComboActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel5Layout.createSequentialGroup()
-                                        .addComponent(jRadioButton9)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(geLable))
-                                    .addGroup(jPanel5Layout.createSequentialGroup()
-                                        .addComponent(jRadioButton8)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(sbcLable)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(sbcCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(geCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jLabel3))
-                        .addGap(0, 52, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1)))
-                .addContainerGap())
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton8)
-                    .addComponent(sbcLable)
-                    .addComponent(sbcCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton9)
-                    .addComponent(geLable)
-                    .addComponent(geCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGap(26, 26, 26)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -522,13 +564,6 @@ public class ProvaGUI extends javax.swing.JFrame {
         sourceText.setText("Input sorgente:");
         sourceText.setEnabled(false);
         jScrollPane2.setViewportView(sourceText);
-        sourceText.setEditable(false);
-
-        outputText.setColumns(20);
-        outputText.setRows(5);
-        outputText.setText("Output decodifica:");
-        outputText.setEnabled(false);
-        jScrollPane3.setViewportView(outputText);
         sourceText.setEditable(false);
 
         comprFactorButton.setText("Mostra fattore di compressione");
@@ -565,7 +600,7 @@ public class ProvaGUI extends javax.swing.JFrame {
                     .addComponent(comprFactorButton)
                     .addComponent(showErrButton)
                     .addComponent(timeSlices))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(222, Short.MAX_VALUE))
         );
         statPanelLayout.setVerticalGroup(
             statPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -576,7 +611,56 @@ public class ProvaGUI extends javax.swing.JFrame {
                 .addComponent(showErrButton)
                 .addGap(18, 18, 18)
                 .addComponent(timeSlices)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(259, Short.MAX_VALUE))
+        );
+
+        outputText.setColumns(20);
+        outputText.setRows(5);
+        outputText.setText("Output decodifica:");
+        outputText.setEnabled(false);
+        jScrollPane3.setViewportView(outputText);
+        sourceText.setEditable(false);
+
+        jLabel4.setText("Statistiche:");
+
+        jLabel5.setText("Input sorgente:");
+
+        jLabel6.setText("Output decodifica:");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(statPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(4, 4, 4)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane3))
+                    .addComponent(statPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -584,41 +668,17 @@ public class ProvaGUI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
-                    .addComponent(statPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
-                .addContainerGap())
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1)
-                            .addComponent(jScrollPane2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3)
-                            .addComponent(statPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
+
+        //jPanel3.setBorder(new RoundedBorder(10, Color.GRAY));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -658,67 +718,6 @@ public class ProvaGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jRadioButton5ActionPerformed
 
-    private void jRadioButton1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRadioButton1StateChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton1StateChanged
-
-    private void jRadioButton1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton1ItemStateChanged
-        if (evt.getStateChange() == ItemEvent.SELECTED) {
-            convLableR.setEnabled(true);
-            convLableK.setEnabled(true);
-            convComboR.setEnabled(true);
-            convComboK.setEnabled(true);
-            GUIHelper.getInstance().setChannel(GUIHelper.Channel.CONVOLUTIONAL);
-        } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
-            convLableR.setEnabled(false);
-            convLableK.setEnabled(false);
-            convComboR.setEnabled(false);
-            convComboK.setEnabled(false);
-        }
-    }//GEN-LAST:event_jRadioButton1ItemStateChanged
-
-    private void jRadioButton2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton2ItemStateChanged
-        if (evt.getStateChange() == ItemEvent.SELECTED) {
-            ripComboR.setEnabled(true);
-            ripLableR.setEnabled(true);
-            GUIHelper.getInstance().setChannel(GUIHelper.Channel.REPETITION);
-        } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
-            ripComboR.setEnabled(false);
-            ripLableR.setEnabled(false);
-        }
-    }//GEN-LAST:event_jRadioButton2ItemStateChanged
-
-    private void jRadioButton3ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton3ItemStateChanged
-        if (evt.getStateChange() == ItemEvent.SELECTED) {
-            concCombo.setEnabled(true);
-            GUIHelper.getInstance().setChannel(GUIHelper.Channel.CONCATENATED);
-        } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
-            concCombo.setEnabled(false);
-        }
-    }//GEN-LAST:event_jRadioButton3ItemStateChanged
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-        Runnable start = () -> {
-            try {
-                jButton1.setEnabled(false);
-                GUIHelper.getInstance().run();
-                inputText.setEnabled(true);
-                outputText.setEnabled(true);
-                showErrButton.setEnabled(true);
-                comprFactorButton.setEnabled(true);
-                timeSlices.setEnabled(true);
-                jButton1.setEnabled(true);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(rootPane, "Errore");
-                jButton1.setEnabled(true);
-            }
-        };
-        Thread t = new Thread(start);
-        t.start();
-
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void jRadioButton4ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton4ItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             GUIHelper.getInstance().setSource(GUIHelper.Source.HUFFMAN);
@@ -739,79 +738,6 @@ public class ProvaGUI extends javax.swing.JFrame {
         } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
         }
     }//GEN-LAST:event_jRadioButton6ItemStateChanged
-
-    private void jRadioButton7ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton7ItemStateChanged
-        if (evt.getStateChange() == ItemEvent.SELECTED) {
-            hamLableR.setEnabled(true);
-            hamComboR.setEnabled(true);
-            GUIHelper.getInstance().setChannel(GUIHelper.Channel.HAMMING);
-        } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
-            hamLableR.setEnabled(false);
-            hamComboR.setEnabled(false);
-        }
-    }//GEN-LAST:event_jRadioButton7ItemStateChanged
-
-    private void jRadioButton8ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton8ItemStateChanged
-        if (evt.getStateChange() == ItemEvent.SELECTED) {
-            sbcLable.setEnabled(true);
-            sbcCombo.setEnabled(true);
-            GUIHelper.getInstance().setError(GUIHelper.Error.SBC);
-        } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
-            sbcLable.setEnabled(false);
-            sbcCombo.setEnabled(false);
-        }
-    }//GEN-LAST:event_jRadioButton8ItemStateChanged
-
-    private void jRadioButton9ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton9ItemStateChanged
-        if (evt.getStateChange() == ItemEvent.SELECTED) {
-            geLable.setEnabled(true);
-            geCombo.setEnabled(true);
-            GUIHelper.getInstance().setError(GUIHelper.Error.G_E);
-        } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
-            geLable.setEnabled(false);
-            geCombo.setEnabled(false);
-        }
-    }//GEN-LAST:event_jRadioButton9ItemStateChanged
-
-    private void ripComboRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ripComboRActionPerformed
-        int r = (Integer) ripComboR.getSelectedItem();
-        GUIHelper.getInstance().setRepR(r);
-    }//GEN-LAST:event_ripComboRActionPerformed
-
-    private void concComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_concComboActionPerformed
-        String s = (String) concCombo.getSelectedItem();
-        String[] vals = s.substring(1, 5).split(", ");
-        int[] reps = {Integer.parseInt(vals[0]), Integer.parseInt(vals[1])};
-        GUIHelper.getInstance().setConcR(reps);
-    }//GEN-LAST:event_concComboActionPerformed
-
-    private void convComboRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_convComboRActionPerformed
-        int r = (Integer) convComboR.getSelectedItem();
-        GUIHelper.getInstance().setConvR(r);
-    }//GEN-LAST:event_convComboRActionPerformed
-
-    private void convComboKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_convComboKActionPerformed
-        int k = (Integer) convComboK.getSelectedItem();
-        GUIHelper.getInstance().setConvK(k);
-    }//GEN-LAST:event_convComboKActionPerformed
-
-    private void hamComboRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hamComboRActionPerformed
-        int r = (Integer) hamComboR.getSelectedItem();
-        GUIHelper.getInstance().setRepH(r);
-    }//GEN-LAST:event_hamComboRActionPerformed
-
-    private void sbcComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sbcComboActionPerformed
-        double ber = (Double) sbcCombo.getSelectedItem();
-        GUIHelper.getInstance().setBer(ber);
-    }//GEN-LAST:event_sbcComboActionPerformed
-
-    private void geComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_geComboActionPerformed
-        String type = (String) geCombo.getSelectedItem();
-        if (type.equals("Soft"))
-            GUIHelper.getInstance().setG_eType(0);
-        else
-            GUIHelper.getInstance().setG_eType(1);
-    }//GEN-LAST:event_geComboActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         String input = JOptionPane.showInputDialog("Inserisci testo");
@@ -836,6 +762,139 @@ public class ProvaGUI extends javax.swing.JFrame {
         GUIHelper.getInstance().showTimeSlices();
     }//GEN-LAST:event_timeSlicesActionPerformed
 
+    private void hamComboRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hamComboRActionPerformed
+        int r = (Integer) hamComboR.getSelectedItem();
+        GUIHelper.getInstance().setRepH(r);
+    }//GEN-LAST:event_hamComboRActionPerformed
+
+    private void concComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_concComboActionPerformed
+        String s = (String) concCombo.getSelectedItem();
+        String[] vals = s.substring(1, 5).split(", ");
+        int[] reps = {Integer.parseInt(vals[0]), Integer.parseInt(vals[1])};
+        GUIHelper.getInstance().setConcR(reps);
+    }//GEN-LAST:event_concComboActionPerformed
+
+    private void ripComboRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ripComboRActionPerformed
+        int r = (Integer) ripComboR.getSelectedItem();
+        GUIHelper.getInstance().setRepR(r);
+    }//GEN-LAST:event_ripComboRActionPerformed
+
+    private void convComboKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_convComboKActionPerformed
+        int k = (Integer) convComboK.getSelectedItem();
+        GUIHelper.getInstance().setConvK(k);
+    }//GEN-LAST:event_convComboKActionPerformed
+
+    private void convComboRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_convComboRActionPerformed
+        int r = (Integer) convComboR.getSelectedItem();
+        GUIHelper.getInstance().setConvR(r);
+    }//GEN-LAST:event_convComboRActionPerformed
+
+    private void jRadioButton7ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton7ItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            hamLableR.setEnabled(true);
+            hamComboR.setEnabled(true);
+            GUIHelper.getInstance().setChannel(GUIHelper.Channel.HAMMING);
+        } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
+            hamLableR.setEnabled(false);
+            hamComboR.setEnabled(false);
+        }
+    }//GEN-LAST:event_jRadioButton7ItemStateChanged
+
+    private void jRadioButton3ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton3ItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            concCombo.setEnabled(true);
+            GUIHelper.getInstance().setChannel(GUIHelper.Channel.CONCATENATED);
+        } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
+            concCombo.setEnabled(false);
+        }
+    }//GEN-LAST:event_jRadioButton3ItemStateChanged
+
+    private void jRadioButton2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton2ItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            ripComboR.setEnabled(true);
+            ripLableR.setEnabled(true);
+            GUIHelper.getInstance().setChannel(GUIHelper.Channel.REPETITION);
+        } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
+            ripComboR.setEnabled(false);
+            ripLableR.setEnabled(false);
+        }
+    }//GEN-LAST:event_jRadioButton2ItemStateChanged
+
+    private void jRadioButton1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRadioButton1StateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton1StateChanged
+
+    private void jRadioButton1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton1ItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            convLableR.setEnabled(true);
+            convLableK.setEnabled(true);
+            convComboR.setEnabled(true);
+            convComboK.setEnabled(true);
+            GUIHelper.getInstance().setChannel(GUIHelper.Channel.CONVOLUTIONAL);
+        } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
+            convLableR.setEnabled(false);
+            convLableK.setEnabled(false);
+            convComboR.setEnabled(false);
+            convComboK.setEnabled(false);
+        }
+    }//GEN-LAST:event_jRadioButton1ItemStateChanged
+
+    private void geComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_geComboActionPerformed
+        String type = (String) geCombo.getSelectedItem();
+        if (type.equals("Soft"))
+            GUIHelper.getInstance().setG_eType(0);
+        else
+            GUIHelper.getInstance().setG_eType(1);
+    }//GEN-LAST:event_geComboActionPerformed
+
+    private void sbcComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sbcComboActionPerformed
+        double ber = (Double) sbcCombo.getSelectedItem();
+        GUIHelper.getInstance().setBer(ber);
+    }//GEN-LAST:event_sbcComboActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+        Runnable start = () -> {
+            try {
+                jButton1.setEnabled(false);
+                GUIHelper.getInstance().run();
+                inputText.setEnabled(true);
+                outputText.setEnabled(true);
+                showErrButton.setEnabled(true);
+                comprFactorButton.setEnabled(true);
+                timeSlices.setEnabled(true);
+                jButton1.setEnabled(true);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(rootPane, "Errore");
+                jButton1.setEnabled(true);
+            }
+        };
+        Thread t = new Thread(start);
+        t.start();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jRadioButton9ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton9ItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            geLable.setEnabled(true);
+            geCombo.setEnabled(true);
+            GUIHelper.getInstance().setError(GUIHelper.Error.G_E);
+        } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
+            geLable.setEnabled(false);
+            geCombo.setEnabled(false);
+        }
+    }//GEN-LAST:event_jRadioButton9ItemStateChanged
+
+    private void jRadioButton8ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton8ItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            sbcLable.setEnabled(true);
+            sbcCombo.setEnabled(true);
+            GUIHelper.getInstance().setError(GUIHelper.Error.SBC);
+        } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
+            sbcLable.setEnabled(false);
+            sbcCombo.setEnabled(false);
+        }
+    }//GEN-LAST:event_jRadioButton8ItemStateChanged
+
     /**
      * @param args the command line arguments
      */
@@ -845,22 +904,22 @@ public class ProvaGUI extends javax.swing.JFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(ProvaGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(ProvaGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(ProvaGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(ProvaGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Windows".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }//javax.swing.UIManager.setLookAndFeel(new MaterialLookAndFeel());
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(ProvaGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ProvaGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(ProvaGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ProvaGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
         //</editor-fold>
         WebLookAndFeel.install();
         /* Create and display the form */
@@ -893,13 +952,14 @@ public class ProvaGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JRadioButton jRadioButton3;
