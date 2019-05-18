@@ -185,6 +185,7 @@ public class ViterbiDecoder {
 		TrellisNode finalNodeCandidate = null;
 		for (TrellisNode node : finalLevelNodes) {
 //			System.out.println("Node: "+node+" PM finale: "+node.getPathMetric());
+			//System.perrex.out();
 			int nodePM = node.getPathMetric();
 			if (nodePM < bestPathMetric) {
 				bestPathMetric = nodePM;
