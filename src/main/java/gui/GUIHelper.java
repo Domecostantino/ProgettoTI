@@ -84,7 +84,6 @@ public class GUIHelper {
         for (Map.Entry<String, Double> e : diz.entrySet()) {
             dataset.setValue(e.getValue(), e.getKey(), "");
         }
-        GestioneDB.SOURCE_COD source_cod = db.getSourceCodeSim(simulation.getSourceCoder().getClass().getName());
         GestioneDB.CHAN_COD chan_cod = db.getChanCodeSim(simulation.getChannelCoder().getClass().getName(), simulation);
         JFreeChart chart = ChartFactory.createBarChart3D("Recovery rate medio per modello di canale\ncodificatore di canale: " + chan_cod, "", "Rate", dataset);
 
@@ -106,8 +105,9 @@ public class GUIHelper {
         for (Map.Entry<String, Double> e : diz.entrySet()) {
             dataset.setValue(e.getValue(), e.getKey(), "");
         }
+        GestioneDB.SOURCE_COD source_cod = db.getSourceCodeSim(simulation.getSourceCoder().getClass().getName());
 
-        JFreeChart chart = ChartFactory.createBarChart3D("Compression rate per file", "", "Rate", dataset);
+        JFreeChart chart = ChartFactory.createBarChart3D("Compression rate per file\n"+"codificatore di sorgente: "+source_cod, "", "Rate", dataset);
 
         // we put the chart into a panel
         ChartPanel chartPanel = new ChartPanel(chart);
@@ -389,8 +389,7 @@ public class GUIHelper {
         stat = new Statistics();
         simulation = new Simulation(scoder, ccoder, errorModel, stat, file.getName());
         simulation.execute();
-        ProvaGUI.getInstance().getInputText().append("\n---------------------------------------------------------------");
-        ProvaGUI.getInstance().getInputText().append("\nRitardo: " + stat.getTotalTime() + " ms");
+        ProvaGUI.getInstance().getInputText().append("Ritardo: " + stat.getTotalTime() + " ms");
         ProvaGUI.getInstance().getInputText().append("\nritardo cod sorg: " + stat.getSourceCodingTime() + " ms");
         ProvaGUI.getInstance().getInputText().append("\nritardo cod canale: " + stat.getChannelCodingTime() + " ms");
         ProvaGUI.getInstance().getInputText().append("\nritardo di invio: " + stat.getSendingTime() + " ms");
@@ -403,7 +402,8 @@ public class GUIHelper {
 
         ProvaGUI.getInstance().getInputText().append("\nerror rate cod canale " + stat.getChannelDecodingErrorRate() + " %");
         ProvaGUI.getInstance().getInputText().append("\nerror rate canale solo cod sorgente " + stat.getOnlySourceCodeChannelErrorRate() + " %");
-        ProvaGUI.getInstance().getInputText().append("\nrecovery rate del codificatore di canale " + stat.getErrorRecoveryRate() + " %\n");
+        ProvaGUI.getInstance().getInputText().append("\nrecovery rate del codificatore di canale " + stat.getErrorRecoveryRate() );
+        ProvaGUI.getInstance().getInputText().append("\n---------------------------------------------------------------\n\n");
 
         //Inserimento valori nel DB
         db.insertSimulation(simulation);
