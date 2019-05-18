@@ -312,7 +312,7 @@ public class GUIHelper {
 
     public void setFile(File file) {
         this.file = file;
-        JTextArea source = ProvaGUI.getInstance().getSourceText();
+        JTextArea source = GUI.getInstance().getSourceText();
         source.setText(GenericUtils.readFile(file.getAbsolutePath(), StandardCharsets.UTF_8));
         //List<Pair<Integer, Integer>> indexes = new LinkedList<>();
         //indexes.add(new Pair(0, 5));
@@ -435,32 +435,32 @@ public class GUIHelper {
         stat = new Statistics();
         simulation = new Simulation(scoder, ccoder, errorModel, stat, file.getName());
         simulation.execute();
-        ProvaGUI.getInstance().getInputText().append("Ritardo: " + stat.getTotalTime() + " ms");
-        ProvaGUI.getInstance().getInputText().append("\nritardo cod sorg: " + stat.getSourceCodingTime() + " ms");
-        ProvaGUI.getInstance().getInputText().append("\nritardo cod canale: " + stat.getChannelCodingTime() + " ms");
-        ProvaGUI.getInstance().getInputText().append("\nritardo di invio: " + stat.getSendingTime() + " ms");
-        ProvaGUI.getInstance().getInputText().append("\nritardo decod canale: " + stat.getChannelDecodingTime() + " ms");
-        ProvaGUI.getInstance().getInputText().append("\nritardo decod sorg: " + stat.getSourceDecodingTime() + " ms");
+        GUI.getInstance().getInputText().append("Ritardo: " + stat.getTotalTime() + " ms");
+        GUI.getInstance().getInputText().append("\nritardo cod sorg: " + stat.getSourceCodingTime() + " ms");
+        GUI.getInstance().getInputText().append("\nritardo cod canale: " + stat.getChannelCodingTime() + " ms");
+        GUI.getInstance().getInputText().append("\nritardo di invio: " + stat.getSendingTime() + " ms");
+        GUI.getInstance().getInputText().append("\nritardo decod canale: " + stat.getChannelDecodingTime() + " ms");
+        GUI.getInstance().getInputText().append("\nritardo decod sorg: " + stat.getSourceDecodingTime() + " ms");
 
-        ProvaGUI.getInstance().getInputText().append("\n\ndimensione file iniziale " + stat.getInitialSize() + " byte");
-        ProvaGUI.getInstance().getInputText().append("\ndimensione file compressioneSorgente " + stat.getSourceCodeSize() + " byte");
-        ProvaGUI.getInstance().getInputText().append("\ncompression rate: " + stat.getCompressionRate() + "\n");
+        GUI.getInstance().getInputText().append("\n\ndimensione file iniziale " + stat.getInitialSize() + " byte");
+        GUI.getInstance().getInputText().append("\ndimensione file compressioneSorgente " + stat.getSourceCodeSize() + " byte");
+        GUI.getInstance().getInputText().append("\ncompression rate: " + stat.getCompressionRate() + "\n");
 
-        ProvaGUI.getInstance().getInputText().append("\nerror rate cod canale " + stat.getChannelDecodingErrorRate() + " %");
-        ProvaGUI.getInstance().getInputText().append("\nerror rate canale solo cod sorgente " + stat.getOnlySourceCodeChannelErrorRate() + " %");
-        ProvaGUI.getInstance().getInputText().append("\nrecovery rate del codificatore di canale " + stat.getErrorRecoveryRate() );
-        ProvaGUI.getInstance().getInputText().append("\n---------------------------------------------------------------\n\n");
+        GUI.getInstance().getInputText().append("\nerror rate cod canale " + stat.getChannelDecodingErrorRate() + " %");
+        GUI.getInstance().getInputText().append("\nerror rate canale solo cod sorgente " + stat.getOnlySourceCodeChannelErrorRate() + " %");
+        GUI.getInstance().getInputText().append("\nrecovery rate del codificatore di canale " + stat.getErrorRecoveryRate() );
+        GUI.getInstance().getInputText().append("\n---------------------------------------------------------------\n\n");
 
         //Inserimento valori nel DB
         db.insertSimulation(simulation);
 
-        JTextArea output = ProvaGUI.getInstance().getOutputText();
+        JTextArea output = GUI.getInstance().getOutputText();
         String outString = GenericUtils.readFile(Simulation.outputPath(file.getAbsolutePath()), StandardCharsets.UTF_8);
         output.setText(outString);
         output.setEditable(false);
         String inString = GenericUtils.readFile(file.getAbsolutePath(), StandardCharsets.UTF_8);
         highlight(output, findDifferences(inString, outString), new Color(0.9f, 0.1f, 0f, 0.1f));
-        highlight(ProvaGUI.getInstance().getSourceText(), findDifferences(outString, inString), new Color(0f, 0.7f, 0.3f, 0.2f));
+        highlight(GUI.getInstance().getSourceText(), findDifferences(outString, inString), new Color(0f, 0.7f, 0.3f, 0.2f));
     }
 
 }

@@ -16,7 +16,7 @@ import coders.hamming.HammingChannelCoder;
 import coders.huffman.HuffmanSourceCoder;
 import coders.repetition.ConcatenatedChannelCoder;
 import coders.repetition.RepChannelCoder;
-import gui.ProvaGUI;
+import gui.GUI;
 import utils.GenericUtils;
 import utils.MyBitSet;
 import utils.Statistics;
@@ -54,26 +54,26 @@ public class Simulation {
         statistics.setInitialTime(System.currentTimeMillis());
         sourceCoder.encode(fileInputPath, sourceCode);
         statistics.setSourceCodingTime(System.currentTimeMillis());
-        ProvaGUI.getInstance().getProgressBar().setValue(1);
+        GUI.getInstance().getProgressBar().setValue(1);
         
         ChannelMessage mess = GenericUtils.getChannelMessage(sourceCode);
         MyBitSet b = channelCoder.encode(mess);
         statistics.setChannelCodingTime(System.currentTimeMillis());
-        ProvaGUI.getInstance().getProgressBar().setValue(2);
+        GUI.getInstance().getProgressBar().setValue(2);
         
         
         //invio su canale
         MyBitSet corruptedBits = channel.send(b);
-        ProvaGUI.getInstance().getProgressBar().setValue(3);
+        GUI.getInstance().getProgressBar().setValue(3);
         statistics.setSendingTime(System.currentTimeMillis());
         //decodifica
         channelCoder.decode(corruptedBits, mess);
         statistics.setChannelDecodingTime(System.currentTimeMillis());
         GenericUtils.writeChannelMessage(mess, sourceCode + "2");
-        ProvaGUI.getInstance().getProgressBar().setValue(4);
+        GUI.getInstance().getProgressBar().setValue(4);
         sourceCoder.decode(sourceCode + "2", fileOutput);
         statistics.setSourceDecodingTime(System.currentTimeMillis());
-        ProvaGUI.getInstance().getProgressBar().setValue(5);
+        GUI.getInstance().getProgressBar().setValue(5);
         
         
         //dati utili alle statistiche (compressione e errorRate)
