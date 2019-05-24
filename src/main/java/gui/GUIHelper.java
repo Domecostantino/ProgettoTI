@@ -70,7 +70,7 @@ public class GUIHelper {
     private Statistics stat;
     private GestioneDB db = new GestioneDB();
     private Simulation simulation;
-    
+
     private static final Map<String, String> NAMES_MAP = createMap();
 
     private static Map<String, String> createMap() {
@@ -100,7 +100,6 @@ public class GUIHelper {
         result.put(CHAN_COD.CONV_3_7.toString(), "CONVOLUZIONALE R=3 K=7");
         return Collections.unmodifiableMap(result);
     }
-    
 
     private GUIHelper() {
     }
@@ -120,7 +119,7 @@ public class GUIHelper {
             dataset.setValue(e.getValue(), e.getKey(), "");
         }
         GestioneDB.CHAN_COD chan_cod = db.getChanCodeSim(simulation.getChannelCoder().getClass().getName(), simulation);
-        JFreeChart chart = ChartFactory.createBarChart3D("Recovery rate medio per modello di canale\nCod di canale: " +NAMES_MAP.get(chan_cod.toString()), "", "Rate", dataset);
+        JFreeChart chart = ChartFactory.createBarChart3D("Recovery rate medio per modello di canale\nCod di canale: " + NAMES_MAP.get(chan_cod.toString()), "", "Rate", dataset);
 
         // we put the chart into a panel
         ChartPanel chartPanel = new ChartPanel(chart);
@@ -142,7 +141,7 @@ public class GUIHelper {
         }
         GestioneDB.SOURCE_COD source_cod = db.getSourceCodeSim(simulation.getSourceCoder().getClass().getName());
 
-        JFreeChart chart = ChartFactory.createBarChart3D("Compression rate per file\n"+"Cod di sorgente: "+NAMES_MAP.get(source_cod.toString()), "", "Rate", dataset);
+        JFreeChart chart = ChartFactory.createBarChart3D("Compression rate per file\n" + "Cod di sorgente: " + NAMES_MAP.get(source_cod.toString()), "", "Rate", dataset);
 
         // we put the chart into a panel
         ChartPanel chartPanel = new ChartPanel(chart);
@@ -163,12 +162,12 @@ public class GUIHelper {
         dataset.setValue("Tempo di invio", list.get(2));
         dataset.setValue("Decodifica di canale", list.get(3));
         dataset.setValue("Decodifica di sorgente", list.get(4));
-        
+
         GestioneDB.CHAN_COD chan_cod = db.getChanCodeSim(simulation.getChannelCoder().getClass().getName(), simulation);
         GestioneDB.SOURCE_COD source_cod = db.getSourceCodeSim(simulation.getSourceCoder().getClass().getName());
-        
+
         JFreeChart chart = ChartFactory.createPieChart3D(
-                "Tempi degli step di simulazione\nCod di sorgente: "+NAMES_MAP.get(source_cod.toString())+", Cod di canale: "+NAMES_MAP.get(chan_cod.toString()), // chart title
+                "Tempi degli step di simulazione\nCod di sorgente: " + NAMES_MAP.get(source_cod.toString()) + ", Cod di canale: " + NAMES_MAP.get(chan_cod.toString()), // chart title
                 dataset, // data
                 true, // include legend
                 true,
@@ -194,9 +193,9 @@ public class GUIHelper {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         dataset.setValue(stat.getInitialSize(), "Dimensione input", "");
         dataset.setValue(stat.getSourceCodeSize(), "Dimensione codifica", "");
-        
+
         GestioneDB.SOURCE_COD source_cod = db.getSourceCodeSim(simulation.getSourceCoder().getClass().getName());
-        JFreeChart chart = ChartFactory.createBarChart3D("Compressione\n"+NAMES_MAP.get(source_cod.toString()), "", "Dimensione", dataset);
+        JFreeChart chart = ChartFactory.createBarChart3D("Compressione\n" + NAMES_MAP.get(source_cod.toString()), "", "Dimensione", dataset);
 
         // we put the chart into a panel
         ChartPanel chartPanel = new ChartPanel(chart);
@@ -214,7 +213,7 @@ public class GUIHelper {
         dataset.setValue(stat.getOnlySourceCodeChannelErrorRate(), "Error rate senza\ncodifica di canale", "");
         dataset.setValue(stat.getChannelDecodingErrorRate(), "Error rate con\ncodifica di canale", "");
         GestioneDB.CHAN_COD chan_cod = db.getChanCodeSim(simulation.getChannelCoder().getClass().getName(), simulation);
-        JFreeChart chart = ChartFactory.createBarChart3D("Codifica di canale: "+NAMES_MAP.get(chan_cod.toString()), "", "%", dataset);
+        JFreeChart chart = ChartFactory.createBarChart3D("Codifica di canale: " + NAMES_MAP.get(chan_cod.toString()), "", "%", dataset);
 
         // we put the chart into a panel
         ChartPanel chartPanel = new ChartPanel(chart);
@@ -235,12 +234,12 @@ public class GUIHelper {
         dataset.setValue("Tempo di invio", stat.getSendingTime());
         dataset.setValue("Decodifica di canale", stat.getChannelDecodingTime());
         dataset.setValue("Decodifica di sorgente", stat.getSourceDecodingTime());
-        
+
         GestioneDB.CHAN_COD chan_cod = db.getChanCodeSim(simulation.getChannelCoder().getClass().getName(), simulation);
         GestioneDB.SOURCE_COD source_cod = db.getSourceCodeSim(simulation.getSourceCoder().getClass().getName());
 
         JFreeChart chart = ChartFactory.createPieChart3D(
-                "Tempi degli step di simulazione\nCod di sorgente: "+NAMES_MAP.get(source_cod.toString())+", Cod di canale: "+NAMES_MAP.get(chan_cod.toString()), // chart title
+                "Tempi degli step di simulazione\nCod di sorgente: " + NAMES_MAP.get(source_cod.toString()) + ", Cod di canale: " + NAMES_MAP.get(chan_cod.toString()), // chart title
                 dataset, // data
                 true, // include legend
                 true,
@@ -350,7 +349,7 @@ public class GUIHelper {
                 return false;
             }
             final Triple other = (Triple) obj;
-            if (!Objects.equals(this.line, other.line)) {
+            if (!this.line.equals(other.line)) {
                 return false;
             }
             return true;
@@ -433,7 +432,7 @@ public class GUIHelper {
                 break;
         }
         stat = new Statistics();
-        simulation = new Simulation(scoder, ccoder, errorModel, stat, file.getName());
+        simulation = new Simulation(scoder, ccoder, errorModel, stat, file.getAbsolutePath());
         simulation.execute();
         GUI.getInstance().getInputText().append("Ritardo: " + stat.getTotalTime() + " ms");
         GUI.getInstance().getInputText().append("\nritardo cod sorg: " + stat.getSourceCodingTime() + " ms");
@@ -448,7 +447,7 @@ public class GUIHelper {
 
         GUI.getInstance().getInputText().append("\nerror rate cod canale " + stat.getChannelDecodingErrorRate() + " %");
         GUI.getInstance().getInputText().append("\nerror rate canale solo cod sorgente " + stat.getOnlySourceCodeChannelErrorRate() + " %");
-        GUI.getInstance().getInputText().append("\nrecovery rate del codificatore di canale " + stat.getErrorRecoveryRate() );
+        GUI.getInstance().getInputText().append("\nrecovery rate del codificatore di canale " + stat.getErrorRecoveryRate());
         GUI.getInstance().getInputText().append("\n---------------------------------------------------------------\n\n");
 
         //Inserimento valori nel DB
@@ -459,8 +458,11 @@ public class GUIHelper {
         output.setText(outString);
         output.setEditable(false);
         String inString = GenericUtils.readFile(file.getAbsolutePath(), StandardCharsets.UTF_8);
-        highlight(output, findDifferences(inString, outString), new Color(0.9f, 0.1f, 0f, 0.1f));
-        highlight(GUI.getInstance().getSourceText(), findDifferences(outString, inString), new Color(0f, 0.7f, 0.3f, 0.2f));
+        Thread highlight = new Thread(() -> {
+            highlight(output, findDifferences(inString, outString), new Color(0.9f, 0.1f, 0f, 0.1f));
+            highlight(GUI.getInstance().getSourceText(), findDifferences(outString, inString), new Color(0f, 0.7f, 0.3f, 0.2f));
+        });
+        highlight.start();
     }
 
 }

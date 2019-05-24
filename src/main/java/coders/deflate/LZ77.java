@@ -230,7 +230,9 @@ public class LZ77 {
 					out.append(p.character);
 					pos += p.lenght + 1;
 				}
-                            }catch(Exception e){System.out.println("Errore Decodifica");}
+                            }catch(Exception e){
+                                System.out.println("Errore Decodifica");
+                            }
 
 			}
 		}

@@ -36,12 +36,18 @@ public class Prove {
 //		System.out.println("Dimensione file input:" + new File(in).length());
 //		System.out.println("Dimensione file codificato:" + GenericUtils.getChannelMessage(cod).getPayload().length);
 //        System.out.println(GenericUtils.readFile(out, StandardCharsets.UTF_8));
-                String s="000";
-                Message m=new Message();
-                m.setPayload(s);
-                GenericUtils.writeMessageToFile(m, "prova");
-                ChannelMessage cm=GenericUtils.getChannelMessage("prova");
-                System.out.println(cm.getPayloadLength());
+//                String s="000";
+//                Message m=new Message();
+//                m.setPayload(s);
+//                GenericUtils.writeMessageToFile(m, "prova");
+//                ChannelMessage cm=GenericUtils.getChannelMessage("prova");
+//                System.out.println(cm.getPayloadLength());
+                        String filename = "c:\\user\\john\\text.txt";
+                        System.out.println(filename);
+                        String[] path=filename.split("/|\\\\");
+                        filename=path[path.length-1];
+			filename = filename.substring(0, filename.length() - 4);
+                        System.out.println(filename);
 		
 	}
 

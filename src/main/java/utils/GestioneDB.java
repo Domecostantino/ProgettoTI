@@ -64,6 +64,8 @@ public class GestioneDB {
 	public void insertSimulation(Simulation simulation) {
 		try {
 			String filename = simulation.getFileInputPath();
+                        String[] path=filename.split("/|\\\\");
+                        filename=path[path.length-1];
 			filename = filename.substring(0, filename.length() - 4);
 			SOURCE_COD source_cod = null;
 			CHAN_COD chan_cod = null;

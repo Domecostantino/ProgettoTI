@@ -17,6 +17,8 @@ import coders.huffman.HuffmanSourceCoder;
 import coders.repetition.ConcatenatedChannelCoder;
 import coders.repetition.RepChannelCoder;
 import gui.GUI;
+import javafx.scene.control.ProgressBar;
+import javax.swing.JProgressBar;
 import utils.GenericUtils;
 import utils.MyBitSet;
 import utils.Statistics;
@@ -53,27 +55,36 @@ public class Simulation {
         String sourceCode = fileInputPath.substring(0, fileInputPath.length() - 4) + "_TMP";
         statistics.setInitialTime(System.currentTimeMillis());
         sourceCoder.encode(fileInputPath, sourceCode);
+        JProgressBar progress=GUI.getInstance().getProgressBar();
         statistics.setSourceCodingTime(System.currentTimeMillis());
-        GUI.getInstance().getProgressBar().setValue(1);
+        
+        progress.setValue(1);
         
         ChannelMessage mess = GenericUtils.getChannelMessage(sourceCode);
         MyBitSet b = channelCoder.encode(mess);
         statistics.setChannelCodingTime(System.currentTimeMillis());
-        GUI.getInstance().getProgressBar().setValue(2);
+        
+        progress.setValue(2);
         
         
         //invio su canale
         MyBitSet corruptedBits = channel.send(b);
-        GUI.getInstance().getProgressBar().setValue(3);
+        
         statistics.setSendingTime(System.currentTimeMillis());
+        
+        progress.setValue(3);
+        
         //decodifica
         channelCoder.decode(corruptedBits, mess);
         statistics.setChannelDecodingTime(System.currentTimeMillis());
         GenericUtils.writeChannelMessage(mess, sourceCode + "2");
-        GUI.getInstance().getProgressBar().setValue(4);
+        
+        progress.setValue(4);
+        
         sourceCoder.decode(sourceCode + "2", fileOutput);
         statistics.setSourceDecodingTime(System.currentTimeMillis());
-        GUI.getInstance().getProgressBar().setValue(5);
+        
+        progress.setValue(5);
         
         
         //dati utili alle statistiche (compressione e errorRate)
