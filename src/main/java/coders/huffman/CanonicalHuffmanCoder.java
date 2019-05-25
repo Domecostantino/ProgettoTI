@@ -1,6 +1,5 @@
 package coders.huffman;
 
-import java.util.BitSet;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.PriorityQueue;
@@ -8,9 +7,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import coders.Message;
-import utils.GenericUtils;
 import utils.HuffmanUtils;
-import utils.MyBitSet;
 
 /*
  * per comprendere di cosa si parla
@@ -62,9 +59,6 @@ import utils.MyBitSet;
  * C = 110 
  * D = 111
  * 
- * Per capire di cosa si parla:
- *  - https://en.wikipedia.org/wiki/Canonical_Huffman_code
- *  - https://www.geeksforgeeks.org/canonical-huffman-coding/
  * 
  * 
  * 
@@ -92,8 +86,6 @@ public class CanonicalHuffmanCoder {
 	}
 
 	public Message encode(String input) {
-		// TODO eliminare
-//		System.out.println("Input: " + input + "\n\n");
 
 		if (input == null || input.length() < 2) {
 			System.out.println("!!!! Input non valido (nullo o minore di 2 caratteri) !!!!");
@@ -114,16 +106,9 @@ public class CanonicalHuffmanCoder {
 		// otteniamo la codifica canonica esplcita dalla lengthTable
 		canonicalCodeTable = HuffmanUtils.getCanonicalCodeTable(lengthTable);
 
-		// TODO eliminare
-//		printNormalCodeTable();
-//		printCanonicalCodeTable();
-//		System.out.println(canonicalCodeTable);
-//		System.out.println("\nLengthTable:\n"+lengthTable);
-
 		// ottenuta la canonicalCodeTable possiamo codificare il messaggio e aggiungerlo
 		// come payload
 		String encodedPayload = encodePayload(input);
-//		System.out.println(encodedPayload); //TODO eliminare
 
 		// creiamo il messaggio e lo ritorniamo
 		Message mex = new Message();
@@ -154,9 +139,6 @@ public class CanonicalHuffmanCoder {
 		for (Coppia coppia : frequencies.values()) {
 			coppie.add(new HuffmanNode(coppia));
 		}
-
-		// TODO eliminare
-//		System.out.println("Frequenze: " + frequencies + "\n");
 
 		// creazione dell'albero - iterativamente estraiamo i due valori pi� piccoli e
 		// creaimo un
@@ -205,6 +187,7 @@ public class CanonicalHuffmanCoder {
 		getLengthTable(root.right, code_length + 1);
 	}
 
+	@SuppressWarnings("unused")
 	private void printCanonicalCodeTable() {
 		System.out.println("\nCodifica di Huffman Canonica: ");
 		for (java.util.Map.Entry<Character, String> entry : canonicalCodeTable.entrySet()) {
@@ -213,6 +196,7 @@ public class CanonicalHuffmanCoder {
 	}
 
 	// metodo che permette di stampare la codifica di Huffman non canonica
+	@SuppressWarnings("unused")
 	private void printNormalCodeTable() {
 
 		PriorityQueue<Entry> codeTable = new PriorityQueue<>();
@@ -243,12 +227,12 @@ public class CanonicalHuffmanCoder {
 		return encodedPayload.toString();
 	}
 
-	// main di prova per codifica/decodifica di Huffman, eliminare TODO
+	// main di prova per codifica/decodifica di Huffman
 	public static void main(String args[]) {
 		CanonicalHuffmanCoder c = new CanonicalHuffmanCoder();
 		Message m = c.encode("domenico non è particolarmente convinto che questa versione possa funzionare");
 		System.out.println("\n");
-		String mess = m.getPayload();
+//		String mess = m.getPayload();
 //		MyBitSet bs = GenericUtils.getBitSetFromString(mess,mess.length());
 //		System.out.println(
 //				"n byte=" + "domenico non è particolarmente convinto che questa versione possa funzionare".length());
