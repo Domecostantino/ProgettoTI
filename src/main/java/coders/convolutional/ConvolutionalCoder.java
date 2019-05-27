@@ -1,9 +1,7 @@
 package coders.convolutional;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 
-import coders.Message;
 import utils.ConvolutionalUtils;
 
 /*
@@ -80,13 +78,8 @@ public class ConvolutionalCoder {
 	 * 
 	 */
 
-	public String encode(String input) { // TODO pulire stampe
-		// conversione dell'input testuale in una stringa di bit
-//		String input = new BigInteger(input.getBytes()).toString(2);
-//		System.out.println(input);
-//		System.out.println(input.length());
-//		System.out.println(input);
-
+	public String encode(String input) { 
+		
 		StringBuilder encodedPayload = new StringBuilder();
 		int range = NUM_LEVELS;
 		// cicliamo su tutto il payload in input
@@ -100,25 +93,12 @@ public class ConvolutionalCoder {
 				block = input.substring(i);
 			}
 
-//			System.out.println(block);
 			// codifica convoluzionale mediante i polinomi generatori
 			String encodingBlock = computeEncoding(block);
-//			System.out.println();
-//			System.out.println(encodingBlock);
 
 			encodedPayload.append(encodingBlock);
 
-//			System.out.println("\n\n ************************************** \n\n");
 		}
-
-//		System.out.println("EncodedPayload: "+encodedPayload.toString());
-
-//		// header
-//		ConvolutionalHeader header = new ConvolutionalHeader(K, r);
-//		message.setHeader(header);
-//
-//		// payload
-//		message.setPayload(encodedPayload.toString());
 
 		return encodedPayload.toString();
 	}
@@ -133,7 +113,6 @@ public class ConvolutionalCoder {
 
 		memoryRegister = new byte[K + 1];
 		// recuperiamo i polinomi generatori
-//		System.out.println(Arrays.toString(generatorPolynomial));
 		// li convertiamo in una matrice di byte per semplicita
 		byte[][] gs = ConvolutionalUtils.convertGeneratorPolynomials(r, K, generatorPolynomial);
 
@@ -152,10 +131,9 @@ public class ConvolutionalCoder {
 					currentBitEncoding[l] = (byte) (currentBitEncoding[l] ^ (memoryRegister[j] * gs[l][j]));
 				}
 				result.append(currentBitEncoding[l]);
-//				System.out.println(currentBitEncoding[l]); //TODO eliminare
 			}
 
-		} // TODO controllare a mano se è giusto
+		}
 		return result.toString();
 	}
 
@@ -165,7 +143,6 @@ public class ConvolutionalCoder {
 		}
 		memoryRegister[0] = input;
 
-//		System.out.println(Arrays.toString(memoryRegister)); // TODO eliminare
 	}
 
 	public static void main(String[] args) {

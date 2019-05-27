@@ -1,7 +1,6 @@
 package coders.convolutional;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.TreeSet;
 
@@ -30,8 +29,6 @@ public class ViterbiDecoder {
 	// nodi per ogni livello
 	private HashMap<Integer, TreeSet<TrellisNode>> trellis;
 
-	int numRip; // TODO eliminare
-
 	private int K, r;
 	private final int NUM_LEVELS;
 
@@ -45,11 +42,6 @@ public class ViterbiDecoder {
 	}
 
 	public String decode(String payload) {
-
-		// riceviamo il messaggio ed estrapoliamo header e payload
-//		ConvolutionalHeader header = (ConvolutionalHeader) input.getHeader();
-//		this.K = header.getK();
-//		this.r = header.getR();
 
 		GeneratorTable generatorTable = new GeneratorTable();
 		generatorPolynomial = generatorTable.getGeneratorPolynomials(r, K);
@@ -78,8 +70,6 @@ public class ViterbiDecoder {
 			decodedPayload.append(decodedBlock);
 			// System.out.println("\n\n ************************************** \n\n");
 		}
-
-		System.out.println(numRip); // TODO
 		return decodedPayload.toString();
 	}
 
@@ -91,7 +81,6 @@ public class ViterbiDecoder {
 	 * 
 	 */
 	private String createTrellisAndDecode(String block) {
-		// System.out.println("trellis: " + trellis);
 
 		byte[][] gs = ConvolutionalUtils.convertGeneratorPolynomials(r, K, generatorPolynomial);
 
@@ -105,13 +94,11 @@ public class ViterbiDecoder {
 			String p_received = block.substring(i, i + r);
 
 			TreeSet<TrellisNode> levelNodes = trellis.get((i + r) / r);
-//			System.out.println("\nlevelNodes: " + levelNodes);
 			// per ogni nodo del livello
 			for (TrellisNode currentNode : levelNodes) {
 				// recupera i nodi predecessori
 				LinkedList<TrellisNode> predecessors = getPredecessors(previousLevel, currentNode);
 
-//				System.out.println(currentNode+" "+predecessors);
 				// per ognuno calcoliamo la possibile pathMetric e teniamo conto di quella
 				// migliore
 				int bestPathMetric = Integer.MAX_VALUE;
@@ -119,7 +106,6 @@ public class ViterbiDecoder {
 				for (TrellisNode predecessor : predecessors) {
 					// calcoliamo la Path Metric per il nodo corrente
 					int pathMetric = computePathMetric(currentNode, predecessor, gs, p_received);
-//					System.out.println("pM "+pathMetric);
 
 					if (pathMetric < bestPathMetric) {
 						bestPathMetric = pathMetric;
@@ -128,7 +114,6 @@ public class ViterbiDecoder {
 				}
 
 				// infine settiamo il predecessore sul path e la pathMetric per il nodo corrente
-//				System.out.println(bestPathMetric);
 				currentNode.setPathMetric(bestPathMetric);
 				currentNode.setPathPredecessor(predecessorPathCandidate);
 
@@ -139,24 +124,9 @@ public class ViterbiDecoder {
 		// selezioniamo il nodo finale (tra quelli dell'ultimo livello) con pathMetric
 		// minore
 		TrellisNode finalNode = getFinalNode(previousLevel);
-		//pathMetricUltimoLivRip(previousLevel); // TODO modifiche
-
-//		if (finalNode.getPathMetric() > 0) {
-//			LinkedList<TrellisNode> nodiNonZero = getRepeatedNodeLevel(previousLevel);
-//			if (nodiNonZero.size() > 1) {
-//				TrellisNode fn = ritornaNodoInBaseAlPredMigl(nodiNonZero);
-//				if (!fn.getState().equals(finalNode.getState())) {
-//					finalNode = fn;
-//				}
-//			}
-//		}
-
-		// System.out.println("final Node: "+finalNode+" PM finale:
-		// "+finalNode.getPathMetric());
 
 		// decodifichiamo attraversando il path a pathMetric minima
 		String inverseDecodedPayload = traverseMLPath(finalNode);
-		// System.out.println("inverseDecodedPayload: "+inverseDecodedPayload);
 
 		// reverse dell'output ottenuto
 		StringBuilder decodedPayload = new StringBuilder(inverseDecodedPayload);
@@ -184,7 +154,6 @@ public class ViterbiDecoder {
 		int bestPathMetric = Integer.MAX_VALUE;
 		TrellisNode finalNodeCandidate = null;
 		for (TrellisNode node : finalLevelNodes) {
-//			System.out.println("Node: "+node+" PM finale: "+node.getPathMetric());
 			//System.perrex.out();
 			int nodePM = node.getPathMetric();
 			if (nodePM < bestPathMetric) {
@@ -198,9 +167,7 @@ public class ViterbiDecoder {
 	private int computePathMetric(TrellisNode currentNode, TrellisNode predecessor, byte[][] gs, String p_received) {
 		// ricaviamo il valore di bit di parità che dovrebbe avere il nodo corrente
 		String p_node = expectedParity(currentNode.getState(), gs);
-//		System.out.println("current Node: " + currentNode + "   predec :" + predecessor);
-//		System.out.println("paritybits " + p_node);
-
+		
 //		Calcoliamo la distanza di hamming tra p_node e p_received, ovvero i bit
 //		sicuramente ricevuti errati nel blocco  in relazione allo stato e 
 //		chiamiamo quasta misura branch metric
@@ -279,79 +246,5 @@ public class ViterbiDecoder {
 		} else {
 			trellis.put(i, new TreeSet<>(successors));
 		}
-	}
-
-//	// TODO eliminare
-//	private void pathMetricUltimoLivRip(TreeSet<TrellisNode> finalLevelNodes) {
-//		LinkedList<TrellisNode> nodiRip = new LinkedList<>();
-//		int bestPathMetric = Integer.MAX_VALUE;
-//		TrellisNode finalNodeCandidate = null;
-//		for (TrellisNode node : finalLevelNodes) {
-////				System.out.println("Node: "+node+" PM finale: "+node.getPathMetric());
-//			int nodePM = node.getPathMetric();
-//			if (nodePM < bestPathMetric) {
-//				bestPathMetric = nodePM;
-//				finalNodeCandidate = node;
-//			}
-//		}
-//		for (TrellisNode trellisNode : finalLevelNodes) {
-//			if (finalNodeCandidate.getPathMetric() == trellisNode.getPathMetric())
-//				nodiRip.add(trellisNode);
-//		}
-//		if (nodiRip.size() > 1) {
-//			numRip++;
-//		}
-//	}
-
-//	private TrellisNode ritornaNodoInBaseAlPredMigl(LinkedList<TrellisNode> nodiFinaliFagl) {
-//		LinkedList<Integer> deeps = new LinkedList<>();
-//		for (TrellisNode nodoFin : nodiFinaliFagl) {
-//			deeps.add(getPM0Level(nodoFin));
-//		}
-//		System.out.println(deeps); //TODO
-//		//ora selezioniamo quello con il predecessore con PM 0 più vicino
-//		int index = 0;
-//		int max = 0;
-//		int i=0;
-//		for (Integer integer : deeps) {
-//			if(integer>max) {
-//				index = i;
-//				max = integer;
-//			}
-//			i++;
-//		}
-//		System.out.println(index);
-//		return nodiFinaliFagl.get(index);
-//	}
-//
-//	private Integer getPM0Level(TrellisNode nodoFin) {
-//		int liv = K;
-//		TrellisNode current = nodoFin;
-//		while (current != null) {
-//			liv--;
-//			if (current.getPathPredecessor().getPathMetric() == 0)
-//				return liv;
-//			current = current.getPathPredecessor();
-//		}
-//		return liv;
-//	}
-
-	private LinkedList<TrellisNode> getRepeatedNodeLevel(TreeSet<TrellisNode> finalLevelNodes) {
-		LinkedList<TrellisNode> nodiRip = new LinkedList<>();
-		int bestPathMetric = Integer.MAX_VALUE;
-		TrellisNode finalNodeCandidate = null;
-		for (TrellisNode node : finalLevelNodes) {
-//				System.out.println("Node: "+node+" PM finale: "+node.getPathMetric());
-			int nodePM = node.getPathMetric();
-			if (nodePM < bestPathMetric) {
-				bestPathMetric = nodePM;
-				finalNodeCandidate = node;
-			}
-		}
-		for (TrellisNode trellisNode : finalLevelNodes) {
-			if (finalNodeCandidate.getPathMetric() == trellisNode.getPathMetric())
-				nodiRip.add(trellisNode);
-		}
-		return nodiRip;
 	}
 }
