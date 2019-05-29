@@ -70,7 +70,6 @@ public class GUIHelper {
     private Statistics stat;
     private GestioneDB db = new GestioneDB();
     private Simulation simulation;
-    private boolean flag;
 
     private static final Map<String, String> NAMES_MAP = createMap();
 
