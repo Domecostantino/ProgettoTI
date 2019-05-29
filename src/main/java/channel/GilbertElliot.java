@@ -1,5 +1,7 @@
 package channel;
 
+import java.util.Random;
+
 import utils.MyBitSet;
 
 public class GilbertElliot implements ChannelModel {
@@ -11,16 +13,16 @@ public class GilbertElliot implements ChannelModel {
     public final static int SOFT = 0, HARD = 1;
     private final int type;
 
-	private final double[] prob_gg = {0.995, 0.9999918}; // prob. transizione GOOD --> GOOD
-    private final double[] prob_bb = {0.996, 0.999184}; // prob. transizione BAD --> BAD
+	private final double[] prob_gg = {0.995, 0.9}; // prob. transizione GOOD --> GOOD
+    private final double[] prob_bb = {0.996, 0.9}; // prob. transizione BAD --> BAD
     private final double prob_gb ; //prob. transizione GOOD --> BAD
     private final double prob_bg ; //prob. transizione BAD --> GOOD
 
-    private final double[] ber_good = {0.0001, 0.00001}, ber_bad = {0.001, 0.01}; //bit error rate per gli stati good e bad
+    private final double[] ber_good = {0.0001, 0.0001}, ber_bad = {0.001, 0.1}; //bit error rate per gli stati good e bad
 
     private State statoCorrente;
-
-    private final double rate = 8000000; //8 Mbps
+	private double rate = 700000; // 700 Kbps
+	private Random random = new Random();
 
     public GilbertElliot(int type){
         if(type<=HARD&&type>=SOFT){
@@ -39,8 +41,6 @@ public class GilbertElliot implements ChannelModel {
     
     @Override
     public MyBitSet send(MyBitSet encodedPayload) {
-
-        int num_bit = 0;
 
         statoCorrente = State.GOOD;
 
@@ -75,6 +75,13 @@ public class GilbertElliot implements ChannelModel {
             }
 
         }
+        //simulazione tempo invio
+        long time = (long) Math.ceil(encodedPayload.getLength() / rate);
+		try {
+			Thread.sleep(time);
+		} catch (InterruptedException ex) {
+			ex.printStackTrace();
+		}
         return encodedPayload;
     }
 

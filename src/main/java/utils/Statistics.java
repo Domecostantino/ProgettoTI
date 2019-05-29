@@ -23,6 +23,7 @@ public class Statistics {
     private BitSet corruptedSourceCodingWithoutChannelEncoding;
     private double channelDecodingErrorRate;
     private double onlySourceCodeChannelErrorRate;
+    private boolean flag;
 
     /*
 	 * Il numero di bit flippati erroneamente che il decodificatore di canale non è

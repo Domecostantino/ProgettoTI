@@ -70,6 +70,7 @@ public class GUIHelper {
     private Statistics stat;
     private GestioneDB db = new GestioneDB();
     private Simulation simulation;
+    private boolean flag;
 
     private static final Map<String, String> NAMES_MAP = createMap();
 
@@ -431,6 +432,9 @@ public class GUIHelper {
                 errorModel = new CanaleSimmetricoBinario(ber);
                 break;
         }
+        
+        
+        
         stat = new Statistics();
         simulation = new Simulation(scoder, ccoder, errorModel, stat, file.getAbsolutePath());
         simulation.execute();
