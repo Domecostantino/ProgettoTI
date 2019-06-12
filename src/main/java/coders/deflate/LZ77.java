@@ -252,6 +252,7 @@ public class LZ77 {
 //
 //		br.close();
 		LZ77 coder = new LZ77(3843, 3843);
+		System.out.println(coder.alphabet.length);
 		String coded = coder.encode("Lorem ipsum.txt");
 //		System.out.println(new File("mail_de_rango.txt").length());
 //		System.out.println(coded);

@@ -9,20 +9,20 @@ import utils.MyBitSet;
 
 public class HammingChannelCoder implements ChannelCoder {
 
-    private HammingCode coder;
+    private Hamming coder;
     private int r;
     private int length;
 
     public HammingChannelCoder() {
         this.r = 3;
         this.length = (int) Math.pow(2, r) - 1;
-        coder = new HammingCode(3);// Hamming 7/4
+        coder = new Hamming(3);// Hamming 7/4
     }
 
     public HammingChannelCoder(int r) {
         this.r = r;
         this.length = (int) Math.pow(2, r) - 1;
-        coder = new HammingCode(r);
+        coder = new Hamming(r);
     }
 
     @Override

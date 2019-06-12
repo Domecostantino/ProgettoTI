@@ -35,13 +35,15 @@ public class GestioneDB {
 	}
 
 	public GestioneDB() {
-		System.out.println("Connecting to database...");
-		inizializzaDB();
+		//System.out.println("Connecting to database...");
+		//inizializzaDB();
 	}
 
-	private void inizializzaDB() {
+	public boolean inizializzaDB() {
+		boolean connection=false;
 		Statement stmt = null;
 		try {
+			System.out.println("Connecting to database...");
 			conn = DriverManager.getConnection(DBurl, USER, PASS);
 			System.out.println("Opened database successfully");
 
@@ -54,11 +56,13 @@ public class GestioneDB {
 
 			stmt.executeUpdate(sql);
 			stmt.close();
+			connection=true;
+			System.out.println("Table created successfully");
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+			//System.exit(0);
 		}
-		System.out.println("Table created successfully");
+		return connection;
 	}
 
 	public void insertSimulation(Simulation simulation) {

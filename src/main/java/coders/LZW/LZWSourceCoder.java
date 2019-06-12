@@ -8,9 +8,9 @@ public class LZWSourceCoder implements SourceCoder {
 
 	@Override
 	public void encode(String input, String output) {
-		LZWCompression lzw = new LZWCompression();
+		LZW lzw = new LZW();
 		try {
-			lzw.LZW_Compress(input, output);
+			lzw.LZWEncode(input, output);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -18,9 +18,9 @@ public class LZWSourceCoder implements SourceCoder {
 
 	@Override
 	public void decode(String input, String output) {
-		LZWCompression lzw = new LZWCompression();
+		LZW lzw = new LZW();
 		try {
-			lzw.LZW_Decompress(input, output);
+			lzw.LZWDecode(input, output);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
